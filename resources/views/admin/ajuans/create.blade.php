@@ -10,23 +10,8 @@
         <form method="POST" action="{{ route("admin.ajuans.store") }}" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
-                <label for="fakultas_id">{{ trans('cruds.ajuan.fields.fakultas') }}</label>
-                <select class="form-control select2 {{ $errors->has('fakultas') ? 'is-invalid' : '' }}" name="fakultas_id" id="fakultas_id">
-                    @foreach($fakultas as $id => $entry)
-                        <option value="{{ $id }}" {{ old('fakultas_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('fakultas'))
-                    <span class="text-danger">{{ $errors->first('fakultas') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.ajuan.fields.fakultas_helper') }}</span>
-            </div>
-            <div class="form-group">
                 <label for="prodi_id">{{ trans('cruds.ajuan.fields.prodi') }}</label>
                 <select class="form-control select2 {{ $errors->has('prodi') ? 'is-invalid' : '' }}" name="prodi_id" id="prodi_id">
-                    @foreach($prodis as $id => $entry)
-                        <option value="{{ $id }}" {{ old('prodi_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
                 </select>
                 @if($errors->has('prodi'))
                     <span class="text-danger">{{ $errors->first('prodi') }}</span>
@@ -97,6 +82,30 @@
 @endsection
 
 @section('scripts')
+<script>
+$(document).ready(function () {
+    $('#prodi_id').select2({
+        placeholder: 'Search for a program studi',
+        ajax: {
+            url: '{{ route("select.getProdiWithFakultas") }}',
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    q: params.term // search term
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 3 // minimum chars to search
+    });
+});
+</script>
 <script>
     var uploadedBuktiUploadMap = {}
 Dropzone.options.buktiUploadDropzone = {

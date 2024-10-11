@@ -3,13 +3,13 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.akreditasiIntenasional.title') }}
+        {{ trans('global.show') }} {{ trans('cruds.akreditasiInternasional.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
-                <a class="btn btn-default" href="{{ route('admin.akreditasi-intenasionals.index') }}">
+                <a class="btn btn-default" href="{{ route('admin.akreditasi-internasionals.index') }}">
                     {{ trans('global.back_to_list') }}
                 </a>
             </div>
@@ -17,110 +17,110 @@
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.akreditasiIntenasional.fields.fakultas') }}
+                            {{ trans('cruds.akreditasiInternasional.fields.fakultas') }}
                         </th>
                         <td>
-                            {{ $akreditasiIntenasional->fakultas->name ?? '' }}
+                            {{ $akreditasiInternasional->fakultas->name ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.akreditasiIntenasional.fields.prodi') }}
+                            {{ trans('cruds.akreditasiInternasional.fields.prodi') }}
                         </th>
                         <td>
-                            {{ $akreditasiIntenasional->prodi->name_dikti ?? '' }}
+                            {{ $akreditasiInternasional->prodi->name_dikti ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.akreditasiIntenasional.fields.jenjang') }}
+                            {{ trans('cruds.akreditasiInternasional.fields.jenjang') }}
                         </th>
                         <td>
-                            {{ $akreditasiIntenasional->jenjang->name ?? '' }}
+                            {{ $akreditasiInternasional->jenjang->name ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.akreditasiIntenasional.fields.lembaga') }}
+                            {{ trans('cruds.akreditasiInternasional.fields.lembaga') }}
                         </th>
                         <td>
-                            {{ $akreditasiIntenasional->lembaga->name ?? '' }}
+                            {{ $akreditasiInternasional->lembaga->name ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.akreditasiIntenasional.fields.no_sk') }}
+                            {{ trans('cruds.akreditasiInternasional.fields.no_sk') }}
                         </th>
                         <td>
-                            {{ $akreditasiIntenasional->no_sk }}
+                            {{ $akreditasiInternasional->no_sk }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.akreditasiIntenasional.fields.tgl_sk') }}
+                            {{ trans('cruds.akreditasiInternasional.fields.tgl_sk') }}
                         </th>
                         <td>
-                            {{ $akreditasiIntenasional->tgl_sk }}
+                            {{ $akreditasiInternasional->tgl_sk }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.akreditasiIntenasional.fields.tgl_akhir_sk') }}
+                            {{ trans('cruds.akreditasiInternasional.fields.tgl_akhir_sk') }}
                         </th>
                         <td>
-                            {{ $akreditasiIntenasional->tgl_akhir_sk }}
+                            {{ $akreditasiInternasional->tgl_akhir_sk }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.akreditasiIntenasional.fields.tahun_expired') }}
+                            {{ trans('cruds.akreditasiInternasional.fields.tahun_expired') }}
                         </th>
                         <td>
-                            {{ $akreditasiIntenasional->tahun_expired }}
+                            {{ $akreditasiInternasional->tahun_expired }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.akreditasiIntenasional.fields.peringkat') }}
+                            {{ trans('cruds.akreditasiInternasional.fields.peringkat') }}
                         </th>
                         <td>
-                            {{ App\Models\AkreditasiIntenasional::PERINGKAT_SELECT[$akreditasiIntenasional->peringkat] ?? '' }}
+                            {{ App\Models\AkreditasiInternasional::PERINGKAT_SELECT[$akreditasiInternasional->peringkat] ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.akreditasiIntenasional.fields.nilai') }}
+                            {{ trans('cruds.akreditasiInternasional.fields.nilai') }}
                         </th>
                         <td>
-                            {{ $akreditasiIntenasional->nilai }}
+                            {{ $akreditasiInternasional->nilai }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.akreditasiIntenasional.fields.diakui_dikti') }}
+                            {{ trans('cruds.akreditasiInternasional.fields.diakui_dikti') }}
                         </th>
                         <td>
-                            <input type="checkbox" disabled="disabled" {{ $akreditasiIntenasional->diakui_dikti ? 'checked' : '' }}>
+                            <input type="checkbox" disabled="disabled" {{ $akreditasiInternasional->diakui_dikti ? 'checked' : '' }}>
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.akreditasiIntenasional.fields.sertifikat') }}
+                            {{ trans('cruds.akreditasiInternasional.fields.sertifikat') }}
                         </th>
                         <td>
-                            @if($akreditasiIntenasional->sertifikat)
-                                <a href="{{ $akreditasiIntenasional->sertifikat->getUrl() }}" target="_blank" style="display: inline-block">
-                                    <img src="{{ $akreditasiIntenasional->sertifikat->getUrl('thumb') }}">
+                            @if($akreditasiInternasional->sertifikat)
+                                <a href="{{ $akreditasiInternasional->sertifikat->getUrl() }}" target="_blank" style="display: inline-block">
+                                    <img src="{{ $akreditasiInternasional->sertifikat->getUrl('thumb') }}">
                                 </a>
                             @endif
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.akreditasiIntenasional.fields.file_penunjang') }}
+                            {{ trans('cruds.akreditasiInternasional.fields.file_penunjang') }}
                         </th>
                         <td>
-                            @foreach($akreditasiIntenasional->file_penunjang as $key => $media)
+                            @foreach($akreditasiInternasional->file_penunjang as $key => $media)
                                 <a href="{{ $media->getUrl() }}" target="_blank">
                                     {{ trans('global.view_file') }}
                                 </a>
@@ -129,16 +129,16 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.akreditasiIntenasional.fields.note') }}
+                            {{ trans('cruds.akreditasiInternasional.fields.note') }}
                         </th>
                         <td>
-                            {{ $akreditasiIntenasional->note }}
+                            {{ $akreditasiInternasional->note }}
                         </td>
                     </tr>
                 </tbody>
             </table>
             <div class="form-group">
-                <a class="btn btn-default" href="{{ route('admin.akreditasi-intenasionals.index') }}">
+                <a class="btn btn-default" href="{{ route('admin.akreditasi-internasionals.index') }}">
                     {{ trans('global.back_to_list') }}
                 </a>
             </div>

@@ -12,11 +12,11 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class AkreditasiIntenasional extends Model implements HasMedia
+class AkreditasiInternasional extends Model implements HasMedia
 {
     use SoftDeletes, InteractsWithMedia, Auditable, HasFactory;
 
-    public $table = 'akreditasi_intenasionals';
+    public $table = 'akreditasi_internasionals';
 
     protected $appends = [
         'sertifikat',

@@ -9,6 +9,8 @@ Route::get('/home', function () {
     return redirect()->route('admin.home');
 });
 
+Route::get('select/prodi-with-fakultas', 'Admin\ProdiController@getProdisWithFakultas')->name('select.getProdiWithFakultas');
+
 Auth::routes(['register' => false]);
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
@@ -44,6 +46,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('prodis/destroy', 'ProdiController@massDestroy')->name('prodis.massDestroy');
     Route::post('prodis/parse-csv-import', 'ProdiController@parseCsvImport')->name('prodis.parseCsvImport');
     Route::post('prodis/process-csv-import', 'ProdiController@processCsvImport')->name('prodis.processCsvImport');
+    Route::post('prodis/import', 'ProdiController@import')->name('prodis.import');
     Route::resource('prodis', 'ProdiController');
 
     // Akreditasi
@@ -54,13 +57,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('akreditasis/process-csv-import', 'AkreditasiController@processCsvImport')->name('akreditasis.processCsvImport');
     Route::resource('akreditasis', 'AkreditasiController');
 
-    // Akreditasi Intenasional
-    Route::delete('akreditasi-intenasionals/destroy', 'AkreditasiIntenasionalController@massDestroy')->name('akreditasi-intenasionals.massDestroy');
-    Route::post('akreditasi-intenasionals/media', 'AkreditasiIntenasionalController@storeMedia')->name('akreditasi-intenasionals.storeMedia');
-    Route::post('akreditasi-intenasionals/ckmedia', 'AkreditasiIntenasionalController@storeCKEditorImages')->name('akreditasi-intenasionals.storeCKEditorImages');
-    Route::post('akreditasi-intenasionals/parse-csv-import', 'AkreditasiIntenasionalController@parseCsvImport')->name('akreditasi-intenasionals.parseCsvImport');
-    Route::post('akreditasi-intenasionals/process-csv-import', 'AkreditasiIntenasionalController@processCsvImport')->name('akreditasi-intenasionals.processCsvImport');
-    Route::resource('akreditasi-intenasionals', 'AkreditasiIntenasionalController');
+    // Akreditasi Internasional
+    Route::delete('akreditasi-internasionals/destroy', 'AkreditasiInternasionalController@massDestroy')->name('akreditasi-internasionals.massDestroy');
+    Route::post('akreditasi-internasionals/media', 'AkreditasiInternasionalController@storeMedia')->name('akreditasi-internasionals.storeMedia');
+    Route::post('akreditasi-internasionals/ckmedia', 'AkreditasiInternasionalController@storeCKEditorImages')->name('akreditasi-internasionals.storeCKEditorImages');
+    Route::post('akreditasi-internasionals/parse-csv-import', 'AkreditasiInternasionalController@parseCsvImport')->name('akreditasi-internasionals.parseCsvImport');
+    Route::post('akreditasi-internasionals/process-csv-import', 'AkreditasiInternasionalController@processCsvImport')->name('akreditasi-internasionals.processCsvImport');
+    Route::resource('akreditasi-internasionals', 'AkreditasiInternasionalController');
 
     // Ajuan
     Route::delete('ajuans/destroy', 'AjuanController@massDestroy')->name('ajuans.massDestroy');

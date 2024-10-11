@@ -18,6 +18,10 @@ use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
+use Alert;
+use DB;
 
 class AjuanController extends Controller
 {
@@ -88,30 +92,46 @@ class AjuanController extends Controller
     {
         abort_if(Gate::denies('ajuan_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $fakultas = Faculty::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $prodis = Prodi::pluck('name_dikti', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $jenjangs = Jenjang::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         $lembagas = LembagaAkreditasi::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.ajuans.create', compact('fakultas', 'jenjangs', 'lembagas', 'prodis'));
+        return view('admin.ajuans.create', compact('lembagas'));
     }
 
     public function store(StoreAjuanRequest $request)
     {
         $prodi = Prodi::find($request->input('prodi_id'));
+        $request->request->add(['fakultas_id' => $prodi->fakultas_id]);
         $request->request->add(['jenjang_id' => $prodi->jenjang_id]);
 
-        $ajuan = Ajuan::create($request->all());
+        try {
+            DB::transaction(function () use ($request, $prodi) {
+                $ajuan = Ajuan::create($request->all());
 
-        foreach ($request->input('bukti_upload', []) as $file) {
-            $ajuan->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('bukti_upload');
-        }
+                $prodi_name = Str::slug($prodi->jenjang->name . '-' . $prodi->name_dikti);
+                foreach ($request->input('bukti_upload', []) as $file) {
+                    $filePath = storage_path('tmp/uploads/' . basename($file));
+                    $extension = pathinfo($filePath, PATHINFO_EXTENSION);
 
-        if ($media = $request->input('ck-media', false)) {
-            Media::whereIn('id', $media)->update(['model_id' => $ajuan->id]);
+                    $fileBukti = 'ajuan_bukti_' . $prodi_name . '_' . uniqid() . '.' . $extension;
+
+                    $newFilePath = storage_path('tmp/uploads/' . $fileBukti);
+                    rename($filePath, $newFilePath);
+
+                    if (file_exists($newFilePath)) {
+                        $ajuan->addMedia($newFilePath)->toMediaCollection('bukti_upload');
+                    } else {
+                        throw new \Exception('File does not exist at path: ' . $newFilePath);
+                    }
+                }
+
+                if ($media = $request->input('ck-media', false)) {
+                    Media::whereIn('id', $media)->update(['model_id' => $ajuan->id]);
+                }
+            });
+
+            Alert::success('Success', 'Ajuan Berhasil Disimpan');
+        } catch (\Exception $e) {
+            Alert::error('Error', "Failed: " . $e->getMessage());
         }
 
         return redirect()->route('admin.ajuans.index');

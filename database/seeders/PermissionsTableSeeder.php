@@ -128,19 +128,19 @@ class PermissionsTableSeeder extends Seeder
                 'title' => 'akreditasi_access',
             ],
             [
-                'title' => 'akreditasi_intenasional_create',
+                'title' => 'akreditasi_internasional_create',
             ],
             [
-                'title' => 'akreditasi_intenasional_edit',
+                'title' => 'akreditasi_internasional_edit',
             ],
             [
-                'title' => 'akreditasi_intenasional_show',
+                'title' => 'akreditasi_internasional_show',
             ],
             [
-                'title' => 'akreditasi_intenasional_delete',
+                'title' => 'akreditasi_internasional_delete',
             ],
             [
-                'title' => 'akreditasi_intenasional_access',
+                'title' => 'akreditasi_internasional_access',
             ],
             [
                 'title' => 'ajuan_create',

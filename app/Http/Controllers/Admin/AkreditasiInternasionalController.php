@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\CsvImportTrait;
 use App\Http\Controllers\Traits\MediaUploadingTrait;
-use App\Http\Requests\MassDestroyAkreditasiRequest;
-use App\Http\Requests\StoreAkreditasiRequest;
-use App\Http\Requests\UpdateAkreditasiRequest;
-use App\Models\Akreditasi;
+use App\Http\Requests\MassDestroyAkreditasiInternasionalRequest;
+use App\Http\Requests\StoreAkreditasiInternasionalRequest;
+use App\Http\Requests\UpdateAkreditasiInternasionalRequest;
+use App\Models\AkreditasiInternasional;
 use App\Models\Faculty;
 use App\Models\Jenjang;
 use App\Models\LembagaAkreditasi;
@@ -23,26 +23,26 @@ use Illuminate\Support\Str;
 use Alert;
 use DB;
 
-class AkreditasiController extends Controller
+class AkreditasiInternasionalController extends Controller
 {
     use MediaUploadingTrait, CsvImportTrait;
 
     public function index(Request $request)
     {
-        abort_if(Gate::denies('akreditasi_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('akreditasi_internasional_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Akreditasi::with(['fakultas', 'prodi', 'jenjang', 'lembaga'])->select(sprintf('%s.*', (new Akreditasi)->table));
+            $query = AkreditasiInternasional::with(['fakultas', 'prodi', 'jenjang', 'lembaga'])->select(sprintf('%s.*', (new AkreditasiInternasional)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
             $table->addColumn('actions', '&nbsp;');
 
             $table->editColumn('actions', function ($row) {
-                $viewGate      = 'akreditasi_show';
-                $editGate      = 'akreditasi_edit';
-                $deleteGate    = 'akreditasi_delete';
-                $crudRoutePart = 'akreditasis';
+                $viewGate      = 'akreditasi_internasional_show';
+                $editGate      = 'akreditasi_internasional_edit';
+                $deleteGate    = 'akreditasi_internasional_delete';
+                $crudRoutePart = 'akreditasi-internasionals';
 
                 return view('partials.datatablesActions', compact(
                     'viewGate',
@@ -69,8 +69,12 @@ class AkreditasiController extends Controller
                 return $row->no_sk ? $row->no_sk : '';
             });
 
+            $table->editColumn('diakui_dikti', function ($row) {
+                return $row->diakui_dikti ? "<span class='badge badge-info'>Sudah</span>" : '<span class="badge badge-danger">Belum</span>';
+            });
+
             $table->editColumn('peringkat', function ($row) {
-                return $row->peringkat ? Akreditasi::PERINGKAT_SELECT[$row->peringkat] : '';
+                return $row->peringkat ? AkreditasiInternasional::PERINGKAT_SELECT[$row->peringkat] : '';
             });
             $table->editColumn('nilai', function ($row) {
                 return $row->nilai ? $row->nilai : '';
@@ -87,24 +91,24 @@ class AkreditasiController extends Controller
                 return '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'fakultas', 'prodi', 'lembaga', 'sertifikat']);
+            $table->rawColumns(['actions', 'placeholder', 'fakultas', 'prodi', 'lembaga', 'sertifikat', 'diakui_dikti']);
 
             return $table->make(true);
         }
 
-        return view('admin.akreditasis.index');
+        return view('admin.akreditasiInternasionals.index');
     }
 
     public function create()
     {
-        abort_if(Gate::denies('akreditasi_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('akreditasi_internasional_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $lembagas = LembagaAkreditasi::where('type', 'nasional')->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $lembagas = LembagaAkreditasi::where('type', 'internasional')->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.akreditasis.create', compact('lembagas'));
+        return view('admin.akreditasiInternasionals.create', compact('lembagas'));
     }
 
-    public function store(StoreAkreditasiRequest $request)
+    public function store(StoreAkreditasiInternasionalRequest $request)
     {
         $prodi = Prodi::find($request->input('prodi_id'));
         $lembaga = LembagaAkreditasi::find($request->input('lembaga_id'));
@@ -114,7 +118,7 @@ class AkreditasiController extends Controller
 
         try {
             DB::transaction(function () use ($request, $prodi, $lembaga) {
-                $akreditasi = Akreditasi::create($request->all());
+                $akreditasiInternasional = AkreditasiInternasional::create($request->all());
 
                 $prodi_name = Str::slug($prodi->jenjang->name . '-' . $prodi->name_dikti);
 
@@ -132,7 +136,7 @@ class AkreditasiController extends Controller
                     rename($filePath, $newFilePath);
 
                     if (file_exists($newFilePath)) {
-                        $akreditasi->addMedia($newFilePath)->toMediaCollection('sertifikat');
+                        $akreditasiInternasional->addMedia($newFilePath)->toMediaCollection('sertifikat');
                     } else {
                         throw new \Exception('File does not exist at path: ' . $newFilePath);
                     }
@@ -148,98 +152,92 @@ class AkreditasiController extends Controller
                     rename($filePath, $newFilePath);
 
                     if (file_exists($newFilePath)) {
-                        $akreditasi->addMedia($newFilePath)->toMediaCollection('file_penunjang');
+                        $akreditasiInternasional->addMedia($newFilePath)->toMediaCollection('file_penunjang');
                     } else {
                         throw new \Exception('File does not exist at path: ' . $newFilePath);
                     }
                 }
 
                 if ($media = $request->input('ck-media', false)) {
-                    Media::whereIn('id', $media)->update(['model_id' => $akreditasi->id]);
+                    Media::whereIn('id', $media)->update(['model_id' => $akreditasiInternasional->id]);
                 }
             });
 
-            Alert::success('Success', 'Akreditasi Berhasil Disimpan');
+            Alert::success('Success', 'Akreditasi Internasional Berhasil Disimpan');
         } catch (\Exception $e) {
             Alert::error('Error', "Failed: " . $e->getMessage());
         }
 
-        return redirect()->route('admin.akreditasis.index');
+        return redirect()->route('admin.akreditasi-internasionals.index');
     }
 
-    public function edit(Akreditasi $akreditasi)
+    public function edit(AkreditasiInternasional $akreditasiInternasional)
     {
-        abort_if(Gate::denies('akreditasi_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $fakultas = Faculty::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $prodis = Prodi::pluck('name_dikti', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $jenjangs = Jenjang::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        abort_if(Gate::denies('akreditasi_internasional_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $lembagas = LembagaAkreditasi::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $akreditasi->load('fakultas', 'prodi', 'jenjang', 'lembaga');
+        $akreditasiInternasional->load('fakultas', 'prodi', 'jenjang', 'lembaga');
 
-        return view('admin.akreditasis.edit', compact('akreditasi', 'fakultas', 'jenjangs', 'lembagas', 'prodis'));
+        return view('admin.akreditasiInternasionals.edit', compact('akreditasiInternasional', 'fakultas', 'jenjangs', 'lembagas', 'prodis'));
     }
 
-    public function update(UpdateAkreditasiRequest $request, Akreditasi $akreditasi)
+    public function update(UpdateAkreditasiInternasionalRequest $request, AkreditasiInternasional $akreditasiInternasional)
     {
-        $akreditasi->update($request->all());
+        $akreditasiInternasional->update($request->all());
 
         if ($request->input('sertifikat', false)) {
-            if (! $akreditasi->sertifikat || $request->input('sertifikat') !== $akreditasi->sertifikat->file_name) {
-                if ($akreditasi->sertifikat) {
-                    $akreditasi->sertifikat->delete();
+            if (! $akreditasiInternasional->sertifikat || $request->input('sertifikat') !== $akreditasiInternasional->sertifikat->file_name) {
+                if ($akreditasiInternasional->sertifikat) {
+                    $akreditasiInternasional->sertifikat->delete();
                 }
-                $akreditasi->addMedia(storage_path('tmp/uploads/' . basename($request->input('sertifikat'))))->toMediaCollection('sertifikat');
+                $akreditasiInternasional->addMedia(storage_path('tmp/uploads/' . basename($request->input('sertifikat'))))->toMediaCollection('sertifikat');
             }
-        } elseif ($akreditasi->sertifikat) {
-            $akreditasi->sertifikat->delete();
+        } elseif ($akreditasiInternasional->sertifikat) {
+            $akreditasiInternasional->sertifikat->delete();
         }
 
-        if (count($akreditasi->file_penunjang) > 0) {
-            foreach ($akreditasi->file_penunjang as $media) {
+        if (count($akreditasiInternasional->file_penunjang) > 0) {
+            foreach ($akreditasiInternasional->file_penunjang as $media) {
                 if (! in_array($media->file_name, $request->input('file_penunjang', []))) {
                     $media->delete();
                 }
             }
         }
-        $media = $akreditasi->file_penunjang->pluck('file_name')->toArray();
+        $media = $akreditasiInternasional->file_penunjang->pluck('file_name')->toArray();
         foreach ($request->input('file_penunjang', []) as $file) {
             if (count($media) === 0 || ! in_array($file, $media)) {
-                $akreditasi->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('file_penunjang');
+                $akreditasiInternasional->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('file_penunjang');
             }
         }
 
-        return redirect()->route('admin.akreditasis.index');
+        return redirect()->route('admin.akreditasi-internasionals.index');
     }
 
-    public function show(Akreditasi $akreditasi)
+    public function show(AkreditasiInternasional $akreditasiInternasional)
     {
-        abort_if(Gate::denies('akreditasi_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('akreditasi_internasional_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $akreditasi->load('fakultas', 'prodi', 'jenjang', 'lembaga');
+        $akreditasiInternasional->load('fakultas', 'prodi', 'jenjang', 'lembaga');
 
-        return view('admin.akreditasis.show', compact('akreditasi'));
+        return view('admin.akreditasiInternasionals.show', compact('akreditasiInternasional'));
     }
 
-    public function destroy(Akreditasi $akreditasi)
+    public function destroy(AkreditasiInternasional $akreditasiInternasional)
     {
-        abort_if(Gate::denies('akreditasi_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('akreditasi_internasional_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $akreditasi->delete();
+        $akreditasiInternasional->delete();
 
         return back();
     }
 
-    public function massDestroy(MassDestroyAkreditasiRequest $request)
+    public function massDestroy(MassDestroyAkreditasiInternasionalRequest $request)
     {
-        $akreditasis = Akreditasi::find(request('ids'));
+        $akreditasiInternasionals = AkreditasiInternasional::find(request('ids'));
 
-        foreach ($akreditasis as $akreditasi) {
-            $akreditasi->delete();
+        foreach ($akreditasiInternasionals as $akreditasiInternasional) {
+            $akreditasiInternasional->delete();
         }
 
         return response(null, Response::HTTP_NO_CONTENT);
@@ -247,9 +245,9 @@ class AkreditasiController extends Controller
 
     public function storeCKEditorImages(Request $request)
     {
-        abort_if(Gate::denies('akreditasi_create') && Gate::denies('akreditasi_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('akreditasi_internasional_create') && Gate::denies('akreditasi_internasional_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $model         = new Akreditasi();
+        $model         = new AkreditasiInternasional();
         $model->id     = $request->input('crud_id', 0);
         $model->exists = true;
         $media         = $model->addMediaFromRequest('upload')->toMediaCollection('ck-media');

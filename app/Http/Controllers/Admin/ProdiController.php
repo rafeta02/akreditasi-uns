@@ -14,6 +14,9 @@ use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
+use App\Imports\ProdiImport;
+use Alert;
+use Excel;
 
 class ProdiController extends Controller
 {
@@ -142,5 +145,54 @@ class ProdiController extends Controller
         }
 
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function import(Request $request)
+    {
+        $file = $request->file('import_file');
+        $request->validate([
+            'import_file' => 'mimes:csv,xls,xlsx',
+        ]);
+
+        Excel::import(new ProdiImport(), $file);
+
+        Alert::success('Success', 'Prodi berhasil di import');
+        return redirect()->back();
+    }
+
+    public function getProdisWithFakultas(Request $request)
+    {
+        $query = $request->input('q');
+
+        $prodis = Prodi::where('name_dikti', 'like', '%' . $query . '%')
+            ->orWhere('name_akreditasi', 'like', '%' . $query . '%')
+            ->orWhere('name_en', 'like', '%' . $query . '%')
+            ->orWhereHas('fakultas', function($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%');
+            })
+            ->with('fakultas')
+            ->get();
+
+        $results = [];
+        foreach ($prodis as $prodi) {
+            $fakultas = $prodi->fakultas->name;
+            if (!isset($results[$fakultas])) {
+                $results[$fakultas] = [];
+            }
+            $results[$fakultas][] = [
+                'id' => $prodi->id,
+                'text' => $prodi->jenjang->name . ' - ' . $prodi->name_dikti
+            ];
+        }
+
+        $formattedResults = [];
+        foreach ($results as $fakultas => $prodi) {
+            $formattedResults[] = [
+                'text' => $fakultas,
+                'children' => $prodi
+            ];
+        }
+
+        return response()->json($formattedResults);
     }
 }

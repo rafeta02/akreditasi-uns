@@ -170,14 +170,14 @@
                         </a>
                     </li>
                 @endcan
-                @can('akreditasi_intenasional_access')
+                @can('akreditasi_internasional_access')
                     <li class="nav-item">
-                        <a href="{{ route("admin.akreditasi-intenasionals.index") }}" class="nav-link {{ request()->is("admin/akreditasi-intenasionals") || request()->is("admin/akreditasi-intenasionals/*") ? "active" : "" }}">
+                        <a href="{{ route("admin.akreditasi-internasionals.index") }}" class="nav-link {{ request()->is("admin/akreditasi-internasionals") || request()->is("admin/akreditasi-internasionals/*") ? "active" : "" }}">
                             <i class="fa-fw nav-icon fas fa-certificate">
 
                             </i>
                             <p>
-                                {{ trans('cruds.akreditasiIntenasional.title') }}
+                                {{ trans('cruds.akreditasiInternasional.title') }}
                             </p>
                         </a>
                     </li>

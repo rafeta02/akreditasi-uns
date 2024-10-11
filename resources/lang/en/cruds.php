@@ -227,9 +227,9 @@ return [
             'fakultas_helper'       => ' ',
         ],
     ],
-    'akreditasiIntenasional' => [
-        'title'          => 'Akreditasi Intenasional',
-        'title_singular' => 'Akreditasi Intenasional',
+    'akreditasiInternasional' => [
+        'title'          => 'Akreditasi Internasional',
+        'title_singular' => 'Akreditasi Internasional',
         'fields'         => [
             'id'                    => 'ID',
             'id_helper'             => ' ',

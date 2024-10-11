@@ -2,16 +2,16 @@
 
 namespace App\Http\Requests;
 
-use App\Models\AkreditasiIntenasional;
+use App\Models\AkreditasiInternasional;
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 
-class UpdateAkreditasiIntenasionalRequest extends FormRequest
+class StoreAkreditasiInternasionalRequest extends FormRequest
 {
     public function authorize()
     {
-        return Gate::allows('akreditasi_intenasional_edit');
+        return Gate::allows('akreditasi_internasional_create');
     }
 
     public function rules()

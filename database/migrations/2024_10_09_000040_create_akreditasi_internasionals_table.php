@@ -4,11 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAkreditasiIntenasionalsTable extends Migration
+class CreateAkreditasiInternasionalsTable extends Migration
 {
     public function up()
     {
-        Schema::create('akreditasi_intenasionals', function (Blueprint $table) {
+        Schema::create('akreditasi_internasionals', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('no_sk')->nullable();
             $table->date('tgl_sk')->nullable();

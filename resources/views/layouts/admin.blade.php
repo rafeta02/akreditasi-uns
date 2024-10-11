@@ -39,6 +39,7 @@
 </div>
 
 <body class="sidebar-mini layout-fixed" style="height: auto;">
+    @include('sweetalert::alert')
     <div class="wrapper">
         <nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom">
             <!-- Left navbar links -->
