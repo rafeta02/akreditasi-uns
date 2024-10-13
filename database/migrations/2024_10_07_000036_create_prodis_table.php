@@ -11,6 +11,7 @@ class CreateProdisTable extends Migration
         Schema::create('prodis', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('code');
+            $table->string('slug')->nullable();
             $table->string('code_siakad')->nullable();
             $table->string('nim')->nullable();
             $table->string('name_dikti')->nullable();

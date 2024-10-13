@@ -8,10 +8,11 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Prodi extends Model
 {
-    use SoftDeletes, Auditable, HasFactory;
+    use SoftDeletes, Auditable, HasFactory, Sluggable;
 
     public $table = 'prodis';
 
@@ -25,6 +26,7 @@ class Prodi extends Model
 
     protected $fillable = [
         'code',
+        'slug',
         'fakultas_id',
         'jenjang_id',
         'code_siakad',
@@ -77,4 +79,16 @@ class Prodi extends Model
     {
         $this->attributes['tgl_sk_izin'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
     }
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => ['jenjang_name', 'name_dikti'],
+                'separator' => '-', // Custom separator
+                'maxLength' => 50, // Maximum length of the slug
+            ]
+        ];
+    }
+
 }
