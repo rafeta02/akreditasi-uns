@@ -3,12 +3,9 @@
 // Route::redirect('/', '/login');
 Route::get('/', 'HomeController@index')->name("home");
 Route::get('/home', function () {
-    if (session('status')) {
-        return redirect()->route('admin.home')->with('status', session('status'));
-    }
-
-    return redirect()->route('admin.home');
+    return redirect()->route('home');
 });
+Route::get('/fakultas', 'HomeController@fakultas')->name("fakultas");
 
 Route::get('select/prodi-with-fakultas', 'Admin\ProdiController@getProdisWithFakultas')->name('select.getProdiWithFakultas');
 
