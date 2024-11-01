@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests;
+use App\Models\Jenjang;
 
 class HomeController extends Controller
 {
@@ -29,5 +31,11 @@ class HomeController extends Controller
     public function fakultas()
     {
         return view('frontend.fakultas');
+    }
+
+    public function prodi()
+    {
+        $jenjangs = Jenjang::all();
+        return view('frontend.prodi', compact('jenjangs'));
     }
 }

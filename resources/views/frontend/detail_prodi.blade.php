@@ -28,8 +28,8 @@
                         <span class="info-box-icon bg-danger"><i class="far fa-star"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Prestasi Mahasiswa</span>
-                            <span class="info-box-number">{{ $prestasi ?? 0 }} Prestasi</span>
+                            <span class="info-box-text">Vokasi</span>
+                            <span class="info-box-number">{{ $prestasi ?? 0 }} Prodi</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
