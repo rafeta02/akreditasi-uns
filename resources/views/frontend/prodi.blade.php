@@ -1,17 +1,17 @@
 @extends('layouts.frontend')
 
-@section('title', 'Data Fakultas | Akreditasi UNS | LPPMP UNS')
+@section('title', 'Data Program Studi | Akreditasi UNS | LPPMP UNS')
 
 @section('breadcumb')
 <div class="container">
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0"> Data Fakultas </h1>
+            <h1 class="m-0"> Data Program Studi </h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Fakultas</li>
+                <li class="breadcrumb-item active">Program Studi</li>
             </ol>
         </div><!-- /.col -->
     </div><!-- /.row -->
@@ -24,7 +24,7 @@
         <div class="col-lg-12">
           <div class="card">
             <div class="card-header">
-                Rekap Akreditasi Per Fakultas
+                Daftar Akreditasi Program Studi
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -32,12 +32,12 @@
                         <thead>
                             <tr>
                               <th>No</th>
+                              <th>Prodi</th>
                               <th>Fakultas</th>
+                              <th>Akreditasi Nasional</th>
                               <th>Akreditasi Internasional</th>
-                              <th>"A"</th>
-                              <th>Unggul</th>
-                              <th>"B"</th>
-                              <th>Baik Sekali</th>
+                              <th>Nilai</th>
+                              <th></th>
                               <th>"C"</th>
                               <th>Baik</th>
                               <th>Terakreditasi Sementara</th>

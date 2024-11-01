@@ -68,4 +68,11 @@ $(document).ready(function () {
       $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
     }, 350);
   })
+  $('.image-popup').magnificPopup({
+      type: 'image',
+      gallery: {
+          enabled: true // Enable gallery mode
+      }
+  });
+
 })

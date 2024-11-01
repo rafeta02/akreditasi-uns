@@ -6,6 +6,7 @@ Route::get('/home', function () {
     return redirect()->route('home');
 });
 Route::get('/fakultas', 'HomeController@fakultas')->name("fakultas");
+Route::get('/prodi', 'HomeController@prodi')->name("prodi");
 
 Route::get('select/prodi-with-fakultas', 'Admin\ProdiController@getProdisWithFakultas')->name('select.getProdiWithFakultas');
 

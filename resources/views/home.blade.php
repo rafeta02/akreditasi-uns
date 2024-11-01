@@ -18,7 +18,7 @@
                     <div class="icon">
                         <i class="ion ion-university"></i>
                     </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('fakultas') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -67,6 +67,73 @@
                     </div>
                 </div>
                 <!-- ./col -->
+            </div>
+
+            <div class="row">
+              <div class="col-lg-6">
+                  <div class="card">
+                      <div class="card-header text-muted border-bottom-0">
+                          Akreditasi Universitas
+                      </div>
+                      <div class="card-body pt-0">
+                          <div class="row">
+                              <div class="col-7">
+                                  <h2 class="lead"><b>Universitas Sebelas Maret</b></h2>
+
+                                  <ul class="ml-4 my-4 fa-ul text-muted">
+                                      <li><span class="fa-li"><i class="fas fa-lg fa-landmark"></i></span>
+                                        Lembaga Pengakreditasi<br><b>BAN PT</b>
+                                      </li>
+                                      <li><span class="fa-li"><i class="fas fa-lg fa-thumbtack"></i></span>
+                                        Standar yang Digunakan<br><b>SK PerBAN-PT No. 5 Tahun 2024</b>
+                                      </li>
+                                      <li><span class="fa-li"><i class="fas fa-lg fa-award"></i></span>
+                                        Nilai<br><b>UNGGUL</b>
+                                      </li>
+                                      <li><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span>
+                                        Periode<br><b>18 Juli 2023 s/d 18 Juli 2028</b>
+                                      </li>
+                                  </ul>
+                              </div>
+                              <div class="col-5 text-center">
+                                  <img src="{{ asset('img/uns.png') }}" alt="Logo UNS" class="img-circle img-fluid">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="card-footer">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header text-muted border-bottom-0">
+                        Sertifikat Akreditasi
+                    </div>
+                    <div class="card-body pt-0">
+                        <div class="row">
+                            <div class="col-7">
+                                <ul class="ml-4 my-2 fa-ul text-muted">
+                                    <li><span class="fa-li"><i class="fas fa-lg fa-certificate"></i></span>
+                                      No Sertifikat<br><b>No. 451/SK/BAN-PT/Ak.Ppj/PT/VII/2023</b>
+                                    </li>
+                                    <li><span class="fa-li"><i class="fas fa-lg fa-award"></i></span>
+                                      Nilai<br><b>UNGGUL</b>
+                                    </li>
+                                    <li><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span>
+                                      Periode<br><b>18 Juli 2023 s/d 18 Juli 2028</b>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-5 text-center">
+                              <a href="{{ asset('img/sertifikat.jpg') }}" class="image-popup">
+                                <img class="img-fluid" src="{{ asset('img/sertifikat.jpg') }}" alt="Sertifikat Akreditasi UNS">
+                              </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
             </div>
 
             <div class="row">
@@ -150,6 +217,8 @@
                     </div>
                     <!-- /.card -->
                 </div>
+            </div>
+
             </div>
             <div class="row">
                 <div class="col-md-12">
