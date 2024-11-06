@@ -28,7 +28,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover datatable datatable-PrestasiMaba">
+                    <table class="table table-bordered table-hover datatable datatable-List">
                         <thead>
                             <tr>
                               <th>No</th>
@@ -73,7 +73,7 @@
 @parent
 <script>
 $(function () {
-    let table = $('.datatable-PrestasiMaba:not(.ajaxTable)').DataTable({
+    let table = $('.datatable-List:not(.ajaxTable)').DataTable({
         searching: false,
         paging: false,
         pageLength: 50

@@ -7,6 +7,10 @@ Route::get('/home', function () {
 });
 Route::get('/fakultas', 'HomeController@fakultas')->name("fakultas");
 Route::get('/prodi', 'HomeController@prodi')->name("prodi");
+Route::get('/akreditasi-nasional', 'HomeController@akreditasiNasional')->name("akreditasiNasional");
+Route::get('/akreditasi-internasional', 'HomeController@akreditasiInternasional')->name("akreditasiInternasional");
+Route::get('/infografis', 'HomeController@infografis')->name("infografis");
+Route::get('/pantauan-banpt', 'HomeController@pantauanBanpt')->name("pantauanBanpt");
 
 Route::get('select/prodi-with-fakultas', 'Admin\ProdiController@getProdisWithFakultas')->name('select.getProdiWithFakultas');
 

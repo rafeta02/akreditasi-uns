@@ -63,12 +63,19 @@
                         <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false" class="nav-link dropdown-toggle">Akreditasi</a>
                         <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
-                            <li><a href="#" class="dropdown-item">Akreditasi Nasional</a></li>
-                            <li><a href="#" class="dropdown-item">Akreditasi Internasional</a></li>
+                            <li><a href="{{ route('akreditasiNasional') }}" class="dropdown-item">Akreditasi Nasional</a></li>
+                            <li><a href="{{ route('akreditasiInternasional') }}" class="dropdown-item">Akreditasi Internasional</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a id="pantuan" href="#" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false" class="nav-link dropdown-toggle">Pantauan</a>
+                        <ul aria-labelledby="pantuan" class="dropdown-menu border-0 shadow">
+                            <li><a href="{{ route('pantauanBanpt') }}" class="dropdown-item">Pantauan BAN-PT</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Infografis Pengajaran</a>
+                        <a href="{{ route('infografis') }}" class="nav-link">Infografis Pengajaran</a>
                     </li>
                 </ul>
             </div>

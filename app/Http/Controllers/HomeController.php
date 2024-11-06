@@ -38,4 +38,27 @@ class HomeController extends Controller
         $jenjangs = Jenjang::all();
         return view('frontend.prodi', compact('jenjangs'));
     }
+
+    public function akreditasiNasional()
+    {
+        $jenjangs = Jenjang::all();
+        return view('frontend.akreditasi_nasional', compact('jenjangs'));
+    }
+
+    public function akreditasiInternasional()
+    {
+        $jenjangs = Jenjang::all();
+        return view('frontend.akreditasi_internasional', compact('jenjangs'));
+    }
+
+    public function infografis()
+    {
+        return view('frontend.infografis');
+    }
+
+    public function pantauanBanpt()
+    {
+        $jenjangs = Jenjang::all();
+        return view('frontend.pantuan_banpt', compact('jenjangs'));
+    }
 }
