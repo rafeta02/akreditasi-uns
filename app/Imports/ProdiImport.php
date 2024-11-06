@@ -20,6 +20,9 @@ class ProdiImport implements ToCollection, WithHeadingRow
         foreach ($rows as $row) {
             $faculty = Faculty::where('code', $row['fakultas'])->first();
             $jenjang = Jenjang::where('code', $row['jenjang'])->first();
+            if (!$faculty) {
+                dd($row['fakultas']);
+            }
             Prodi::create([
                 'code' => $row['code'],
                 'fakultas_id' => $faculty->id,
@@ -31,9 +34,9 @@ class ProdiImport implements ToCollection, WithHeadingRow
                 'name_en' => $row['name_en'],
                 'gelar' => $row['gelar'],
                 'gelar_en' => $row['gelar_en'],
-                'tanggal_berdiri' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['tanggal_berdiri']))->format('d-m-Y'),
+                'tanggal_berdiri' => is_numeric($row['tanggal_berdiri']) ? Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject((float) $row['tanggal_berdiri']))->format('d-m-Y') : null,
                 'sk_izin' => $row['sk_izin'],
-                'tgl_sk_izin' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['tgl_sk_izin']))->format('d-m-Y'),
+                'tgl_sk_izin' => is_numeric($row['tgl_sk_izin']) ? Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['tgl_sk_izin']))->format('d-m-Y') : null,
             ]);
         }
     }

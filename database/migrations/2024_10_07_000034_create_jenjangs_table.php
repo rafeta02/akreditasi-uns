@@ -12,6 +12,7 @@ class CreateJenjangsTable extends Migration
             $table->bigIncrements('id');
             $table->string('code')->nullable();
             $table->string('name');
+            $table->string('slug')->nullable();
             $table->longText('description')->nullable();
             $table->timestamps();
             $table->softDeletes();

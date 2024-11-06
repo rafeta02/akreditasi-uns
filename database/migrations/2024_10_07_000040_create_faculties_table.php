@@ -12,6 +12,7 @@ class CreateFacultiesTable extends Migration
             $table->bigIncrements('id');
             $table->string('code');
             $table->string('name');
+            $table->string('slug')->nullable();
             $table->longText('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
