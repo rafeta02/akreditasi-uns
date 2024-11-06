@@ -7,6 +7,7 @@ Route::get('/home', function () {
 });
 Route::get('/fakultas', 'HomeController@fakultas')->name("fakultas");
 Route::get('/prodi', 'HomeController@prodi')->name("prodi");
+Route::get('/prodi/detail', 'HomeController@detailProdi')->name("detail-prodi");
 
 Route::get('select/prodi-with-fakultas', 'Admin\ProdiController@getProdisWithFakultas')->name('select.getProdiWithFakultas');
 

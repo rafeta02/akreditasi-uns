@@ -146,7 +146,13 @@
                                 <td class="text-center">Terakreditasi</td>
                                 <td class="text-center">Unggul <br> (399)</td>
                                 <td class="text-center">3906/SK/BAN-PT/Akred-Itnl/S/IX/2023</td>
-                                <td class="text-center"></td>
+                                <td class="text-center">
+                                    <a class="btn btn-primary btn-sm" href="{{ route('detail-prodi')}}">
+                                        <i class="fas fa-folder">
+                                        </i>
+                                        View
+                                    </a>
+                                </td>
                               </tr>
                         </tbody>
                     </table>

@@ -38,4 +38,10 @@ class HomeController extends Controller
         $jenjangs = Jenjang::all();
         return view('frontend.prodi', compact('jenjangs'));
     }
+
+    public function detailProdi()
+    {
+        $jenjangs = Jenjang::all();
+        return view('frontend.detail_prodi', compact('jenjangs'));
+    }
 }
