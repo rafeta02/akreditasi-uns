@@ -1,17 +1,17 @@
 @extends('layouts.frontend')
 
-@section('title', 'Data Program Studi | Akreditasi UNS | LPPMP UNS')
+@section('title', 'Akreditasi Nasional | Akreditasi UNS | LPPMP UNS')
 
 @section('breadcumb')
 <div class="container">
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0"> Data Program Studi </h1>
+            <h1 class="m-0"> Akreditasi Nasional</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">Program Studi</li>
+                <li class="breadcrumb-item active">Akreditasi Nasional</li>
             </ol>
         </div><!-- /.col -->
     </div><!-- /.row -->
@@ -28,8 +28,8 @@
                         <span class="info-box-icon bg-danger"><i class="far fa-star"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Prestasi Mahasiswa</span>
-                            <span class="info-box-number">{{ $prestasi ?? 0 }} Prestasi</span>
+                            <span class="info-box-text">Akreditasi Unggul</span>
+                            <span class="info-box-number">80 Prodi</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -41,8 +41,8 @@
                         <span class="info-box-icon bg-primary"><i class="far fa-bell"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Kompetensi Mahasiswa</span>
-                            <span class="info-box-number">{{ $competency ?? 0 }} Checklist</span>
+                            <span class="info-box-text">Akreditasi "A"</span>
+                            <span class="info-box-number">36 Prodi</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -54,8 +54,8 @@
                         <span class="info-box-icon bg-warning"><i class="far fa-flag"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Assessment Taken</span>
-                            <span class="info-box-number">{{ $assessment ?? 0 }} Times</span>
+                            <span class="info-box-text">Akreditasi Baik Sekali</span>
+                            <span class="info-box-number">12 Prodi</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -65,7 +65,7 @@
             </div>
           <div class="card">
             <div class="card-header">
-                Daftar Akreditasi Program Studi
+                Daftar Akreditasi Nasional
             </div>
 
             <div class="card-body">
@@ -93,7 +93,7 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="jenjang_id">Akreditasi Nasional</label>
+                                <label for="jenjang_id">Lembaga Akreditasi</label>
                                 <select class="form-control select2" name="jenjang_id" id="jenjang_id">
                                     @foreach($jenjangs as $id => $entry)
                                         <option value="{{ $id }}" {{ old('jenjang_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
@@ -103,7 +103,7 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="jenjang_id">Akreditasi Internasional</label>
+                                <label for="jenjang_id">Nilai Akreditasi</label>
                                 <select class="form-control select2" name="jenjang_id" id="jenjang_id">
                                     @foreach($jenjangs as $id => $entry)
                                         <option value="{{ $id }}" {{ old('jenjang_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
@@ -130,8 +130,7 @@
                               <th width="1%">No</th>
                               <th>Prodi</th>
                               <th>Fakultas</th>
-                              <th width="1%">Akreditasi Nasional</th>
-                              <th width="1%">Akreditasi Internasional</th>
+                              <th width="1%">Lembaga Akreditasi</th>
                               <th>Nilai</th>
                               <th>No Sertifikat</th>
                               <th></th>
@@ -142,17 +141,10 @@
                                 <td class="text-center">1</td>
                                 <td class="text-center">D3 Manajemen Bisnis</td>
                                 <td class="text-center">Sekolah Vokasi</td>
-                                <td class="text-center">Terakreditasi</td>
-                                <td class="text-center">Terakreditasi</td>
+                                <td class="text-center">LAMKES</td>
                                 <td class="text-center">Unggul <br> (399)</td>
                                 <td class="text-center">3906/SK/BAN-PT/Akred-Itnl/S/IX/2023</td>
-                                <td class="text-center">
-                                    <a class="btn btn-primary btn-sm" href="{{ route('detail-prodi')}}">
-                                        <i class="fas fa-folder">
-                                        </i>
-                                        View
-                                    </a>
-                                </td>
+                                <td class="text-center"></td>
                               </tr>
                         </tbody>
                     </table>

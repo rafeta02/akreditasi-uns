@@ -17,12 +17,12 @@ class SystemCalendarController extends Controller
             'route'      => 'admin.akreditasis.edit',
         ],
         [
-            'model'      => '\App\Models\AkreditasiIntenasional',
+            'model'      => '\App\Models\AkreditasiInternasional',
             'date_field' => 'tgl_akhir_sk',
             'field'      => 'no_sk',
             'prefix'     => 'NO SK',
             'suffix'     => 'Has Ended',
-            'route'      => 'admin.akreditasi-intenasionals.edit',
+            'route'      => 'admin.akreditasi-internasionals.edit',
         ],
     ];
 

@@ -1,141 +1,27 @@
 @extends('layouts.frontend')
 
-@section('title', 'Akreditasi UNS | LPPMP UNS')
+@section('title', 'Infografis | Akreditasi UNS | LPPMP UNS')
+
+@section('breadcumb')
+<div class="container">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0"> Infografis </h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                <li class="breadcrumb-item active">Infografis</li>
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
+@endsection
 
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-12">
-            <div class="row">
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-info">
-                    <div class="inner">
-                        <h3>10</h3>
-        
-                        <p>Fakultas</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-university"></i>
-                    </div>
-                    <a href="{{ route('fakultas') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-success">
-                    <div class="inner">
-                        <h3>220</h3>
-        
-                        <p>Program Studi</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-university"></i>
-                    </div>
-                    <a href="{{ route('prodi') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-warning">
-                    <div class="inner">
-                        <h3>180 <sup style="font-size: 20px">Prodi</sup></h3>
-        
-                        <p>Terakreditasi Unggul</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-ribbon-b"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-danger">
-                    <div class="inner">
-                        <h3>65 <sup style="font-size: 20px">Prodi</sup></h3>
-        
-                        <p>Terakreditasi Internasional</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-ribbon-b"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-            </div>
-
-            <div class="row">
-              <div class="col-lg-6">
-                  <div class="card">
-                      <div class="card-header text-muted border-bottom-0">
-                          Akreditasi Universitas
-                      </div>
-                      <div class="card-body pt-0">
-                          <div class="row">
-                              <div class="col-7">
-                                  <h2 class="lead"><b>Universitas Sebelas Maret</b></h2>
-
-                                  <ul class="ml-4 my-4 fa-ul text-muted">
-                                      <li><span class="fa-li"><i class="fas fa-lg fa-landmark"></i></span>
-                                        Lembaga Pengakreditasi<br><b>BAN PT</b>
-                                      </li>
-                                      <li><span class="fa-li"><i class="fas fa-lg fa-thumbtack"></i></span>
-                                        Standar yang Digunakan<br><b>SK PerBAN-PT No. 5 Tahun 2024</b>
-                                      </li>
-                                      <li><span class="fa-li"><i class="fas fa-lg fa-award"></i></span>
-                                        Nilai<br><b>UNGGUL</b>
-                                      </li>
-                                      <li><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span>
-                                        Periode<br><b>18 Juli 2023 s/d 18 Juli 2028</b>
-                                      </li>
-                                  </ul>
-                              </div>
-                              <div class="col-5 text-center">
-                                  <img src="{{ asset('img/uns.png') }}" alt="Logo UNS" class="img-circle img-fluid">
-                              </div>
-                          </div>
-                      </div>
-                      <div class="card-footer">
-                      </div>
-                  </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-header text-muted border-bottom-0">
-                        Sertifikat Akreditasi
-                    </div>
-                    <div class="card-body pt-0">
-                        <div class="row">
-                            <div class="col-7">
-                                <ul class="ml-4 my-2 fa-ul text-muted">
-                                    <li><span class="fa-li"><i class="fas fa-lg fa-certificate"></i></span>
-                                      No Sertifikat<br><b>No. 451/SK/BAN-PT/Ak.Ppj/PT/VII/2023</b>
-                                    </li>
-                                    <li><span class="fa-li"><i class="fas fa-lg fa-award"></i></span>
-                                      Nilai<br><b>UNGGUL</b>
-                                    </li>
-                                    <li><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span>
-                                      Periode<br><b>18 Juli 2023 s/d 18 Juli 2028</b>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-5 text-center">
-                              <a href="{{ asset('img/sertifikat.jpg') }}" class="image-popup">
-                                <img class="img-fluid" src="{{ asset('img/sertifikat.jpg') }}" alt="Sertifikat Akreditasi UNS">
-                              </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                    </div>
-                </div>
-            </div>
-
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
@@ -217,7 +103,6 @@
                     </div>
                     <!-- /.card -->
                 </div>
-            </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -332,23 +217,6 @@
                     </div>
                     <!-- /.card -->
                 </div>
-                <!-- /.col -->
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    Dashboard
-                </div>
-
-                <div class="card-body">
-                    @if(session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    <div class="row">
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -358,7 +226,7 @@
 @parent
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script>
-$(function () {
+    $(function () {
   'use strict'
 
   var ticksStyle = {
