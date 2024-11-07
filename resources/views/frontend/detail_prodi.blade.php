@@ -1,18 +1,18 @@
 @extends('layouts.frontend')
 
-@section('title', 'S1 Akuntansi | Akreditasi UNS | LPPMP UNS')
+@section('title', $prodi->nama_prodi . ' | Akreditasi UNS | LPPMP UNS')
 
 @section('breadcumb')
 <div class="container">
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0"> S1 Akuntansi </h1>
+            <h1 class="m-0"> {{ $prodi->nama_prodi }} </h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('prodi') }}">Program Studi</a></li>
-                <li class="breadcrumb-item active">Akuntansi</li>
+                <li class="breadcrumb-item active">{{ $prodi->nama_prodi }}</li>
             </ol>
         </div><!-- /.col -->
     </div><!-- /.row -->
@@ -33,7 +33,7 @@
                                     src="{{ asset('img/uns.png') }}" alt="User profile picture">
                             </div>
 
-                            <h3 class="profile-username text-center">S1 Akuntansi</h3>
+                            <h3 class="profile-username text-center">{{ $prodi->nama_prodi }}</h3>
 
                             <p class="text-muted text-center">Universitas Sebelas Maret</p>
 
@@ -56,27 +56,35 @@
                     <!-- About Me Box -->
                     <div class="card card-primary">
                         <div class="card-header bg-primary">
-                            <h3 class="card-title">Profile Akreditasi</h3>
+                            <h3 class="card-title">Profile Program Studi</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <strong><i class="fas fa-award mr-1"></i> Nilai</strong>
-                            <p class="text-muted">Unggul</p>
+                            <strong><i class="fas fa-award mr-1"></i> Gelar</strong>
+                            <p class="text-muted">{{ $prodi->gelar }} - {{ $prodi->gelar_en }}</p>
 
                             <hr>
 
-                            <strong><i class="fas fa-calendar mr-1"></i> Berakhir</strong>
-                            <p class="text-muted">31 Agustus 2028</p>
+                            <strong><i class="fas fa-calendar mr-1"></i> Tanggal Berdiri</strong>
+                            <p class="text-muted">{{ Carbon\Carbon::parse($prodi->tanggal_berdiri)->format('d F Y')}}</p>
 
                             <hr>
 
-                            <strong><i class="fas fa-certificate mr-1"></i> Lembaga Pengakreditasi</strong>
-                            <p class="text-muted"> Lembaga Akreditasi Mandiri Ekonomi, Manajemen, Bisnis, dan Akuntansi</p>
+                            <strong><i class="fas fa-certificate mr-1"></i> No. SK Izin Program Studi</strong>
+                            <p class="text-muted">{{ $prodi->sk_izin }}</p>
 
                             <hr>
 
                             <strong><i class="far fa-file-alt mr-1"></i> Standard yang Digunakan</strong>
                             <p class="text-muted">INA TEST</p>
+
+                            {{-- <strong><i class="fas fa-certificate mr-1"></i> Lembaga Pengakreditasi</strong>
+                            <p class="text-muted"> Lembaga Akreditasi Mandiri Ekonomi, Manajemen, Bisnis, dan Akuntansi</p>
+
+                            <hr>
+
+                            <strong><i class="far fa-file-alt mr-1"></i> Standard yang Digunakan</strong>
+                            <p class="text-muted">INA TEST</p> --}}
                         </div>
                         <!-- /.card-body -->
                     </div>

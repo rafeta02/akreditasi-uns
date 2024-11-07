@@ -38,6 +38,7 @@ class Akreditasi extends Model implements HasMedia
         'A'           => 'A',
         'B'           => 'B',
         'C'           => 'C',
+        'SEMENTARA'   => 'TERAKREDITASI SEMENTARA',
     ];
 
     protected $fillable = [

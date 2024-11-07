@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use App\Models\Faculty;
+use App\Models\Prodi;
 use App\Models\Jenjang;
+use App\Models\LembagaAkreditasi;
+use Yajra\DataTables\Facades\DataTables;
 
 class HomeController extends Controller
 {
@@ -30,19 +34,85 @@ class HomeController extends Controller
 
     public function fakultas()
     {
-        return view('frontend.fakultas');
+        $fakultas = Faculty::all();
+        return view('frontend.fakultas', compact('fakultas'));
     }
 
-    public function prodi()
+    public function prodi(Request $request)
     {
-        $jenjangs = Jenjang::all();
-        return view('frontend.prodi', compact('jenjangs'));
+        $prodis = Prodi::all();
+
+        if ($request->ajax()) {
+            $query = Prodi::with(['fakultas', 'jenjang'])->select(sprintf('%s.*', (new Prodi)->table));
+
+            if (!empty($request->fakultas)) {
+                $query->where('fakultas_id', $request->fakultas);
+            }
+            if (!empty($request->jenjang)) {
+                $query->where('jenjang_id', $request->jenjang);
+            }
+            // if (!empty($request->nasional)) {
+            //     $query->whereHas('akreditasi', $request->nasional);
+            // }
+            // if (!empty($request->internasional)) {
+            //     $query->where('akreditasi_internasional', $request->internasional);
+            // }
+
+            $table = Datatables::of($query);
+
+            $table->addColumn('placeholder', '&nbsp;');
+            $table->addColumn('actions', '&nbsp;');
+
+            $table->editColumn('actions', function ($row) {
+                return '<a class="btn btn-primary btn-xs" href="'.route('detail-prodi', $row->slug).'">
+                                <i class="fas fa-eye"></i>
+                            </a>';
+            });
+
+            $table->addColumn('nama_prodi', function ($row) {
+                return $row->nama_prodi ? $row->nama_prodi : '';
+            });
+            $table->addColumn('fakultas_name', function ($row) {
+                return $row->fakultas ? $row->fakultas->name : '';
+            });
+            $table->addColumn('jenjang_name', function ($row) {
+                return $row->jenjang ? $row->jenjang->name : '';
+            });
+
+            $table->editColumn('name_dikti', function ($row) {
+                return $row->name_dikti ? $row->name_dikti : '';
+            });
+            $table->editColumn('name_en', function ($row) {
+                return $row->name_en ? $row->name_en : '';
+            });
+            $table->editColumn('gelar', function ($row) {
+                return $row->gelar ? $row->gelar : '';
+            });
+
+            $table->filterColumn('nama_prodi', function ($query, $keyword) {
+                $query->whereHas('jenjang', function ($q) use ($keyword) {
+                    $q->where('name', 'LIKE', "%{$keyword}%");
+                })
+                ->orWhere('name_dikti', 'LIKE', "%{$keyword}%");
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'fakultas', 'jenjang']);
+
+            return $table->make(true);
+        }
+
+        $jenjangs = Jenjang::pluck('name', 'id')->prepend('All', '');
+        $fakultas = Faculty::pluck('name', 'id')->prepend('All', '');
+        $lembaga_nasional = LembagaAkreditasi::where('type', 'nasional')->pluck('name', 'id')->prepend('All', '');
+        $lembaga_internasional = LembagaAkreditasi::where('type','internasional')->pluck('name', 'id')->prepend('All', '');
+
+        return view('frontend.prodi', compact('prodis', 'jenjangs', 'fakultas', 'lembaga_nasional', 'lembaga_internasional'));
     }
 
-    public function detailProdi()
+    public function detailProdi($slug)
     {
-        $jenjangs = Jenjang::all();
-        return view('frontend.detail_prodi', compact('jenjangs'));
+        $prodi = Prodi::where('slug', $slug)->first();
+        return view('frontend.detail_prodi', compact('prodi'));
     }
     public function akreditasiNasional()
     {
