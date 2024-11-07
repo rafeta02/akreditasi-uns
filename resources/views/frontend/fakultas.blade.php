@@ -33,22 +33,23 @@
                             <tr>
                               <th>No</th>
                               <th>Fakultas</th>
-                              <th>Akreditasi Internasional</th>
-                              <th>"A"</th>
-                              <th>Unggul</th>
-                              <th>"B"</th>
-                              <th>Baik Sekali</th>
-                              <th>"C"</th>
-                              <th>Baik</th>
-                              <th>Terakreditasi Sementara</th>
-                              <th>Belum Terakreditasi</th>
+                              <th width="1%">Akreditasi Internasional</th>
+                              <th width="1%">"A"</th>
+                              <th width="1%">Unggul</th>
+                              <th width="1%">"B"</th>
+                              <th width="1%">Baik Sekali</th>
+                              <th width="1%">"C"</th>
+                              <th width="1%">Baik</th>
+                              <th width="1%">Terakreditasi Sementara</th>
+                              <th width="1%">Belum Terakreditasi</th>
                               <th>Total</th>
                             </tr>
                         </thead>
                         <tbody>
-                              <tr data-entry-id="1">
-                                <td class="text-center">1</td>
-                                <td class="text-center">Fakultas Ilmu Budaya</td>
+                            @foreach ($fakultas as $item)
+                            <tr data-entry-id="{{ $item->id}}">
+                                <td class="text-center">{{ $loop->iteration }}</td>
+                                <td class="text-center">{{ $item->name }}</td>
                                 <td class="text-center">10</td>
                                 <td class="text-center">10</td>
                                 <td class="text-center">5</td>
@@ -59,7 +60,8 @@
                                 <td class="text-center">4</td>
                                 <td class="text-center">4</td>
                                 <td class="text-center">124</td>
-                              </tr>
+                              </tr> 
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

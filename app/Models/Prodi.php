@@ -45,6 +45,13 @@ class Prodi extends Model
         'deleted_at',
     ];
 
+    protected $appends = ['nama_prodi'];
+
+    public function getNamaProdiAttribute()
+    {
+        return $this->jenjang ? $this->jenjang->name . ' ' . $this->name_dikti : $this->name_dikti;
+    }
+
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
@@ -84,7 +91,7 @@ class Prodi extends Model
     {
         return [
             'slug' => [
-                'source' => ['jenjang_name', 'name_dikti'],
+                'source' => ['jenjang.name', 'name_dikti'],
                 'separator' => '-', // Custom separator
                 'maxLength' => 50, // Maximum length of the slug
             ]

@@ -6,12 +6,68 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-12">
+            <div class="row mb-5">
+                <div class="col-lg-12">
+                    <div id="customCarousel" class="carousel slide" data-ride="carousel" data-interval="2000">
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators">
+                            <li data-target="#customCarousel" data-slide-to="0" class="active"></li>
+                            <li data-target="#customCarousel" data-slide-to="1"></li>
+                            <li data-target="#customCarousel" data-slide-to="2"></li>
+                            <li data-target="#customCarousel" data-slide-to="3"></li>
+                        </ol>
+        
+                        <!-- Carousel Items -->
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="{{ asset('img/sertifikat.jpg') }}" class="d-block w-100 carousel-image" alt="Slide 1">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>Slide Title 1</h5>
+                                    <p>Slide Description 1</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{{ asset('img/uns.png') }}" class="d-block w-100 carousel-image" alt="Slide 2">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>Slide Title 2</h5>
+                                    <p>Slide Description 2</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{{ asset('img/sertifikat.jpg') }}" class="d-block w-100 carousel-image" alt="Slide 3">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>Slide Title 3</h5>
+                                    <p>Slide Description 3</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                              <img src="{{ asset('img/uns.png') }}" class="d-block w-100 carousel-image" alt="Slide 4">
+                              <div class="carousel-caption d-none d-md-block">
+                                  <h5>Slide Title 4</h5>
+                                  <p>Slide Description 4</p>
+                              </div>
+                          </div>
+                        </div>
+        
+                        <!-- Controls -->
+                        <a class="carousel-control-prev" href="#customCarousel" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#customCarousel" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        
             <div class="row">
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-info">
                     <div class="inner">
-                        <h3>10</h3>
+                        <h3>{{ sumFakultas() }}</h3>
         
                         <p>Fakultas</p>
                     </div>
@@ -26,7 +82,7 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                     <div class="inner">
-                        <h3>220</h3>
+                        <h3>{{ sumProdi() }}</h3>
         
                         <p>Program Studi</p>
                     </div>
@@ -41,7 +97,7 @@
                     <!-- small box -->
                     <div class="small-box bg-warning">
                     <div class="inner">
-                        <h3>180 <sup style="font-size: 20px">Prodi</sup></h3>
+                        <h3>{{ sumProdiUnggul() }} <sup style="font-size: 20px">Prodi</sup></h3>
         
                         <p>Terakreditasi Unggul</p>
                     </div>
@@ -56,7 +112,7 @@
                     <!-- small box -->
                     <div class="small-box bg-danger">
                     <div class="inner">
-                        <h3>65 <sup style="font-size: 20px">Prodi</sup></h3>
+                        <h3>{{ sumProdiInternasional() }} <sup style="font-size: 20px">Prodi</sup></h3>
         
                         <p>Terakreditasi Internasional</p>
                     </div>

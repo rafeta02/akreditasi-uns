@@ -229,3 +229,60 @@ table.dataTable thead .sorting_desc {
 .dataTables_wrapper .dataTables_paginate .paginate_button {
     padding: 0rem;
 }
+
+/* Customize the carousel */
+/* Carousel container styling */
+.carousel {
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Set carousel item height to a fixed size */
+.carousel-item {
+    height: 500px; /* Adjust this height as needed */
+    position: relative;
+    overflow: hidden; /* Ensures images don't overflow outside the item */
+    border-radius: 10px;
+}
+
+/* Image styling to fill the slider without cropping */
+.carousel-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image fills the area without distortion */
+    object-position: center; /* Centers the image to avoid cutoff on edges */
+    border-radius: 10px; /* Optional: adds rounded corners */
+}
+
+/* Customize the carousel indicators */
+.carousel-indicators li {
+    background-color: #007bff;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+}
+
+/* Customize the caption */
+.carousel-caption h5 {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #000;
+}
+
+.carousel-caption p {
+    font-size: 1.1rem;
+    color: #000;
+}
+
+/* Control arrows */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    border-radius: 50%;
+}
+
