@@ -185,6 +185,8 @@ return [
             'description_helper'     => ' ',
             'fakultas'               => 'Fakultas',
             'fakultas_helper'        => ' ',
+            'status'                 => 'Status',
+            'status_helper'          => ' ',
         ],
     ],
     'akreditasi' => [

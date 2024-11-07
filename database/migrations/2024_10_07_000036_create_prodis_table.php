@@ -23,6 +23,7 @@ class CreateProdisTable extends Migration
             $table->string('sk_izin')->nullable();
             $table->date('tgl_sk_izin')->nullable();
             $table->longText('description')->nullable();
+            $table->boolean('status')->default(1)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

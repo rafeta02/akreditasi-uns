@@ -131,6 +131,17 @@
                 <span class="help-block">{{ trans('cruds.prodi.fields.description_helper') }}</span>
             </div>
             <div class="form-group">
+                <div class="form-check {{ $errors->has('status') ? 'is-invalid' : '' }}">
+                    <input type="hidden" name="status" value="0">
+                    <input class="form-check-input" type="checkbox" name="status" id="status" value="1" {{ $prodi->status || old('status', 0) === 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="status">{{ trans('cruds.prodi.fields.status') }}</label>
+                </div>
+                @if($errors->has('status'))
+                    <span class="text-danger">{{ $errors->first('status') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.prodi.fields.status_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>

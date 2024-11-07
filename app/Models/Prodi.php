@@ -40,6 +40,7 @@ class Prodi extends Model
         'sk_izin',
         'tgl_sk_izin',
         'description',
+        'status',
         'created_at',
         'updated_at',
         'deleted_at',
