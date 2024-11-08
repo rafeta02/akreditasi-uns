@@ -91,6 +91,13 @@ if (! function_exists('sumProdi')) {
     }
 }
 
+if (! function_exists('sumProdiTerakreditasi')) {
+    function sumProdiTerakreditasi()
+    {
+        return Prodi::count();
+    }
+}
+
 if (! function_exists('sumProdiUnggul')) {
     function sumProdiUnggul()
     {
@@ -105,6 +112,21 @@ if (! function_exists('sumProdiA')) {
     }
 }
 
+if (! function_exists('sumProdiBaikSekali')) {
+    function sumProdiBaikSekali()
+    {
+        return Prodi::count();
+    }
+}
+
+if (! function_exists('sumProdiSementara')) {
+
+    function sumProdiSementara()
+    {
+        return Prodi::count();
+    }
+}
+
 if (! function_exists('sumProdiBelumTerakreditasi')) {
     function sumProdiBelumTerakreditasi()
     {
@@ -113,6 +135,20 @@ if (! function_exists('sumProdiBelumTerakreditasi')) {
 }
 
 if (! function_exists('sumProdiInternasional')) {
+    function sumProdiInternasional()
+    {
+        return Prodi::count();
+    }
+}
+
+if (! function_exists('sumProdiAsiin')) {
+    function sumProdiInternasional()
+    {
+        return Prodi::count();
+    }
+}
+
+if (! function_exists('sumProdiIabee')) {
     function sumProdiInternasional()
     {
         return Prodi::count();

@@ -247,7 +247,52 @@
                                 </div>
                                 <div class="col-9">
                                     <div style="height: 600px; display: flex; align-items: center; justify-content: center;">
-                                        <canvas id="myPieChart"></canvas>
+                                        <canvas id="nasionalChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header text-muted text-center"><h3>Capaian Akreditasi Internasional Universitas Sebelas Maret</h3></div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3">
+                                    <div style="height: 600px; display: flex; align-items: center; justify-content: center;">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Lembaga Akreditasi</th>
+                                                    <th>Jumlah</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($internasional['labels'] as $key => $value)
+                                                <tr>
+                                                    <td class="text-center">{{ $value }}</td>
+                                                    <td class="text-center">{{ $internasional['values'][$key] }}</td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td class="text-center"><b>Total</b></td>
+                                                    <td class="text-center"><b>{{ array_sum($internasional['values']) }}</b></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-9">
+                                    <div style="height: 600px; display: flex; align-items: center; justify-content: center;">
+                                        <canvas id="internasionalChart"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -267,21 +312,16 @@
 {{ $grafik->script() }}
 
 <script>
-  // Get the canvas element
-  var ctx = document.getElementById('myPieChart').getContext('2d');
-
-  // Dynamic data
-  var labels = @json($label);
-  var values = @json($data);
   var colors = ['#FF5733', '#33B5FF', '#FFEB3B', '#8BC34A', '#9C27B0','#FF9800', '#607D8B'];
-
-  var myPieChart = new Chart(ctx, {
+  
+  var ctx = document.getElementById('nasionalChart').getContext('2d');
+  var nasionalChart = new Chart(ctx, {
       type: 'pie',
       data: {
-          labels: labels,
+          labels: @json($label),
           datasets: [{
               label: 'Program Studi',
-              data: values,
+              data: @json($data),
               backgroundColor: colors, // Using 7 colors for the pie chart sections
               hoverOffset: 4,
           }]
@@ -317,5 +357,47 @@
       }
   });
 
+  var ctxInter = document.getElementById('internasionalChart').getContext('2d');
+  var internasionalChart = new Chart(ctxInter, {
+      type: 'pie',
+      data: {
+          labels: @json($internasional['labels']),
+          datasets: [{
+              label: 'Program Studi',
+              data: @json($internasional['values']),
+              backgroundColor: colors, // Using 7 colors for the pie chart sections
+              hoverOffset: 4,
+          }]
+      },
+      options: {
+          responsive: true,
+          plugins: {
+              tooltip: {
+                    enabled: true,
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.raw;
+                            // const total = context.dataset.data
+                            //     .filter((val, index) => !context.chart.getDatasetMeta(0).data[index].hidden) // Only sum visible data points
+                            //     .reduce((sum, val) => sum + val, 0);
+    
+                            // const percentage = ((value / total) * 100).toFixed(1);
+
+                            return ` ${value} Program Studi`;
+                        }
+                    }
+              },
+              legend: {
+                position: 'right',  // Set legend to appear on the left side
+                labels: {
+                    font: {
+                        size: 14,  // Customize font size of the legend
+                    },
+                    padding: 10,
+                },
+              },
+          }
+      }
+  });
 </script>
 @endsection
