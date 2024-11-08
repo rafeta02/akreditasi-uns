@@ -9,6 +9,9 @@ use App\Models\Prodi;
 use App\Models\Jenjang;
 use App\Models\LembagaAkreditasi;
 use Yajra\DataTables\Facades\DataTables;
+use App\Charts\BarChart;
+use App\Charts\PieChart;
+
 
 class HomeController extends Controller
 {
@@ -27,9 +30,15 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(PieChart $pie)
     {
-        return view('home');
+        $title = 'Capaian Peringkat Akreditasi Tahun 2024';
+        $subtitle = 'Capaian Peringkat Akreditasi Tahun 2024 Seluruh Universitas Sebelas Maret';
+        $data = [47, 84, 22, 16, 22, 3, 8];
+        $label = ['Terakreditasi Unggul', 'Terakreditasi A', ' Terakreditasi Baik Sekali', 'Terakreditasi B', 'Terakreditasi Baik', 'Terakreditasi Sementara', 'Belum Terakreditasi'];
+        $grafik = $pie->build($title, $subtitle, $data, $label);
+        
+        return view('home', compact('grafik', 'data', 'label'));
     }
 
     public function fakultas()
@@ -114,12 +123,12 @@ class HomeController extends Controller
         $prodi = Prodi::where('slug', $slug)->first();
         return view('frontend.detail_prodi', compact('prodi'));
     }
+
     public function akreditasiNasional()
     {
         $jenjangs = Jenjang::all();
         return view('frontend.akreditasi_nasional', compact('jenjangs'));
     }
-
 
     public function akreditasiInternasional()
     {
