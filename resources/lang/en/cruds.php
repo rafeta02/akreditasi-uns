@@ -227,6 +227,8 @@ return [
             'nilai_helper'          => ' ',
             'fakultas'              => 'Fakultas',
             'fakultas_helper'       => ' ',
+            'tgl_awal_sk'           => 'Tgl Awal SK Akreditasi',
+            'tgl_awal_sk_helper'    => ' ',
         ],
     ],
     'akreditasiInternasional' => [
@@ -269,6 +271,8 @@ return [
             'deleted_at_helper'     => ' ',
             'fakultas'              => 'Fakultas',
             'fakultas_helper'       => ' ',
+            'tgl_awal_sk'           => 'Tgl Awal SK Akreditasi',
+            'tgl_awal_sk_helper'    => ' ',
         ],
     ],
     'ajuan' => [

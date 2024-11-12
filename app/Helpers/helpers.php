@@ -142,14 +142,14 @@ if (! function_exists('sumProdiInternasional')) {
 }
 
 if (! function_exists('sumProdiAsiin')) {
-    function sumProdiInternasional()
+    function sumProdiAsiin()
     {
         return Prodi::count();
     }
 }
 
 if (! function_exists('sumProdiIabee')) {
-    function sumProdiInternasional()
+    function sumProdiIabee()
     {
         return Prodi::count();
     }

@@ -25,6 +25,7 @@ class Akreditasi extends Model implements HasMedia
 
     protected $dates = [
         'tgl_sk',
+        'tgl_awal_sk',
         'tgl_akhir_sk',
         'created_at',
         'updated_at',
@@ -48,6 +49,7 @@ class Akreditasi extends Model implements HasMedia
         'lembaga_id',
         'no_sk',
         'tgl_sk',
+        'tgl_awal_sk',
         'tgl_akhir_sk',
         'tahun_expired',
         'peringkat',
@@ -97,6 +99,16 @@ class Akreditasi extends Model implements HasMedia
     public function setTglSkAttribute($value)
     {
         $this->attributes['tgl_sk'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
+    }
+
+    public function getTglAwalSkAttribute($value)
+    {
+        return $value ? Carbon::parse($value)->format(config('panel.date_format')) : null;
+    }
+
+    public function setTglAwalSkAttribute($value)
+    {
+        $this->attributes['tgl_awal_sk'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
     }
 
     public function getTglAkhirSkAttribute($value)

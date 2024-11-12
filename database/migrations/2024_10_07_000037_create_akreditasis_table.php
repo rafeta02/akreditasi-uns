@@ -12,6 +12,7 @@ class CreateAkreditasisTable extends Migration
             $table->bigIncrements('id');
             $table->string('no_sk')->nullable();
             $table->date('tgl_sk')->nullable();
+            $table->date('tgl_awal_sk')->nullable();
             $table->date('tgl_akhir_sk')->nullable();
             $table->integer('tahun_expired')->nullable();
             $table->string('peringkat')->nullable();

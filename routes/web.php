@@ -59,6 +59,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('akreditasis/ckmedia', 'AkreditasiController@storeCKEditorImages')->name('akreditasis.storeCKEditorImages');
     Route::post('akreditasis/parse-csv-import', 'AkreditasiController@parseCsvImport')->name('akreditasis.parseCsvImport');
     Route::post('akreditasis/process-csv-import', 'AkreditasiController@processCsvImport')->name('akreditasis.processCsvImport');
+    Route::post('akreditasis/import', 'AkreditasiController@import')->name('akreditasis.import');
+    Route::get('akreditasis/upload-sertifikat', 'AkreditasiController@uploadSertifikat')->name('akreditasis.uploadSertifikat');
     Route::resource('akreditasis', 'AkreditasiController');
 
     // Akreditasi Internasional
