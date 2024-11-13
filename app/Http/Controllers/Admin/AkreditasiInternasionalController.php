@@ -22,6 +22,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Alert;
 use DB;
+use App\Imports\AkreditasiInternasionalImport;
+use Excel;
+
 
 class AkreditasiInternasionalController extends Controller
 {
@@ -44,7 +47,7 @@ class AkreditasiInternasionalController extends Controller
                 $deleteGate    = 'akreditasi_internasional_delete';
                 $crudRoutePart = 'akreditasi-internasionals';
 
-                return view('partials.datatablesActions', compact(
+                return view('partials.akreditasiActions', compact(
                     'viewGate',
                     'editGate',
                     'deleteGate',
@@ -175,11 +178,34 @@ class AkreditasiInternasionalController extends Controller
     {
         abort_if(Gate::denies('akreditasi_internasional_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $fakultas = Faculty::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $prodis = Prodi::pluck('name_dikti', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $jenjangs = Jenjang::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
         $lembagas = LembagaAkreditasi::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $akreditasiInternasional->load('fakultas', 'prodi', 'jenjang', 'lembaga');
 
         return view('admin.akreditasiInternasionals.edit', compact('akreditasiInternasional', 'fakultas', 'jenjangs', 'lembagas', 'prodis'));
+    }
+
+    public function uploadSertifikat(AkreditasiInternasional $akreditasiInternasional)
+    {
+        abort_if(Gate::denies('akreditasi_internasional_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $fakultas = Faculty::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $prodis = Prodi::pluck('name_dikti', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $jenjangs = Jenjang::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $lembagas = LembagaAkreditasi::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $akreditasiInternasional->load('fakultas', 'prodi', 'jenjang', 'lembaga');
+
+        return view('admin.akreditasiInternasionals.upload_sertif', compact('akreditasiInternasional', 'fakultas', 'jenjangs', 'lembagas', 'prodis'));
     }
 
     public function update(UpdateAkreditasiInternasionalRequest $request, AkreditasiInternasional $akreditasiInternasional)
@@ -253,5 +279,18 @@ class AkreditasiInternasionalController extends Controller
         $media         = $model->addMediaFromRequest('upload')->toMediaCollection('ck-media');
 
         return response()->json(['id' => $media->id, 'url' => $media->getUrl()], Response::HTTP_CREATED);
+    }
+
+    public function import(Request $request)
+    {
+        $file = $request->file('import_file');
+        $request->validate([
+            'import_file' => 'mimes:csv,xls,xlsx',
+        ]);
+
+        Excel::import(new AkreditasiInternasionalImport(), $file);
+
+        Alert::success('Success', 'Akreditasi Internasional berhasil di import');
+        return redirect()->back();
     }
 }

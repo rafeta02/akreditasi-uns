@@ -23,6 +23,7 @@ use Illuminate\Support\Str;
 use Alert;
 use DB;
 use App\Imports\AkreditasiImport;
+use Excel;
 
 class AkreditasiController extends Controller
 {
@@ -45,7 +46,7 @@ class AkreditasiController extends Controller
                 $deleteGate    = 'akreditasi_delete';
                 $crudRoutePart = 'akreditasis';
 
-                return view('partials.datatablesActions', compact(
+                return view('partials.akreditasiActions', compact(
                     'viewGate',
                     'editGate',
                     'deleteGate',
