@@ -6,10 +6,10 @@
             <a class="btn btn-success" href="{{ route('admin.akreditasis.create') }}">
                 {{ trans('global.add') }} {{ trans('cruds.akreditasi.title_singular') }}
             </a>
-            <button class="btn btn-warning" data-toggle="modal" data-target="#csvImportModal">
-                {{ trans('global.app_csvImport') }}
+            <button class="btn btn-primary" data-toggle="modal" data-target="#importModal">
+                Import
             </button>
-            @include('csvImport.modal', ['model' => 'Akreditasi', 'route' => 'admin.akreditasis.parseCsvImport'])
+            @include('csvImport.import_modal', ['model' => 'Akreditasi', 'route' => 'admin.akreditasis.import'])
         </div>
     </div>
 @endcan

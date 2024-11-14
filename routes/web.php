@@ -59,6 +59,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('akreditasis/ckmedia', 'AkreditasiController@storeCKEditorImages')->name('akreditasis.storeCKEditorImages');
     Route::post('akreditasis/parse-csv-import', 'AkreditasiController@parseCsvImport')->name('akreditasis.parseCsvImport');
     Route::post('akreditasis/process-csv-import', 'AkreditasiController@processCsvImport')->name('akreditasis.processCsvImport');
+    Route::post('akreditasis/import', 'AkreditasiController@import')->name('akreditasis.import');
+    Route::get('akreditasis/{akreditasi}/upload-sertifikat', 'AkreditasiController@uploadSertifikat')->name('akreditasis.uploadSertifikat');
     Route::resource('akreditasis', 'AkreditasiController');
 
     // Akreditasi Internasional
@@ -67,6 +69,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('akreditasi-internasionals/ckmedia', 'AkreditasiInternasionalController@storeCKEditorImages')->name('akreditasi-internasionals.storeCKEditorImages');
     Route::post('akreditasi-internasionals/parse-csv-import', 'AkreditasiInternasionalController@parseCsvImport')->name('akreditasi-internasionals.parseCsvImport');
     Route::post('akreditasi-internasionals/process-csv-import', 'AkreditasiInternasionalController@processCsvImport')->name('akreditasi-internasionals.processCsvImport');
+    Route::post('akreditasi-internasionals/import', 'AkreditasiInternasionalController@import')->name('akreditasi-internasionals.import');
+    Route::get('akreditasi-internasionals/{akreditasiInternasional}/upload-sertifikat', 'AkreditasiInternasionalController@uploadSertifikat')->name('akreditasi-internasionals.uploadSertifikat');
     Route::resource('akreditasi-internasionals', 'AkreditasiInternasionalController');
 
     // Ajuan

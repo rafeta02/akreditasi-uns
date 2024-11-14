@@ -52,13 +52,27 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="required"for="tgl_akhir_sk">{{ trans('cruds.akreditasi.fields.tgl_akhir_sk') }}</label>
-                <input class="form-control date {{ $errors->has('tgl_akhir_sk') ? 'is-invalid' : '' }}" type="text" name="tgl_akhir_sk" id="tgl_akhir_sk" value="{{ old('tgl_akhir_sk') }}">
-                @if($errors->has('tgl_akhir_sk'))
-                    <span class="text-danger">{{ $errors->first('tgl_akhir_sk') }}</span>
-                @endif
-                <span class="help-block">{{ trans('cruds.akreditasi.fields.tgl_akhir_sk_helper') }}</span>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="tgl_awal_sk">{{ trans('cruds.akreditasi.fields.tgl_awal_sk') }}</label>
+                        <input class="form-control date {{ $errors->has('tgl_awal_sk') ? 'is-invalid' : '' }}" type="text" name="tgl_awal_sk" id="tgl_awal_sk" value="{{ old('tgl_awal_sk') }}">
+                        @if($errors->has('tgl_awal_sk'))
+                            <span class="text-danger">{{ $errors->first('tgl_awal_sk') }}</span>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.akreditasi.fields.tgl_awal_sk_helper') }}</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="required"for="tgl_akhir_sk">{{ trans('cruds.akreditasi.fields.tgl_akhir_sk') }}</label>
+                        <input class="form-control date {{ $errors->has('tgl_akhir_sk') ? 'is-invalid' : '' }}" type="text" name="tgl_akhir_sk" id="tgl_akhir_sk" value="{{ old('tgl_akhir_sk') }}">
+                        @if($errors->has('tgl_akhir_sk'))
+                            <span class="text-danger">{{ $errors->first('tgl_akhir_sk') }}</span>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.akreditasi.fields.tgl_akhir_sk_helper') }}</span>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-6">

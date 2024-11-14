@@ -22,6 +22,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Alert;
 use DB;
+use App\Imports\AkreditasiImport;
+use Excel;
 
 class AkreditasiController extends Controller
 {
@@ -44,7 +46,7 @@ class AkreditasiController extends Controller
                 $deleteGate    = 'akreditasi_delete';
                 $crudRoutePart = 'akreditasis';
 
-                return view('partials.datatablesActions', compact(
+                return view('partials.akreditasiActions', compact(
                     'viewGate',
                     'editGate',
                     'deleteGate',
@@ -184,6 +186,23 @@ class AkreditasiController extends Controller
         return view('admin.akreditasis.edit', compact('akreditasi', 'fakultas', 'jenjangs', 'lembagas', 'prodis'));
     }
 
+    public function uploadSertifikat(Akreditasi $akreditasi)
+    {
+        abort_if(Gate::denies('akreditasi_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $fakultas = Faculty::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $prodis = Prodi::pluck('name_dikti', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $jenjangs = Jenjang::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $lembagas = LembagaAkreditasi::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $akreditasi->load('fakultas', 'prodi', 'jenjang', 'lembaga');
+
+        return view('admin.akreditasis.upload_sertif', compact('akreditasi', 'fakultas', 'jenjangs', 'lembagas', 'prodis'));
+    }
+
     public function update(UpdateAkreditasiRequest $request, Akreditasi $akreditasi)
     {
         $akreditasi->update($request->all());
@@ -255,5 +274,18 @@ class AkreditasiController extends Controller
         $media         = $model->addMediaFromRequest('upload')->toMediaCollection('ck-media');
 
         return response()->json(['id' => $media->id, 'url' => $media->getUrl()], Response::HTTP_CREATED);
+    }
+
+    public function import(Request $request)
+    {
+        $file = $request->file('import_file');
+        $request->validate([
+            'import_file' => 'mimes:csv,xls,xlsx',
+        ]);
+
+        Excel::import(new AkreditasiImport(), $file);
+
+        Alert::success('Success', 'Akreditasi Nasional berhasil di import');
+        return redirect()->back();
     }
 }
