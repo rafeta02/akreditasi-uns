@@ -8,6 +8,7 @@ use App\Models\Faculty;
 use App\Models\Prodi;
 use App\Models\Jenjang;
 use App\Models\LembagaAkreditasi;
+use App\Models\Ajuan;
 use Yajra\DataTables\Facades\DataTables;
 use App\Charts\BarChart;
 use App\Charts\PieChart;
@@ -197,10 +198,72 @@ class HomeController extends Controller
         return view('frontend.akreditasi_nasional', compact('jenjangs', 'fakultas', 'lembaga_nasional'));
     }
 
-    public function akreditasiInternasional()
+    public function akreditasiInternasional(Request $request)
     {
-        $jenjangs = Jenjang::all();
-        return view('frontend.akreditasi_internasional', compact('jenjangs'));
+        if ($request->ajax()) {
+            $query = Prodi::with(['fakultas', 'jenjang'])->select(sprintf('%s.*', (new Prodi)->table));
+
+            if (!empty($request->fakultas)) {
+                $query->where('fakultas_id', $request->fakultas);
+            }
+            if (!empty($request->jenjang)) {
+                $query->where('jenjang_id', $request->jenjang);
+            }
+            // if (!empty($request->nasional)) {
+            //     $query->whereHas('akreditasi', $request->nasional);
+            // }
+            // if (!empty($request->internasional)) {
+            //     $query->where('akreditasi_internasional', $request->internasional);
+            // }
+
+            $table = Datatables::of($query);
+
+            $table->addColumn('placeholder', '&nbsp;');
+            $table->addColumn('actions', '&nbsp;');
+
+            $table->editColumn('actions', function ($row) {
+                return '<a class="btn btn-primary btn-xs" href="'.route('detail-prodi', $row->slug).'">
+                                <i class="fas fa-eye"></i>
+                            </a>';
+            });
+
+            $table->addColumn('nama_prodi', function ($row) {
+                return $row->nama_prodi ? $row->nama_prodi : '';
+            });
+            $table->addColumn('fakultas_name', function ($row) {
+                return $row->fakultas ? $row->fakultas->name : '';
+            });
+            $table->addColumn('jenjang_name', function ($row) {
+                return $row->jenjang ? $row->jenjang->name : '';
+            });
+
+            $table->editColumn('name_dikti', function ($row) {
+                return $row->name_dikti ? $row->name_dikti : '';
+            });
+            $table->editColumn('name_en', function ($row) {
+                return $row->name_en ? $row->name_en : '';
+            });
+            $table->editColumn('gelar', function ($row) {
+                return $row->gelar ? $row->gelar : '';
+            });
+
+            $table->filterColumn('nama_prodi', function ($query, $keyword) {
+                $query->whereHas('jenjang', function ($q) use ($keyword) {
+                    $q->where('name', 'LIKE', "%{$keyword}%");
+                })
+                ->orWhere('name_dikti', 'LIKE', "%{$keyword}%");
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'fakultas', 'jenjang']);
+
+            return $table->make(true);
+        }
+
+        $jenjangs = Jenjang::pluck('name', 'id')->prepend('All', '');
+        $fakultas = Faculty::pluck('name', 'id')->prepend('All', '');
+        $lembaga_internasional = LembagaAkreditasi::where('type', 'internasional')->pluck('name', 'id')->prepend('All', '');
+        
+        return view('frontend.akreditasi_internasional', compact('jenjangs', 'fakultas', 'lembaga_internasional'));
     }
 
     public function infografis()
@@ -208,9 +271,74 @@ class HomeController extends Controller
         return view('frontend.infografis');
     }
 
-    public function pantauanBanpt()
+    public function pantauanBanpt(Request $request)
     {
-        $jenjangs = Jenjang::all();
-        return view('frontend.pantuan_banpt', compact('jenjangs'));
+        if ($request->ajax()) {
+            $query = Ajuan::with(['fakultas', 'prodi', 'jenjang', 'lembaga'])->select(sprintf('%s.*', (new Ajuan)->table));
+
+            if (!empty($request->fakultas)) {
+                $query->where('fakultas_id', $request->fakultas);
+            }
+            if (!empty($request->jenjang)) {
+                $query->where('jenjang_id', $request->jenjang);
+            }
+
+            $table = Datatables::of($query);
+
+            $table->addColumn('placeholder', '&nbsp;');
+            $table->addColumn('actions', '&nbsp;');
+
+            $table->editColumn('actions', function ($row) {
+                return '<a class="btn btn-primary btn-xs" href="'.route('detail-prodi', $row->slug).'">
+                                <i class="fas fa-eye"></i>
+                            </a>';
+            });
+
+            $table->addColumn('nama_prodi', function ($row) {
+                return $row->nama_prodi ? $row->nama_prodi : '';
+            });
+            $table->addColumn('fakultas_name', function ($row) {
+                return $row->fakultas ? $row->fakultas->name : '';
+            });
+
+            $table->addColumn('prodi_name_dikti', function ($row) {
+                return $row->prodi ? $row->jenjang->name. ' - '.  $row->prodi->name_dikti : '';
+            });
+
+            $table->addColumn('lembaga_name', function ($row) {
+                return $row->lembaga ? $row->lembaga->name : '';
+            });
+
+            $table->editColumn('status_ajuan', function ($row) {
+                return $row->status_ajuan ? Ajuan::STATUS_AJUAN_SELECT[$row->status_ajuan] : '';
+            });
+            $table->editColumn('bukti_upload', function ($row) {
+                if (! $row->bukti_upload) {
+                    return '';
+                }
+                $links = [];
+                foreach ($row->bukti_upload as $media) {
+                    $links[] = '<a href="' . $media->getUrl() . '" target="_blank"><img src="' . $media->getUrl('thumb') . '" width="50px" height="50px"></a>';
+                }
+
+                return implode(' ', $links);
+            });
+
+            $table->filterColumn('nama_prodi', function ($query, $keyword) {
+                $query->whereHas('jenjang', function ($q) use ($keyword) {
+                    $q->where('name', 'LIKE', "%{$keyword}%");
+                })
+                ->orWhere('name_dikti', 'LIKE', "%{$keyword}%");
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'fakultas', 'prodi', 'lembaga', 'bukti_upload']);
+
+            return $table->make(true);
+        }
+
+        $jenjangs = Jenjang::pluck('name', 'id')->prepend('All', '');
+        $fakultas = Faculty::pluck('name', 'id')->prepend('All', '');
+
+        return view('frontend.pantuan_banpt', compact('jenjangs', 'fakultas'));
     }
 }

@@ -28,7 +28,7 @@
                         <span class="info-box-icon bg-warning"><i class="far fa-sun"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Total Terakreditasi</span>
+                            <span class="info-box-text">Terakreditasi Internasional</span>
                             <span class="info-box-number">{{ sumProdiInternasional() }} Prodi</span>
                         </div>
                         <!-- /.info-box-content -->
@@ -40,8 +40,8 @@
                         <span class="info-box-icon bg-success"><i class="far fa-star"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Akreditasi Unggul</span>
-                            <span class="info-box-number">{{ sumProdiUnggul() }} Prodi</span>
+                            <span class="info-box-text">ASIIN</span>
+                            <span class="info-box-number">{{ sumProdiAsiin() }} Prodi</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -50,11 +50,11 @@
                 <!-- /.col -->
                 <div class="col-md-3 col-sm-6 col-12">
                     <div class="info-box">
-                        <span class="info-box-icon bg-success"><i class="far fa-star"></i></span>
+                        <span class="info-box-icon bg-primary"><i class="far fa-star"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Akreditasi "A"</span>
-                            <span class="info-box-number">{{ sumProdiA() }} Prodi</span>
+                            <span class="info-box-text">IABEE</span>
+                            <span class="info-box-number">{{ sumProdiIabee() }} Prodi</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -63,11 +63,11 @@
                 <!-- /.col -->
                 <div class="col-md-3 col-sm-6 col-12">
                     <div class="info-box">
-                        <span class="info-box-icon bg-danger"><i class="far fa-hourglass"></i></span>
+                        <span class="info-box-icon bg-danger"><i class="far fa-star"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Terakreditasi Sementara</span>
-                            <span class="info-box-number">{{ sumProdiSementara() }} Prodi</span>
+                            <span class="info-box-text">AQAS</span>
+                            <span class="info-box-number">{{ sumProdiAqas() }} Prodi</span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -90,8 +90,8 @@
                                         <div class="form-group">
                                             <label for="fakultas_id">Fakultas</label>
                                             <select class="form-control select2" name="fakultas_id" id="fakultas_id">
-                                                @foreach($jenjangs as $id => $entry)
-                                                    <option value="{{ $id }}" {{ old('jenjang_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                                @foreach($fakultas as $id => $entry)
+                                                    <option value="{{ $id }}" {{ old('fakultas_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -108,10 +108,10 @@
                                     </div>
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label for="jenjang_id">Lembaga Akreditasi</label>
-                                            <select class="form-control select2" name="jenjang_id" id="jenjang_id">
-                                                @foreach($jenjangs as $id => $entry)
-                                                    <option value="{{ $id }}" {{ old('jenjang_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                            <label for="lembaga_akreditasi_id">Lembaga Akreditasi</label>
+                                            <select class="form-control select2" name="lembaga_akreditasi_id" id="lembaga_akreditasi_id">
+                                                @foreach($lembaga_internasional as $id => $entry)
+                                                    <option value="{{ $id }}" {{ old('lembaga_akreditasi_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                                                 @endforeach
                                             </select>
                                         </div>

@@ -34,8 +34,8 @@
                             <div class="form-group">
                                 <label for="fakultas_id">Fakultas</label>
                                 <select class="form-control select2" name="fakultas_id" id="fakultas_id">
-                                    @foreach($jenjangs as $id => $entry)
-                                        <option value="{{ $id }}" {{ old('jenjang_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                    @foreach($fakultas as $id => $entry)
+                                        <option value="{{ $id }}" {{ old('fakultas_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                                     @endforeach
                                 </select>
                             </div>
