@@ -12,6 +12,7 @@ use App\Models\Ajuan;
 use Yajra\DataTables\Facades\DataTables;
 use App\Charts\BarChart;
 use App\Charts\PieChart;
+use Carbon\Carbon;
 
 
 class HomeController extends Controller
@@ -274,35 +275,26 @@ class HomeController extends Controller
     public function pantauanBanpt(Request $request)
     {
         if ($request->ajax()) {
-            $query = Ajuan::with(['fakultas', 'prodi', 'jenjang', 'lembaga'])->select(sprintf('%s.*', (new Ajuan)->table));
+            $query = Ajuan::with(['fakultas', 'prodi', 'jenjang', 'lembaga'])->select(sprintf('%s.*', (new Ajuan)->table))->latest();
 
             if (!empty($request->fakultas)) {
-                $query->where('fakultas_id', $request->fakultas);
+                $query->where('ajuans.fakultas_id', $request->fakultas);
             }
             if (!empty($request->jenjang)) {
-                $query->where('jenjang_id', $request->jenjang);
+                $query->where('ajuans.jenjang_id', $request->jenjang);
             }
-
+            
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
             $table->addColumn('actions', '&nbsp;');
 
-            $table->editColumn('actions', function ($row) {
-                return '<a class="btn btn-primary btn-xs" href="'.route('detail-prodi', $row->slug).'">
-                                <i class="fas fa-eye"></i>
-                            </a>';
-            });
-
-            $table->addColumn('nama_prodi', function ($row) {
-                return $row->nama_prodi ? $row->nama_prodi : '';
-            });
             $table->addColumn('fakultas_name', function ($row) {
                 return $row->fakultas ? $row->fakultas->name : '';
             });
 
             $table->addColumn('prodi_name_dikti', function ($row) {
-                return $row->prodi ? $row->jenjang->name. ' - '.  $row->prodi->name_dikti : '';
+                return $row->prodi ? $row->jenjang->name. ' '.  $row->prodi->name_dikti : '';
             });
 
             $table->addColumn('lembaga_name', function ($row) {
@@ -310,28 +302,26 @@ class HomeController extends Controller
             });
 
             $table->editColumn('status_ajuan', function ($row) {
-                return $row->status_ajuan ? Ajuan::STATUS_AJUAN_SELECT[$row->status_ajuan] : '';
+                return $row->status_ajuan ? '<span class="badge badge-primary">'.Ajuan::STATUS_AJUAN_SELECT[$row->status_ajuan].'</span>' : '';
             });
+
+            $table->editColumn('tgl_ajuan', function ($row) {
+                return $row->tgl_ajuan ? Carbon::parse($row->tgl_ajuan)->format('d F Y') : '';
+            });
+
             $table->editColumn('bukti_upload', function ($row) {
                 if (! $row->bukti_upload) {
                     return '';
                 }
                 $links = [];
                 foreach ($row->bukti_upload as $media) {
-                    $links[] = '<a href="' . $media->getUrl() . '" target="_blank"><img src="' . $media->getUrl('thumb') . '" width="50px" height="50px"></a>';
+                    $links[] = '<a href="' . $media->getUrl() . '" target="_blank" class="image-popup"><img src="' . $media->getUrl('thumb') . '" width="50px" height="50px"></a>';
                 }
 
                 return implode(' ', $links);
             });
 
-            $table->filterColumn('nama_prodi', function ($query, $keyword) {
-                $query->whereHas('jenjang', function ($q) use ($keyword) {
-                    $q->where('name', 'LIKE', "%{$keyword}%");
-                })
-                ->orWhere('name_dikti', 'LIKE', "%{$keyword}%");
-            });
-
-            $table->rawColumns(['actions', 'placeholder', 'fakultas', 'prodi', 'lembaga', 'bukti_upload']);
+            $table->rawColumns(['placeholder', 'fakultas', 'prodi', 'lembaga', 'status_ajuan', 'bukti_upload']);
 
             return $table->make(true);
         }

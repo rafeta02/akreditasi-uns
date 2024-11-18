@@ -59,43 +59,35 @@
                     </div>
                 </form>
             </div>
-            
-            
+                   
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover datatable datatable-List">
-                        <thead>
-                            <tr>
-                              <th width="1%">No</th>
-                              <th>Prodi</th>
-                              <th>Fakultas</th>
-                              <th width="1%">Type</th>
-                              <th>Progress</th>
-                              <th>Status</th>
-                              <th>Update Terakhir</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                              <tr data-entry-id="1">
-                                <td class="text-center">1</td>
-                                <td class="text-center">D3 Manajemen Bisnis</td>
-                                <td class="text-center">Sekolah Vokasi</td>
-                                <td class="text-center">Penyetaraan Unggul</td>
-                                <td class="text-center" style="vertical-align: middle;">
-                                    <div class="progress progress-sm">
-                                        <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
-                                        </div>
-                                    </div>
-                                    <small>
-                                        10% Complete
-                                    </small>
-                                </td>
-                                <td class="text-center"><span class="badge badge-danger">Belum Diterima</span></td>
-                                <td class="text-center">30 Oktober 2024</td>
-                              </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <table class=" table table-bordered table-striped table-hover ajaxTable datatable datatable-Ajuan">
+                    <thead>
+                        <tr>
+                            <th width="10">
+        
+                            </th>
+                            <th>
+                                {{ trans('cruds.ajuan.fields.fakultas') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.ajuan.fields.prodi') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.ajuan.fields.lembaga') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.ajuan.fields.tgl_ajuan') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.ajuan.fields.status_ajuan') }}
+                            </th>
+                            <th>
+                                {{ trans('cruds.ajuan.fields.bukti_upload') }}
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
         </div>
@@ -106,27 +98,56 @@
 @parent
 <script>
 $(function () {
-    let table = $('.datatable-List:not(.ajaxTable)').DataTable({
-        ordering: false,
-        searching: false,
-        paging: false,
-        pageLength: 50
-    })
-    $('a[data-toggle="tab"]').on('shown.bs.tab click', function (e) {
+    let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+
+    let dtOverrideGlobals = {
+        buttons: dtButtons,
+        processing: true,
+        serverSide: true,
+        retrieve: true,
+        aaSorting: [],
+        ajax: {
+            url: "{{ route('pantauanBanpt') }}",
+            data: function(data) {
+                data.fakultas = $('#fakultas_id').val(),
+                data.jenjang = $('#jenjang_id').val()
+            }
+        },
+        columns: [
+            { data: null, name: 'row_num', class: 'text-center', orderable: false, searchable: false },
+            { data: 'fakultas_name', name: 'fakultas.name', class: 'text-center', },
+            { data: 'prodi_name_dikti', name: 'prodi.name_dikti', class: 'text-center' },
+            { data: 'lembaga_name', name: 'lembaga.name', class: 'text-center', searchable: false },
+            { data: 'tgl_ajuan', name: 'tgl_ajuan', class: 'text-center', searchable: false },
+            { data: 'status_ajuan', name: 'status_ajuan', class: 'text-center' },
+            { data: 'bukti_upload', name: 'bukti_upload', sortable: false, searchable: false, class: 'text-center' },
+        ],
+        orderCellsTop: true,
+        order: [[ 2, 'desc' ]],
+        pageLength: 25,
+        drawCallback: function(settings) {
+            var api = this.api();
+            var start = api.page.info().start;
+
+            // Assign row numbers
+            api.column(0, {page: 'current'}).nodes().each(function(cell, i) {
+                cell.innerHTML = start + i + 1;
+            });
+        }
+    };
+    let table = $('.datatable-Ajuan').DataTable(dtOverrideGlobals);
+    
+    $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
         $($.fn.dataTable.tables(true)).DataTable()
             .columns.adjust();
     });
 
-    $('#expired_date').daterangepicker({
-        locale: {
-            format: 'YYYY-MM-DD'
-        },
-        autoUpdateInput: false
+    $("#filterform").submit(function(event) {
+        event.preventDefault();
+        table.ajax.reload();
     });
 
-    $('#expired_date').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-    });
-})
+});
+
 </script>
 @endsection

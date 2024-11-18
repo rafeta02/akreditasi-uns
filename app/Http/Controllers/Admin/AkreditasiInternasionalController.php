@@ -85,7 +85,7 @@ class AkreditasiInternasionalController extends Controller
             $table->editColumn('sertifikat', function ($row) {
                 if ($photo = $row->sertifikat) {
                     return sprintf(
-                        '<a href="%s" target="_blank"><img src="%s" width="50px" height="50px"></a>',
+                        '<a href="%s" class="image-popup"><img src="%s" width="50px" height="50px"></a>',
                         $photo->url,
                         $photo->thumbnail
                     );
