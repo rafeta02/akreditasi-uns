@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Database\Eloquent\Builder;
 
 class Akreditasi extends Model implements HasMedia
 {
@@ -136,5 +137,11 @@ class Akreditasi extends Model implements HasMedia
     public function getFilePenunjangAttribute()
     {
         return $this->getMedia('file_penunjang');
+    }
+
+    public function scopeCurrent(Builder $query)
+    {
+        return $query->whereDate('tgl_awal_sk', '<=', Carbon::today())
+                     ->whereDate('tgl_akhir_sk', '>=', Carbon::today());
     }
 }

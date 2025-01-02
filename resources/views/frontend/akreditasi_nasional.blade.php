@@ -136,32 +136,39 @@
                             </form>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover datatable datatable-List">
-                                    <thead>
-                                        <tr>
-                                        <th width="1%">No</th>
-                                        <th>Prodi</th>
-                                        <th>Fakultas</th>
-                                        <th width="1%">Lembaga Akreditasi</th>
-                                        <th>Nilai</th>
-                                        <th>No Sertifikat</th>
-                                        <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr data-entry-id="1">
-                                            <td class="text-center">1</td>
-                                            <td class="text-center">D3 Manajemen Bisnis</td>
-                                            <td class="text-center">Sekolah Vokasi</td>
-                                            <td class="text-center">LAMKES</td>
-                                            <td class="text-center">Unggul <br> (399)</td>
-                                            <td class="text-center">3906/SK/BAN-PT/Akred-Itnl/S/IX/2023</td>
-                                            <td class="text-center"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <table class=" table table-bordered table-striped table-hover ajaxTable datatable datatable-Akreditasi">
+                                <thead>
+                                    <tr>
+                                        <th width="10">
+                                            No
+                                        </th>
+                                        <th>
+                                            {{ trans('cruds.akreditasi.fields.fakultas') }}
+                                        </th>
+                                        <th>
+                                            {{ trans('cruds.akreditasi.fields.prodi') }}
+                                        </th>
+                                        <th>
+                                            {{ trans('cruds.akreditasi.fields.lembaga') }}
+                                        </th>
+                                        <th>
+                                            {{ trans('cruds.akreditasi.fields.no_sk') }}
+                                        </th>
+                                        <th>
+                                            {{ trans('cruds.akreditasi.fields.tgl_akhir_sk') }}
+                                        </th>
+                                        <th>
+                                            {{ trans('cruds.akreditasi.fields.peringkat') }}
+                                        </th>
+                                        <th>
+                                            {{ trans('cruds.akreditasi.fields.sertifikat') }}
+                                        </th>
+                                        <th>
+                                            &nbsp;
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -174,27 +181,44 @@
 @parent
 <script>
 $(function () {
-    let table = $('.datatable-List:not(.ajaxTable)').DataTable({
-        ordering: false,
-        searching: false,
-        paging: false,
-        pageLength: 50
-    })
-    $('a[data-toggle="tab"]').on('shown.bs.tab click', function (e) {
+
+    let dtOverrideGlobals = {
+        processing: true,
+        serverSide: true,
+        retrieve: true,
+        aaSorting: [],
+        ajax: "{{ route('akreditasiNasional') }}",
+        columns: [
+            { data: null, name: 'row_num', class: 'text-center', orderable: false, searchable: false },
+            { data: 'fakultas_name', name: 'fakultas.name', class: 'text-center' },
+            { data: 'prodi_name_dikti', name: 'prodi.name_dikti', class: 'text-center' },
+            { data: 'lembaga_name', name: 'lembaga.name', class: 'text-center' },
+            { data: 'no_sk', name: 'no_sk', class: 'text-center' },
+            { data: 'tgl_akhir_sk', name: 'tgl_akhir_sk', class: 'text-center' },
+            { data: 'peringkat', name: 'peringkat', class: 'text-center' },
+            { data: 'sertifikat', name: 'sertifikat', sortable: false, searchable: false, class: 'text-center' },
+            { data: 'actions', name: '{{ trans('global.actions') }}', class: 'text-center' }
+        ],
+        orderCellsTop: true,
+        // order: [[ 5, 'desc' ]],
+        pageLength: 25,
+        drawCallback: function(settings) {
+            var api = this.api();
+            var start = api.page.info().start;
+
+            // Assign row numbers
+            api.column(0, {page: 'current'}).nodes().each(function(cell, i) {
+                cell.innerHTML = start + i + 1;
+            });
+        }
+    };
+    let table = $('.datatable-Akreditasi').DataTable(dtOverrideGlobals);
+    $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
         $($.fn.dataTable.tables(true)).DataTable()
             .columns.adjust();
     });
 
-    $('#expired_date').daterangepicker({
-        locale: {
-            format: 'YYYY-MM-DD'
-        },
-        autoUpdateInput: false
-    });
+});
 
-    $('#expired_date').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-    });
-})
 </script>
 @endsection

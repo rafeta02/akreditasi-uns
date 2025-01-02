@@ -9,6 +9,8 @@ use App\Models\Prodi;
 use App\Models\Jenjang;
 use App\Models\LembagaAkreditasi;
 use App\Models\Ajuan;
+use App\Models\Akreditasi;
+use App\Models\akreditasiInternasional;
 use Yajra\DataTables\Facades\DataTables;
 use App\Charts\BarChart;
 use App\Charts\PieChart;
@@ -134,7 +136,7 @@ class HomeController extends Controller
     public function akreditasiNasional(Request $request)
     {
         if ($request->ajax()) {
-            $query = Prodi::with(['fakultas', 'jenjang'])->select(sprintf('%s.*', (new Prodi)->table));
+            $query = Akreditasi::with(['fakultas', 'prodi', 'jenjang', 'lembaga'])->select(sprintf('%s.*', (new Akreditasi)->table))->current()->orderBy('tgl_akhir_sk', 'DESC');
 
             if (!empty($request->fakultas)) {
                 $query->where('fakultas_id', $request->fakultas);
@@ -155,39 +157,46 @@ class HomeController extends Controller
             $table->addColumn('actions', '&nbsp;');
 
             $table->editColumn('actions', function ($row) {
-                return '<a class="btn btn-primary btn-xs" href="'.route('detail-prodi', $row->slug).'">
+                return '<a class="btn btn-primary btn-xs" href="'.route('detail-prodi', $row->prodi->slug).'">
                                 <i class="fas fa-eye"></i>
                             </a>';
             });
 
-            $table->addColumn('nama_prodi', function ($row) {
-                return $row->nama_prodi ? $row->nama_prodi : '';
-            });
             $table->addColumn('fakultas_name', function ($row) {
                 return $row->fakultas ? $row->fakultas->name : '';
             });
-            $table->addColumn('jenjang_name', function ($row) {
-                return $row->jenjang ? $row->jenjang->name : '';
+
+            $table->addColumn('prodi_name_dikti', function ($row) {
+                return $row->prodi ? $row->jenjang->name. ' - '.  $row->prodi->name_dikti : '';
             });
 
-            $table->editColumn('name_dikti', function ($row) {
-                return $row->name_dikti ? $row->name_dikti : '';
-            });
-            $table->editColumn('name_en', function ($row) {
-                return $row->name_en ? $row->name_en : '';
-            });
-            $table->editColumn('gelar', function ($row) {
-                return $row->gelar ? $row->gelar : '';
+            $table->addColumn('lembaga_name', function ($row) {
+                return $row->lembaga ? $row->lembaga->name : '';
             });
 
-            $table->filterColumn('nama_prodi', function ($query, $keyword) {
-                $query->whereHas('jenjang', function ($q) use ($keyword) {
-                    $q->where('name', 'LIKE', "%{$keyword}%");
-                })
-                ->orWhere('name_dikti', 'LIKE', "%{$keyword}%");
+            $table->editColumn('no_sk', function ($row) {
+                return $row->no_sk ? $row->no_sk : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'fakultas', 'jenjang']);
+            $table->editColumn('peringkat', function ($row) {
+                return $row->peringkat ? Akreditasi::PERINGKAT_SELECT[$row->peringkat] : '';
+            });
+            $table->editColumn('nilai', function ($row) {
+                return $row->nilai ? $row->nilai : '';
+            });
+            $table->editColumn('sertifikat', function ($row) {
+                if ($photo = $row->sertifikat) {
+                    return sprintf(
+                        '<a href="%s" class="image-popup"><img src="%s" width="50px" height="50px"></a>',
+                        $photo->url,
+                        $photo->thumbnail
+                    );
+                }
+
+                return '';
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'fakultas', 'prodi', 'lembaga', 'sertifikat']);
 
             return $table->make(true);
         }
@@ -202,7 +211,7 @@ class HomeController extends Controller
     public function akreditasiInternasional(Request $request)
     {
         if ($request->ajax()) {
-            $query = Prodi::with(['fakultas', 'jenjang'])->select(sprintf('%s.*', (new Prodi)->table));
+            $query = AkreditasiInternasional::with(['fakultas', 'prodi', 'jenjang', 'lembaga'])->select(sprintf('%s.*', (new AkreditasiInternasional)->table))->current()->orderBy('tgl_akhir_sk', 'DESC');
 
             if (!empty($request->fakultas)) {
                 $query->where('fakultas_id', $request->fakultas);
@@ -223,39 +232,50 @@ class HomeController extends Controller
             $table->addColumn('actions', '&nbsp;');
 
             $table->editColumn('actions', function ($row) {
-                return '<a class="btn btn-primary btn-xs" href="'.route('detail-prodi', $row->slug).'">
+                return '<a class="btn btn-primary btn-xs" href="'.route('detail-prodi', $row->prodi->slug).'">
                                 <i class="fas fa-eye"></i>
                             </a>';
             });
 
-            $table->addColumn('nama_prodi', function ($row) {
-                return $row->nama_prodi ? $row->nama_prodi : '';
-            });
             $table->addColumn('fakultas_name', function ($row) {
                 return $row->fakultas ? $row->fakultas->name : '';
             });
-            $table->addColumn('jenjang_name', function ($row) {
-                return $row->jenjang ? $row->jenjang->name : '';
+
+            $table->addColumn('prodi_name_dikti', function ($row) {
+                return $row->prodi ? $row->jenjang->name. ' - '.  $row->prodi->name_dikti : '';
             });
 
-            $table->editColumn('name_dikti', function ($row) {
-                return $row->name_dikti ? $row->name_dikti : '';
-            });
-            $table->editColumn('name_en', function ($row) {
-                return $row->name_en ? $row->name_en : '';
-            });
-            $table->editColumn('gelar', function ($row) {
-                return $row->gelar ? $row->gelar : '';
+            $table->addColumn('lembaga_name', function ($row) {
+                return $row->lembaga ? $row->lembaga->name : '';
             });
 
-            $table->filterColumn('nama_prodi', function ($query, $keyword) {
-                $query->whereHas('jenjang', function ($q) use ($keyword) {
-                    $q->where('name', 'LIKE', "%{$keyword}%");
-                })
-                ->orWhere('name_dikti', 'LIKE', "%{$keyword}%");
+            $table->editColumn('no_sk', function ($row) {
+                return $row->no_sk ? $row->no_sk : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'fakultas', 'jenjang']);
+            $table->editColumn('diakui_dikti', function ($row) {
+                return $row->diakui_dikti ? "<span class='badge badge-info'>Sudah</span>" : '<span class="badge badge-danger">Belum</span>';
+            });
+
+            $table->editColumn('peringkat', function ($row) {
+                return $row->peringkat ? AkreditasiInternasional::PERINGKAT_SELECT[$row->peringkat] : '';
+            });
+            $table->editColumn('nilai', function ($row) {
+                return $row->nilai ? $row->nilai : '';
+            });
+            $table->editColumn('sertifikat', function ($row) {
+                if ($photo = $row->sertifikat) {
+                    return sprintf(
+                        '<a href="%s" class="image-popup"><img src="%s" width="50px" height="50px"></a>',
+                        $photo->url,
+                        $photo->thumbnail
+                    );
+                }
+
+                return '';
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'fakultas', 'prodi', 'lembaga', 'sertifikat', 'diakui_dikti']);
 
             return $table->make(true);
         }

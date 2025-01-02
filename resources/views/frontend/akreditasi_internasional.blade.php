@@ -127,31 +127,33 @@
                         </div>
                         
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover datatable datatable-List">
-                                    <thead>
-                                        <tr>
-                                          <th width="1%">No</th>
-                                          <th>Prodi</th>
-                                          <th>Fakultas</th>
-                                          <th width="1%">Lembaga Akreditasi</th>
-                                          <th>No Sertifikat</th>
-                                          <th>Berlaku Sampai</th>
-                                          <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                          <tr data-entry-id="1">
-                                            <td class="text-center">1</td>
-                                            <td class="text-center">D3 Manajemen Bisnis</td>
-                                            <td class="text-center">Sekolah Vokasi</td>
-                                            <td class="text-center">FIBAA</td>
-                                            <td class="text-center">3906/SK/BAN-PT/Akred-Itnl/S/IX/2023</td>
-                                            <td class="text-center">30 Maret 2029</td>
-                                          </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <table class=" table table-bordered table-striped table-hover ajaxTable datatable datatable-AkreditasiInternasional">
+                                <thead>
+                                    <tr>
+                                        <th width="10">
+                                            No
+                                        </th>
+                                        <th>
+                                            {{ trans('cruds.akreditasiInternasional.fields.fakultas') }}
+                                        </th>
+                                        <th>
+                                            {{ trans('cruds.akreditasiInternasional.fields.prodi') }}
+                                        </th>
+                                        <th>
+                                            {{ trans('cruds.akreditasiInternasional.fields.lembaga') }}
+                                        </th>
+                                        <th>
+                                            {{ trans('cruds.akreditasiInternasional.fields.tgl_akhir_sk') }}
+                                        </th>
+                                        <th>
+                                            {{ trans('cruds.akreditasiInternasional.fields.sertifikat') }}
+                                        </th>
+                                        <th>
+                                            &nbsp;
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -164,27 +166,40 @@
 @parent
 <script>
 $(function () {
-    let table = $('.datatable-List:not(.ajaxTable)').DataTable({
-        ordering: false,
-        searching: false,
-        paging: false,
-        pageLength: 50
-    })
-    $('a[data-toggle="tab"]').on('shown.bs.tab click', function (e) {
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
-    });
+  let dtOverrideGlobals = {
+    processing: true,
+    serverSide: true,
+    retrieve: true,
+    aaSorting: [],
+    ajax: "{{ route('akreditasiInternasional') }}",
+    columns: [
+        { data: null, name: 'row_num', class: 'text-center', orderable: false, searchable: false },
+        { data: 'fakultas_name', name: 'fakultas.name', class: 'text-center' },
+        { data: 'prodi_name_dikti', name: 'prodi.name_dikti', class: 'text-center' },
+        { data: 'lembaga_name', name: 'lembaga.name', class: 'text-center' },
+        { data: 'tgl_akhir_sk', name: 'tgl_akhir_sk', class: 'text-center' },
+        { data: 'sertifikat', name: 'sertifikat', sortable: false, searchable: false, class: 'text-center' },
+        { data: 'actions', name: '{{ trans('global.actions') }}', class: 'text-center' }
+    ],
+    orderCellsTop: true,
+    order: [[ 5, 'desc' ]],
+    pageLength: 25,
+    drawCallback: function(settings) {
+        var api = this.api();
+        var start = api.page.info().start;
 
-    $('#expired_date').daterangepicker({
-        locale: {
-            format: 'YYYY-MM-DD'
-        },
-        autoUpdateInput: false
-    });
+        // Assign row numbers
+        api.column(0, {page: 'current'}).nodes().each(function(cell, i) {
+            cell.innerHTML = start + i + 1;
+        });
+    }
+  };
+  let table = $('.datatable-AkreditasiInternasional').DataTable(dtOverrideGlobals);
+  $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
+      $($.fn.dataTable.tables(true)).DataTable()
+          .columns.adjust();
+  });
 
-    $('#expired_date').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-    });
-})
+});
 </script>
 @endsection
