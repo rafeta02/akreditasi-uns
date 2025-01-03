@@ -69,12 +69,18 @@ class HomeController extends Controller
             if (!empty($request->jenjang)) {
                 $query->where('jenjang_id', $request->jenjang);
             }
-            // if (!empty($request->nasional)) {
-            //     $query->whereHas('akreditasi', $request->nasional);
-            // }
-            // if (!empty($request->internasional)) {
-            //     $query->where('akreditasi_internasional', $request->internasional);
-            // }
+            if (!empty($request->nasional)) {
+                $lembaga_nasional = $request->nasional;
+                $query->whereHas('currentAkreditasi', function ($query) use ($lembaga_nasional)  {
+                    $query->where('lembaga_id', $lembaga_nasional);
+                });
+            }
+            if (!empty($request->internasional)) {
+                $lembaga_internasional = $request->internasional;
+                $query->whereHas('currentAkreditasiInternasional', function ($query) use ($lembaga_internasional)  {
+                    $query->where('lembaga_id', $lembaga_internasional);
+                });
+            }
 
             $table = Datatables::of($query);
 
@@ -114,7 +120,19 @@ class HomeController extends Controller
                 ->orWhere('name_dikti', 'LIKE', "%{$keyword}%");
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'fakultas', 'jenjang']);
+            $table->addColumn('akreditasi_nasional', function ($row) {
+                return $row->currentAkreditasi ? $row->currentAkreditasi->lembaga->name.'<br>('.$row->currentAkreditasi->no_sk.')' : 'Belum Terakreditasi';
+            });
+
+            $table->addColumn('akreditasi_internasional', function ($row) {
+                return $row->currentAkreditasiInternasional ? $row->currentAkreditasiInternasional->lembaga->name.'<br>('.$row->currentAkreditasiInternasional->no_sk.')' : 'Belum Terakreditasi';
+            });
+
+            $table->addColumn('peringkat_nasional', function ($row) {
+                return $row->currentAkreditasi ? $row->currentAkreditasi->peringkat : 'Belum Terakreditasi';
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'fakultas', 'jenjang', 'akreditasi_nasional', 'akreditasi_internasional']);
 
             return $table->make(true);
         }
@@ -130,7 +148,10 @@ class HomeController extends Controller
     public function detailProdi($slug)
     {
         $prodi = Prodi::where('slug', $slug)->first();
-        return view('frontend.detail_prodi', compact('prodi'));
+        $currentAkreditasi = Akreditasi::where('prodi_id', $prodi->id)->current()->first();
+        $allAkreditasi = Akreditasi::allAkreditasi($prodi->id)->get();
+
+        return view('frontend.detail_prodi', compact('prodi', 'currentAkreditasi', 'allAkreditasi'));
     }
 
     public function akreditasiNasional(Request $request)
@@ -144,12 +165,12 @@ class HomeController extends Controller
             if (!empty($request->jenjang)) {
                 $query->where('jenjang_id', $request->jenjang);
             }
-            // if (!empty($request->nasional)) {
-            //     $query->whereHas('akreditasi', $request->nasional);
-            // }
-            // if (!empty($request->internasional)) {
-            //     $query->where('akreditasi_internasional', $request->internasional);
-            // }
+            if (!empty($request->lembaga)) {
+                $query->where('lembaga_id', $request->lembaga);
+            }
+            if (!empty($request->peringkat)) {
+                $query->where('peringkat', $request->peringkat);
+            }
 
             $table = Datatables::of($query);
 
@@ -219,12 +240,9 @@ class HomeController extends Controller
             if (!empty($request->jenjang)) {
                 $query->where('jenjang_id', $request->jenjang);
             }
-            // if (!empty($request->nasional)) {
-            //     $query->whereHas('akreditasi', $request->nasional);
-            // }
-            // if (!empty($request->internasional)) {
-            //     $query->where('akreditasi_internasional', $request->internasional);
-            // }
+            if (!empty($request->lembaga)) {
+                $query->where('lembaga_id', $request->lembaga);
+            }
 
             $table = Datatables::of($query);
 
@@ -260,6 +278,11 @@ class HomeController extends Controller
             $table->editColumn('peringkat', function ($row) {
                 return $row->peringkat ? AkreditasiInternasional::PERINGKAT_SELECT[$row->peringkat] : '';
             });
+
+            $table->editColumn('tgl_akhir_sk', function ($row) {
+                return $row->tgl_akhir_sk ? Carbon::parse($row->tgl_akhir_sk)->format('d F Y') : '';
+            });
+            
             $table->editColumn('nilai', function ($row) {
                 return $row->nilai ? $row->nilai : '';
             });

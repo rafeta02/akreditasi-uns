@@ -171,7 +171,14 @@ $(function () {
     serverSide: true,
     retrieve: true,
     aaSorting: [],
-    ajax: "{{ route('akreditasiInternasional') }}",
+    ajax: {
+        url: "{{ route('akreditasiInternasional') }}",
+        data: function(data) {
+            data.fakultas = $('#fakultas_id').val(),
+            data.jenjang = $('#jenjang_id').val(),
+            data.lembaga = $('#lembaga_akreditasi_id').val()
+        }
+    },
     columns: [
         { data: null, name: 'row_num', class: 'text-center', orderable: false, searchable: false },
         { data: 'fakultas_name', name: 'fakultas.name', class: 'text-center' },
@@ -200,6 +207,10 @@ $(function () {
           .columns.adjust();
   });
 
+    $("#filterform").submit(function(event) {
+        event.preventDefault();
+        table.ajax.reload();
+    });
 });
 </script>
 @endsection

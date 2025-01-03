@@ -101,21 +101,27 @@ if (! function_exists('sumProdiTerakreditasi')) {
 if (! function_exists('sumProdiUnggul')) {
     function sumProdiUnggul()
     {
-        return Prodi::count();
+        return Prodi::whereHas('currentAkreditasi', function ($query) {
+            $query->where('peringkat', 'UNGGUL'); 
+        })->count();
     }
 }
 
 if (! function_exists('sumProdiA')) {
     function sumProdiA()
     {
-        return Prodi::count();
+        return Prodi::whereHas('currentAkreditasi', function ($query) {
+            $query->where('peringkat', 'A'); 
+        })->count();
     }
 }
 
 if (! function_exists('sumProdiBaikSekali')) {
     function sumProdiBaikSekali()
     {
-        return Prodi::count();
+        return Prodi::whereHas('currentAkreditasi', function ($query) {
+            $query->where('peringkat', 'BAIK SEKALI'); 
+        })->count();
     }
 }
 
@@ -123,42 +129,50 @@ if (! function_exists('sumProdiSementara')) {
 
     function sumProdiSementara()
     {
-        return Prodi::count();
+        return Prodi::whereHas('currentAkreditasi', function ($query) {
+            $query->where('peringkat', 'SEMENTARA'); 
+        })->count();
     }
 }
 
 if (! function_exists('sumProdiBelumTerakreditasi')) {
     function sumProdiBelumTerakreditasi()
     {
-        return Prodi::count();
+        return Prodi::whereDoesntHave('currentAkreditasi')->count();
     }
 }
 
 if (! function_exists('sumProdiInternasional')) {
     function sumProdiInternasional()
     {
-        return Prodi::count();
+        return Prodi::whereHas('currentAkreditasiInternasional')->count();
     }
 }
 
 if (! function_exists('sumProdiAsiin')) {
     function sumProdiAsiin()
     {
-        return Prodi::count();
+        return Prodi::whereHas('currentAkreditasiInternasional', function ($query) {
+            $query->where('lembaga_id', 8); 
+        })->count();
     }
 }
 
 if (! function_exists('sumProdiIabee')) {
     function sumProdiIabee()
     {
-        return Prodi::count();
+        return Prodi::whereHas('currentAkreditasiInternasional', function ($query) {
+            $query->where('lembaga_id', 11); 
+        })->count();
     }
 }
 
 if (! function_exists('sumProdiAqas')) {
     function sumProdiAqas()
     {
-        return Prodi::count();
+        return Prodi::whereHas('currentAkreditasiInternasional', function ($query) {
+            $query->where('lembaga_id', 10); 
+        })->count();
     }
 }
 ?>

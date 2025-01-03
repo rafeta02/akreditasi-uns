@@ -89,6 +89,19 @@ class AkreditasiController extends Controller
                 return '';
             });
 
+            $table->editColumn('file_penunjang', function ($row) {
+                if (! $row->file_penunjang) {
+                    return '';
+                }
+                $links = [];
+                foreach ($row->file_penunjang as $media) {
+                    $links[] = '<a href="' . $media->getUrl() . '" target="_blank">' . trans('global.downloadFile') . '</a>';
+                }
+
+                return implode(', ', $links);
+            });
+
+
             $table->rawColumns(['actions', 'placeholder', 'fakultas', 'prodi', 'lembaga', 'sertifikat']);
 
             return $table->make(true);

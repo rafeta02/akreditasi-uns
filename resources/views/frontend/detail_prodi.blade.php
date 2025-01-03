@@ -109,34 +109,50 @@
                                             Sertifikat Akreditasi
                                         </div>
                                         <div class="card-body pt-0">
-                                            <div class="row">
-                                                <div class="col-7">
-                                                    <ul class="ml-4 my-2 fa-ul text-muted">
-                                                        <li><span class="fa-li"><i class="fas fa-lg fa-certificate"></i></span>
-                                                          No Sertifikat<br><b>No. 451/SK/BAN-PT/Ak.Ppj/PT/VII/2023</b>
-                                                        </li>
-                                                        <li><span class="fa-li"><i class="fas fa-lg fa-award"></i></span>
-                                                          Nilai<br><b>UNGGUL</b>
-                                                        </li>
-                                                        <li><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span>
-                                                          Periode<br><b>18 Juli 2023 s/d 18 Juli 2028</b>
-                                                        </li>
-                                                    </ul>
+                                            @if($currentAkreditasi)
+                                                <div class="row">
+                                                    <div class="col-7">
+                                                        <ul class="ml-4 my-2 fa-ul text-muted">
+                                                            <li><span class="fa-li"><i class="fas fa-lg fa-certificate"></i></span>
+                                                            No Sertifikat<br><b>{{ $currentAkreditasi->no_sk }}</b>
+                                                            </li>
+                                                            <li><span class="fa-li"><i class="fas fa-lg fa-award"></i></span>
+                                                            Nilai<br><b>{{ $currentAkreditasi->peringkat }}</b>
+                                                            </li>
+                                                            <li><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span>
+                                                            Periode<br><b>{{ Carbon\Carbon::parse($currentAkreditasi->tgl_awal_sk)->format('d F Y') }} s/d {{ Carbon\Carbon::parse($currentAkreditasi->tgl_akhir_sk)->format('d F Y')}}</b>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-5 text-center">
+                                                    <a href="{{ $currentAkreditasi->sertifikat ? $currentAkreditasi->sertifikat->getUrl() : asset('img/default.jpg') }}" class="image-popup">
+                                                        <img class="img-fluid" src="{{ $currentAkreditasi->sertifikat ? $currentAkreditasi->sertifikat->getUrl() : asset('img/default.jpg') }}" alt="Sertifikat Akreditasi UNS">
+                                                    </a>
+                                                    </div>
                                                 </div>
-                                                <div class="col-5 text-center">
-                                                  <a href="{{ asset('img/sertifikat.jpg') }}" class="image-popup">
-                                                    <img class="img-fluid" src="{{ asset('img/sertifikat.jpg') }}" alt="Sertifikat Akreditasi UNS">
-                                                  </a>
+                                            @else
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        Tidak Ada Sertifikat
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @endif
                                         </div>
                                         <div class="card-footer text-center">
-                                            <a href="{{ asset('img/sertifikat.jpg') }}" download="Sertifikat_Akreditasi_UNS.jpg" class="btn btn-success">
-                                                <i class="fas fa-download"></i> Download SK Sertifikat
-                                            </a>
-                                            <a href="{{ asset('img/sertifikat.jpg') }}" download="Sertifikat_Akreditasi_UNS.jpg" class="btn btn-danger">
-                                                <i class="fas fa-download"></i> Download Sertifikat
-                                            </a>
+                                            @if($currentAkreditasi)
+                                                @if($currentAkreditasi->sertifikat)
+                                                    <a href="{{ $currentAkreditasi->sertifikat->url }}" download="Sertifikat_{{ $prodi->nama_prodi }}" class="btn btn-success">
+                                                        <i class="fas fa-download"></i> Download Sertifikat
+                                                    </a>
+                                                @endif
+                                                @if($currentAkreditasi->file_penunjang)
+                                                    @foreach ($currentAkreditasi->file_penunjang as $item)
+                                                        <a href="{{ $item->getUrl() }}" target="_blank" class="btn btn-danger">
+                                                            <i class="fas fa-download"></i> Download SK
+                                                        </a> 
+                                                    @endforeach
+                                                @endif
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -145,117 +161,61 @@
                                     <!-- The timeline -->
                                     <div class="timeline timeline-inverse">
                                         <!-- timeline time label -->
-                                        <div class="time-label">
-                                            <span class="bg-danger">
-                                                10 Feb. 2014
-                                            </span>
-                                        </div>
-                                        <!-- /.timeline-label -->
-                                        <!-- timeline item -->
-                                        <div>
-                                            <i class="fas fa-certificate bg-danger"></i>
+                                        @foreach ($allAkreditasi as $akreditasi)
+                                            <div class="time-label">
+                                                <span class="bg-danger">
+                                                    {{ Carbon\Carbon::parse($akreditasi->tgl_sk)->format('d-F-Y')}}
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <i class="fas fa-certificate bg-danger"></i>
 
-                                            <div class="timeline-item">
-                                                <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
+                                                <div class="timeline-item">
+                                                    <span class="time"><i class="far fa-clock"></i> {{ Carbon\Carbon::parse($akreditasi->tgl_sk)->diffForHumans()}} </span>
 
-                                                <h3 class="timeline-header">Sertifikat Akreditasi Periode <b>18 Juli 2023 s/d 18 Juli 2028</b></h3>
+                                                    <h3 class="timeline-header">Sertifikat Akreditasi Periode <b>18 Juli 2023 s/d 18 Juli 2028</b></h3>
 
-                                                <div class="timeline-body">
-                                                    <div class="card">
-                                                        <div class="card-header text-muted border-bottom-0">
-                                                            Sertifikat Akreditasi
-                                                        </div>
-                                                        <div class="card-body pt-0">
-                                                            <div class="row">
-                                                                <div class="col-7">
-                                                                    <ul class="ml-4 my-2 fa-ul text-muted">
-                                                                        <li><span class="fa-li"><i class="fas fa-lg fa-certificate"></i></span>
-                                                                          No Sertifikat<br><b>No. 451/SK/BAN-PT/Ak.Ppj/PT/VII/2023</b>
-                                                                        </li>
-                                                                        <li><span class="fa-li"><i class="fas fa-lg fa-award"></i></span>
-                                                                          Nilai<br><b>UNGGUL</b>
-                                                                        </li>
-                                                                        <li><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span>
-                                                                          Periode<br><b>18 Juli 2023 s/d 18 Juli 2028</b>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div class="col-5 text-center">
-                                                                  <a href="{{ asset('img/sertifikat.jpg') }}" class="image-popup">
-                                                                    <img class="img-fluid" src="{{ asset('img/sertifikat.jpg') }}" alt="Sertifikat Akreditasi UNS">
-                                                                  </a>
+                                                    <div class="timeline-body">
+                                                        <div class="card">
+                                                            <div class="card-header text-muted border-bottom-0">
+                                                                Sertifikat Akreditasi
+                                                            </div>
+                                                            <div class="card-body pt-0">
+                                                                <div class="row">
+                                                                    <div class="col-7">
+                                                                        <ul class="ml-4 my-2 fa-ul text-muted">
+                                                                            <li><span class="fa-li"><i class="fas fa-lg fa-certificate"></i></span>
+                                                                            No Sertifikat<br><b>No. 451/SK/BAN-PT/Ak.Ppj/PT/VII/2023</b>
+                                                                            </li>
+                                                                            <li><span class="fa-li"><i class="fas fa-lg fa-award"></i></span>
+                                                                            Nilai<br><b>UNGGUL</b>
+                                                                            </li>
+                                                                            <li><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span>
+                                                                            Periode<br><b>18 Juli 2023 s/d 18 Juli 2028</b>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    <div class="col-5 text-center">
+                                                                    <a href="{{ asset('img/sertifikat.jpg') }}" class="image-popup">
+                                                                        <img class="img-fluid" src="{{ asset('img/sertifikat.jpg') }}" alt="Sertifikat Akreditasi UNS">
+                                                                    </a>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="card-footer text-center">
-                                                            <a href="{{ asset('img/sertifikat.jpg') }}" download="Sertifikat_Akreditasi_UNS.jpg" class="btn btn-success">
-                                                                <i class="fas fa-download"></i> Download SK Sertifikat
-                                                            </a>
-                                                            <a href="{{ asset('img/sertifikat.jpg') }}" download="Sertifikat_Akreditasi_UNS.jpg" class="btn btn-danger">
-                                                                <i class="fas fa-download"></i> Download Sertifikat
-                                                            </a>
+                                                            <div class="card-footer text-center">
+                                                                <a href="{{ asset('img/sertifikat.jpg') }}" download="Sertifikat_Akreditasi_UNS.jpg" class="btn btn-success">
+                                                                    <i class="fas fa-download"></i> Download SK Sertifikat
+                                                                </a>
+                                                                <a href="{{ asset('img/sertifikat.jpg') }}" download="Sertifikat_Akreditasi_UNS.jpg" class="btn btn-danger">
+                                                                    <i class="fas fa-download"></i> Download Sertifikat
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- END timeline item -->
-                                        <!-- END timeline item -->
-                                        <!-- timeline time label -->
-                                        <div class="time-label">
-                                            <span class="bg-danger">
-                                                3 Jan. 2014
-                                            </span>
-                                        </div>
-                                        <!-- /.timeline-label -->
-                                        <!-- timeline item -->
-                                        <div>
-                                            <i class="fas fa-certificate bg-danger"></i>
-
-                                            <div class="timeline-item">
-                                                <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
-
-                                                <h3 class="timeline-header">Sertifikat Akreditasi Periode <b>18 Juli 2023 s/d 18 Juli 2028</b></h3>
-
-                                                <div class="timeline-body">
-                                                    <div class="card">
-                                                        <div class="card-header text-muted border-bottom-0">
-                                                            Sertifikat Akreditasi
-                                                        </div>
-                                                        <div class="card-body pt-0">
-                                                            <div class="row">
-                                                                <div class="col-7">
-                                                                    <ul class="ml-4 my-2 fa-ul text-muted">
-                                                                        <li><span class="fa-li"><i class="fas fa-lg fa-certificate"></i></span>
-                                                                          No Sertifikat<br><b>No. 451/SK/BAN-PT/Ak.Ppj/PT/VII/2023</b>
-                                                                        </li>
-                                                                        <li><span class="fa-li"><i class="fas fa-lg fa-award"></i></span>
-                                                                          Nilai<br><b>UNGGUL</b>
-                                                                        </li>
-                                                                        <li><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span>
-                                                                          Periode<br><b>18 Juli 2023 s/d 18 Juli 2028</b>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div class="col-5 text-center">
-                                                                  <a href="{{ asset('img/sertifikat.jpg') }}" class="image-popup">
-                                                                    <img class="img-fluid" src="{{ asset('img/sertifikat.jpg') }}" alt="Sertifikat Akreditasi UNS">
-                                                                  </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="card-footer text-center">
-                                                            <a href="{{ asset('img/sertifikat.jpg') }}" download="Sertifikat_Akreditasi_UNS.jpg" class="btn btn-success">
-                                                                <i class="fas fa-download"></i> Download SK Sertifikat
-                                                            </a>
-                                                            <a href="{{ asset('img/sertifikat.jpg') }}" download="Sertifikat_Akreditasi_UNS.jpg" class="btn btn-danger">
-                                                                <i class="fas fa-download"></i> Download Sertifikat
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        @endforeach
+                                        
                                         <!-- END timeline item -->
                                         <div>
                                             <i class="far fa-clock bg-gray"></i>

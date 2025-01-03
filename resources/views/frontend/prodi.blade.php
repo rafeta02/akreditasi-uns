@@ -146,8 +146,7 @@
                                             <th>Fakultas</th>
                                             <th width="1%">Akreditasi Nasional</th>
                                             <th width="1%">Akreditasi Internasional</th>
-                                            <th>Nilai</th>
-                                            <th>No Sertifikat</th>
+                                            <th>Peringkat</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -181,12 +180,11 @@ $(function () {
         },
         columns: [
             { data: null, name: 'row_num', class: 'text-center', orderable: false, searchable: false },
-            { data: 'nama_prodi', name: 'nama_prodi', class: 'text-center' },
             { data: 'fakultas_name', name: 'fakultas.name', class: 'text-center' },
-            { data: 'gelar', name: 'gelar', class: 'text-center', searchable: false },
-            { data: 'gelar', name: 'gelar', class: 'text-center', searchable: false },
-            { data: 'slug', name: 'slug', class: 'text-center', searchable: false },
-            { data: 'gelar', name: 'gelar', class: 'text-center', searchable: false  },
+            { data: 'nama_prodi', name: 'nama_prodi', class: 'text-center' },
+            { data: 'akreditasi_nasional', name: 'akreditasi_nasional', class: 'text-center', searchable: false },
+            { data: 'akreditasi_internasional', name: 'akreditasi_internasional', class: 'text-center', searchable: false },
+            { data: 'peringkat_nasional', name: 'peringkat_nasional', class: 'text-center', searchable: false  },
             { data: 'actions', name: 'actions', class: 'text-center', searchable: false }
         ],
         orderCellsTop: true,

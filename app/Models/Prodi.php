@@ -99,4 +99,25 @@ class Prodi extends Model
         ];
     }
 
+    public function allAkreditasi(): HasMany
+    {
+        return $this->hasMany(Akreditasi::class)->orderBy('tgl_akhir_sk');
+    }
+
+
+    public function currentAkreditasi()
+    {
+        return $this->hasOne(Akreditasi::class)
+            ->whereDate('tgl_awal_sk', '<=', Carbon::today())
+            ->whereDate('tgl_akhir_sk', '>=', Carbon::today());
+    }
+
+
+    public function currentAkreditasiInternasional()
+    {
+        return $this->hasOne(AkreditasiInternasional::class)
+            ->whereDate('tgl_awal_sk', '<=', Carbon::today())
+            ->whereDate('tgl_akhir_sk', '>=', Carbon::today());
+    }
+
 }

@@ -118,10 +118,10 @@
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label for="peringkat">Peringkat Akreditasi</label>
-                                            <select class="form-control select2" name="peringkat" id="peringkat">
-                                                <option value {{ old('peringkat', null) === null ? 'selected' : '' }}>All</option>
+                                            <select class="form-control select2" name="peringkat_id" id="peringkat_id">
+                                                <option value {{ old('peringkat_id', null) === null ? 'selected' : '' }}>All</option>
                                                 @foreach(App\Models\Akreditasi::PERINGKAT_SELECT as $key => $label)
-                                                    <option value="{{ $key }}" {{ old('peringkat', '') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
+                                                    <option value="{{ $key }}" {{ old('peringkat_id', '') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -187,7 +187,15 @@ $(function () {
         serverSide: true,
         retrieve: true,
         aaSorting: [],
-        ajax: "{{ route('akreditasiNasional') }}",
+        ajax: {
+            url: "{{ route('akreditasiNasional') }}",
+            data: function(data) {
+                data.fakultas = $('#fakultas_id').val(),
+                data.jenjang = $('#jenjang_id').val(),
+                data.lembaga = $('#lembaga_akreditasi_id').val(),
+                data.peringkat = $('#peringkat_id').val()
+            }
+        },
         columns: [
             { data: null, name: 'row_num', class: 'text-center', orderable: false, searchable: false },
             { data: 'fakultas_name', name: 'fakultas.name', class: 'text-center' },
@@ -218,6 +226,10 @@ $(function () {
             .columns.adjust();
     });
 
+    $("#filterform").submit(function(event) {
+        event.preventDefault();
+        table.ajax.reload();
+    });
 });
 
 </script>
