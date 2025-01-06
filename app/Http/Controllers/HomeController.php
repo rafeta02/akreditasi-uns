@@ -55,7 +55,9 @@ class HomeController extends Controller
     public function fakultas()
     {
         $fakultas = Faculty::all();
-        return view('frontend.fakultas', compact('fakultas'));
+        $akreditasi = Akreditasi::current()->get();
+        $akreditasiInternasional = AkreditasiInternasional::current()->get();
+        return view('frontend.fakultas', compact('fakultas', 'akreditasi', 'akreditasiInternasional'));
     }
 
     public function prodi(Request $request)

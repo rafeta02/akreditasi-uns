@@ -46,4 +46,9 @@ class Faculty extends Model
             ]
         ];
     }
+
+    public function prodi()
+    {
+        return $this->hasMany(Prodi::class, 'fakultas_id');
+    }
 }
