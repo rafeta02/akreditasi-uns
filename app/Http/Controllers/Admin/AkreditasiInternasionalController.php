@@ -195,29 +195,40 @@ class AkreditasiInternasionalController extends Controller
     {
         abort_if(Gate::denies('akreditasi_internasional_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $fakultas = Faculty::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $prodis = Prodi::pluck('name_dikti', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $jenjangs = Jenjang::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $lembagas = LembagaAkreditasi::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         $akreditasiInternasional->load('fakultas', 'prodi', 'jenjang', 'lembaga');
 
-        return view('admin.akreditasiInternasionals.upload_sertif', compact('akreditasiInternasional', 'fakultas', 'jenjangs', 'lembagas', 'prodis'));
+        return view('admin.akreditasiInternasionals.upload_sertif', compact('akreditasiInternasional'));
     }
 
     public function update(UpdateAkreditasiInternasionalRequest $request, AkreditasiInternasional $akreditasiInternasional)
     {
         $akreditasiInternasional->update($request->all());
 
+        $prodi_name = Str::slug($akreditasiInternasional->jenjang->name . '-' . $akreditasiInternasional->prodi->name_dikti);
+
         if ($request->input('sertifikat', false)) {
             if (! $akreditasiInternasional->sertifikat || $request->input('sertifikat') !== $akreditasiInternasional->sertifikat->file_name) {
                 if ($akreditasiInternasional->sertifikat) {
                     $akreditasiInternasional->sertifikat->delete();
                 }
-                $akreditasiInternasional->addMedia(storage_path('tmp/uploads/' . basename($request->input('sertifikat'))))->toMediaCollection('sertifikat');
+
+                $lembaga = Str::slug($akreditasiInternasional->lembaga->name);
+                $tgl_awal = Carbon::parse($akreditasiInternasional->tgl_awal_sk)->format('d-m-Y');
+                $tgl_akhir = Carbon::parse($akreditasiInternasional->tgl_akhir_sk)->format('d-m-Y');
+
+                $filePath = storage_path('tmp/uploads/' . basename($request->input('sertifikat')));
+                $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+
+                $sertifikatNewName = 'sertifikat_' . $prodi_name . '_' . $lembaga . '_' . $tgl_awal . '_sd_' . $tgl_akhir . '_' . uniqid(). '.' . $extension;
+
+                $newFilePath = storage_path('tmp/uploads/' . $sertifikatNewName);
+                rename($filePath, $newFilePath);
+
+                if (file_exists($newFilePath)) {
+                    $akreditasiInternasional->addMedia($newFilePath)->toMediaCollection('sertifikat');
+                } else {
+                    throw new \Exception('File does not exist at path: ' . $newFilePath);
+                }
             }
         } elseif ($akreditasiInternasional->sertifikat) {
             $akreditasiInternasional->sertifikat->delete();
@@ -233,7 +244,19 @@ class AkreditasiInternasionalController extends Controller
         $media = $akreditasiInternasional->file_penunjang->pluck('file_name')->toArray();
         foreach ($request->input('file_penunjang', []) as $file) {
             if (count($media) === 0 || ! in_array($file, $media)) {
-                $akreditasiInternasional->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('file_penunjang');
+                $filePath = storage_path('tmp/uploads/' . basename($file));
+                $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+
+                $filePenunjangNewName = 'file_penunjang_' . $prodi_name . '_' . uniqid() . '.' . $extension;
+
+                $newFilePath = storage_path('tmp/uploads/' . $filePenunjangNewName);
+                rename($filePath, $newFilePath);
+
+                if (file_exists($newFilePath)) {
+                    $akreditasiInternasional->addMedia($newFilePath)->toMediaCollection('file_penunjang');
+                } else {
+                    throw new \Exception('File does not exist at path: ' . $newFilePath);
+                }
             }
         }
 
