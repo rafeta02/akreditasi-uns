@@ -144,4 +144,9 @@ class AkreditasiInternasional extends Model implements HasMedia
         return $query->whereDate('tgl_awal_sk', '<=', Carbon::today())
                      ->whereDate('tgl_akhir_sk', '>=', Carbon::today());
     }
+
+    public function scopeAllAkreditasi(Builder $query, $prodi)
+    {
+        return $query->where('prodi_id', $prodi)->orderBy('tgl_akhir_sk', 'desc');
+    }
 }

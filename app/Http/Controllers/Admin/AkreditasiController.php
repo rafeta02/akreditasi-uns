@@ -135,7 +135,7 @@ class AkreditasiController extends Controller
 
                 if ($request->input('sertifikat', false)) {
                     $lembaga = Str::slug($lembaga->name);
-                    $tgl_awal = Carbon::parse($request->input('tgl_sk'))->format('d-m-Y');
+                    $tgl_awal = Carbon::parse($request->input('tgl_awal_sk'))->format('d-m-Y');
                     $tgl_akhir = Carbon::parse($request->input('tgl_akhir_sk'))->format('d-m-Y');
 
                     $filePath = storage_path('tmp/uploads/' . basename($request->input('sertifikat')));
@@ -203,29 +203,40 @@ class AkreditasiController extends Controller
     {
         abort_if(Gate::denies('akreditasi_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $fakultas = Faculty::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $prodis = Prodi::pluck('name_dikti', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $jenjangs = Jenjang::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $lembagas = LembagaAkreditasi::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         $akreditasi->load('fakultas', 'prodi', 'jenjang', 'lembaga');
 
-        return view('admin.akreditasis.upload_sertif', compact('akreditasi', 'fakultas', 'jenjangs', 'lembagas', 'prodis'));
+        return view('admin.akreditasis.upload_sertif', compact('akreditasi'));
     }
 
     public function update(UpdateAkreditasiRequest $request, Akreditasi $akreditasi)
     {
         $akreditasi->update($request->all());
 
+        $prodi_name = Str::slug($akreditasi->jenjang->name . '-' . $akreditasi->prodi->name_dikti);
+
         if ($request->input('sertifikat', false)) {
             if (! $akreditasi->sertifikat || $request->input('sertifikat') !== $akreditasi->sertifikat->file_name) {
                 if ($akreditasi->sertifikat) {
                     $akreditasi->sertifikat->delete();
                 }
-                $akreditasi->addMedia(storage_path('tmp/uploads/' . basename($request->input('sertifikat'))))->toMediaCollection('sertifikat');
+
+                $lembaga = Str::slug($akreditasi->lembaga->name);
+                $tgl_awal = Carbon::parse($akreditasi->tgl_awal_sk)->format('d-m-Y');
+                $tgl_akhir = Carbon::parse($akreditasi->tgl_akhir_sk)->format('d-m-Y');
+
+                $filePath = storage_path('tmp/uploads/' . basename($request->input('sertifikat')));
+                $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+
+                $sertifikatNewName = 'sertifikat_' . $prodi_name . '_' . $lembaga . '_' . $tgl_awal . '_sd_' . $tgl_akhir . '_' . uniqid(). '.' . $extension;
+
+                $newFilePath = storage_path('tmp/uploads/' . $sertifikatNewName);
+                rename($filePath, $newFilePath);
+
+                if (file_exists($newFilePath)) {
+                    $akreditasi->addMedia($newFilePath)->toMediaCollection('sertifikat');
+                } else {
+                    throw new \Exception('File does not exist at path: ' . $newFilePath);
+                }
             }
         } elseif ($akreditasi->sertifikat) {
             $akreditasi->sertifikat->delete();
@@ -241,7 +252,19 @@ class AkreditasiController extends Controller
         $media = $akreditasi->file_penunjang->pluck('file_name')->toArray();
         foreach ($request->input('file_penunjang', []) as $file) {
             if (count($media) === 0 || ! in_array($file, $media)) {
-                $akreditasi->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('file_penunjang');
+                $filePath = storage_path('tmp/uploads/' . basename($file));
+                $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+
+                $filePenunjangNewName = 'file_penunjang_' . $prodi_name . '_' . uniqid() . '.' . $extension;
+
+                $newFilePath = storage_path('tmp/uploads/' . $filePenunjangNewName);
+                rename($filePath, $newFilePath);
+
+                if (file_exists($newFilePath)) {
+                    $akreditasi->addMedia($newFilePath)->toMediaCollection('file_penunjang');
+                } else {
+                    throw new \Exception('File does not exist at path: ' . $newFilePath);
+                }
             }
         }
 

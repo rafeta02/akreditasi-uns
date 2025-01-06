@@ -116,8 +116,11 @@
                                                             <li><span class="fa-li"><i class="fas fa-lg fa-certificate"></i></span>
                                                             No Sertifikat<br><b>{{ $currentAkreditasi->no_sk }}</b>
                                                             </li>
+                                                            <li><span class="fa-li"><i class="fas fa-lg fa-building"></i></span>
+                                                            Lembaga Akreditasi<br><b>{{ $currentAkreditasi->lembaga->name }}</b>
+                                                            </li>
                                                             <li><span class="fa-li"><i class="fas fa-lg fa-award"></i></span>
-                                                            Nilai<br><b>{{ $currentAkreditasi->peringkat }}</b>
+                                                            Nilai<br><b>{{ $currentAkreditasi->peringkat }} {{ $currentAkreditasi->nilai ? '('.$currentAkreditasi->nilai .')' : '' }}</b>
                                                             </li>
                                                             <li><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span>
                                                             Periode<br><b>{{ Carbon\Carbon::parse($currentAkreditasi->tgl_awal_sk)->format('d F Y') }} s/d {{ Carbon\Carbon::parse($currentAkreditasi->tgl_akhir_sk)->format('d F Y')}}</b>
@@ -126,7 +129,7 @@
                                                     </div>
                                                     <div class="col-5 text-center">
                                                     <a href="{{ $currentAkreditasi->sertifikat ? $currentAkreditasi->sertifikat->getUrl() : asset('img/default.jpg') }}" class="image-popup">
-                                                        <img class="img-fluid" src="{{ $currentAkreditasi->sertifikat ? $currentAkreditasi->sertifikat->getUrl() : asset('img/default.jpg') }}" alt="Sertifikat Akreditasi UNS">
+                                                        <img class="img-fluid" src="{{ $currentAkreditasi->sertifikat ? $currentAkreditasi->sertifikat->getUrl() : asset('img/default.jpg') }}" alt="Sertifikat Akreditasi {{ $prodi->nama_prodi }}">
                                                     </a>
                                                     </div>
                                                 </div>
@@ -146,11 +149,90 @@
                                                     </a>
                                                 @endif
                                                 @if($currentAkreditasi->file_penunjang)
-                                                    @foreach ($currentAkreditasi->file_penunjang as $item)
-                                                        <a href="{{ $item->getUrl() }}" target="_blank" class="btn btn-danger">
-                                                            <i class="fas fa-download"></i> Download SK
-                                                        </a> 
-                                                    @endforeach
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-danger"><i class="fas fa-download"></i> Download SK</button>
+                                                        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                                                            <span class="sr-only">Toggle Dropdown</span>
+                                                        </button>
+                                                        <div class="dropdown-menu" role="menu"> 
+                                                            <div class="dropdown-divider"></div>
+                                                            @foreach ($currentAkreditasi->file_penunjang as $item)
+                                                                <a class="dropdown-item" href="{{ $item->getUrl() }}" target="_blank">
+                                                                    {{ $item->file_name }}
+                                                                </a>
+                                                            <div class="dropdown-divider"></div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="card mt-5">
+                                        <div class="card-header text-muted border-bottom-0">
+                                            Sertifikat Akreditasi Internasional
+                                        </div>
+                                        <div class="card-body pt-0">
+                                            @if($currentAkreditasiInternasional)
+                                                <div class="row">
+                                                    <div class="col-7">
+                                                        <ul class="ml-4 my-2 fa-ul text-muted">
+                                                            @if($currentAkreditasiInternasional->no_sk)
+                                                            <li><span class="fa-li"><i class="fas fa-lg fa-certificate"></i></span>
+                                                            No Sertifikat<br><b>No. {{ $currentAkreditasiInternasional->no_sk }}</b>
+                                                            </li>
+                                                            @endif
+                                                            <li><span class="fa-li"><i class="fas fa-lg fa-building"></i></span>
+                                                            Lembaga Akreditasi<br><b>{{ $currentAkreditasiInternasional->lembaga->name }}</b>
+                                                            </li>
+                                                            @if ($currentAkreditasiInternasional->peringkat)
+                                                            <li><span class="fa-li"><i class="fas fa-lg fa-award"></i></span>
+                                                            Nilai<br><b>{{ $currentAkreditasiInternasional->peringkat }} {{ $currentAkreditasiInternasional->nilai ? '('.$currentAkreditasiInternasional->nilai .')' : '' }}</b>
+                                                            </li>
+                                                            @endif
+                                                            <li><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span>
+                                                            Periode<br><b>{{ Carbon\Carbon::parse($currentAkreditasiInternasional->tgl_awal_sk)->format('d F Y') }} s/d {{ Carbon\Carbon::parse($currentAkreditasiInternasional->tgl_akhir_sk)->format('d F Y')}}</b>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-5 text-center">
+                                                    <a href="{{ $currentAkreditasiInternasional->sertifikat ? $currentAkreditasiInternasional->sertifikat->getUrl() : asset('img/default.jpg') }}" class="image-popup">
+                                                        <img class="img-fluid" src="{{ $currentAkreditasiInternasional->sertifikat ? $currentAkreditasiInternasional->sertifikat->getUrl() : asset('img/default.jpg') }}" alt="Sertifikat Akreditasi {{ $prodi->nama_prodi }}">
+                                                    </a>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        Tidak Ada Sertifikat
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="card-footer text-center">
+                                            @if($currentAkreditasiInternasional)
+                                                @if($currentAkreditasiInternasional->sertifikat)
+                                                    <a href="{{ $currentAkreditasiInternasional->sertifikat->url }}" download="Sertifikat_{{ $prodi->nama_prodi }}" class="btn btn-success">
+                                                        <i class="fas fa-download"></i> Download Sertifikat
+                                                    </a>
+                                                @endif
+                                                @if($currentAkreditasiInternasional->file_penunjang)
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-danger"><i class="fas fa-download"></i> Download SK</button>
+                                                        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                                                            <span class="sr-only">Toggle Dropdown</span>
+                                                        </button>
+                                                        <div class="dropdown-menu" role="menu"> 
+                                                            <div class="dropdown-divider"></div>
+                                                            @foreach ($currentAkreditasiInternasional->file_penunjang as $item)
+                                                                <a class="dropdown-item" href="{{ $item->getUrl() }}" target="_blank">
+                                                                    {{ $item->file_name }}
+                                                                </a>
+                                                            <div class="dropdown-divider"></div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
                                                 @endif
                                             @endif
                                         </div>
@@ -173,7 +255,7 @@
                                                 <div class="timeline-item">
                                                     <span class="time"><i class="far fa-clock"></i> {{ Carbon\Carbon::parse($akreditasi->tgl_sk)->diffForHumans()}} </span>
 
-                                                    <h3 class="timeline-header">Sertifikat Akreditasi Periode <b>18 Juli 2023 s/d 18 Juli 2028</b></h3>
+                                                    <h3 class="timeline-header">Sertifikat Akreditasi Periode <b>{{ Carbon\Carbon::parse($akreditasi->tgl_awal_sk)->format('d F Y')}} s/d {{ Carbon\Carbon::parse($akreditasi->tgl_akhir_sk)->format('d F Y')}}</b></h3>
 
                                                     <div class="timeline-body">
                                                         <div class="card">
@@ -185,41 +267,67 @@
                                                                     <div class="col-7">
                                                                         <ul class="ml-4 my-2 fa-ul text-muted">
                                                                             <li><span class="fa-li"><i class="fas fa-lg fa-certificate"></i></span>
-                                                                            No Sertifikat<br><b>No. 451/SK/BAN-PT/Ak.Ppj/PT/VII/2023</b>
+                                                                            No Sertifikat<br><b>No. {{ $akreditasi->no_sk }}</b>
                                                                             </li>
                                                                             <li><span class="fa-li"><i class="fas fa-lg fa-award"></i></span>
-                                                                            Nilai<br><b>UNGGUL</b>
+                                                                            Nilai<br><b>{{ $akreditasi->peringkat }} {{ $akreditasi->nilai ? '('.$akreditasi->nilai .')' : '' }}</b>
                                                                             </li>
                                                                             <li><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span>
-                                                                            Periode<br><b>18 Juli 2023 s/d 18 Juli 2028</b>
+                                                                            Periode<br><b>{{ Carbon\Carbon::parse($akreditasi->tgl_awal_sk)->format('d F Y') }} s/d {{ Carbon\Carbon::parse($akreditasi->tgl_akhir_sk)->format('d F Y')}}</b>
                                                                             </li>
                                                                         </ul>
                                                                     </div>
                                                                     <div class="col-5 text-center">
-                                                                    <a href="{{ asset('img/sertifikat.jpg') }}" class="image-popup">
-                                                                        <img class="img-fluid" src="{{ asset('img/sertifikat.jpg') }}" alt="Sertifikat Akreditasi UNS">
-                                                                    </a>
+                                                                        <a href="{{ $akreditasi->sertifikat ? $akreditasi->sertifikat->getUrl() : asset('img/default.jpg') }}" class="image-popup">
+                                                                            <img class="img-fluid" src="{{ $akreditasi->sertifikat ? $akreditasi->sertifikat->getUrl() : asset('img/default.jpg') }}" alt="Sertifikat Akreditasi {{ $prodi->nama_prodi }}">
+                                                                        </a>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div class="card-footer text-center">
-                                                                <a href="{{ asset('img/sertifikat.jpg') }}" download="Sertifikat_Akreditasi_UNS.jpg" class="btn btn-success">
-                                                                    <i class="fas fa-download"></i> Download SK Sertifikat
-                                                                </a>
-                                                                <a href="{{ asset('img/sertifikat.jpg') }}" download="Sertifikat_Akreditasi_UNS.jpg" class="btn btn-danger">
-                                                                    <i class="fas fa-download"></i> Download Sertifikat
-                                                                </a>
+                                                                @if($akreditasi)
+                                                                    @if($akreditasi->sertifikat)
+                                                                        <a href="{{ $akreditasi->sertifikat->url }}" download="{{ $akreditasi->sertifikat->filename }}" class="btn btn-success">
+                                                                            <i class="fas fa-download"></i> Download Sertifikat
+                                                                        </a>
+                                                                    @endif
+                                                                    @if($akreditasi->file_penunjang)
+                                                                        <div class="btn-group">
+                                                                            <button type="button" class="btn btn-danger"><i class="fas fa-download"></i> Download SK</button>
+                                                                            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                                                                                <span class="sr-only">Toggle Dropdown</span>
+                                                                            </button>
+                                                                            <div class="dropdown-menu" role="menu"> 
+                                                                                <div class="dropdown-divider"></div>
+                                                                                @foreach ($akreditasi->file_penunjang as $item)
+                                                                                    <a class="dropdown-item" href="{{ $item->getUrl() }}" target="_blank">
+                                                                                        {{ $item->file_name }}
+                                                                                    </a>
+                                                                                <div class="dropdown-divider"></div>
+                                                                                @endforeach
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         @endforeach
-                                        
+
+                                        @if($allAkreditasi->isEmpty())
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    Tidak Ada Sertifikat
+                                                </div>
+                                            </div>
+                                        @else
                                         <!-- END timeline item -->
-                                        <div>
-                                            <i class="far fa-clock bg-gray"></i>
-                                        </div>
+                                            <div>
+                                                <i class="far fa-clock bg-gray"></i>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <!-- /.tab-pane -->
@@ -227,121 +335,98 @@
                                     <!-- The timeline -->
                                     <div class="timeline timeline-inverse">
                                         <!-- timeline time label -->
-                                        <div class="time-label">
-                                            <span class="bg-danger">
-                                                10 Feb. 2014
-                                            </span>
-                                        </div>
-                                        <!-- /.timeline-label -->
-                                        <!-- timeline item -->
-                                        <div>
-                                            <i class="fas fa-certificate bg-danger"></i>
+                                        @foreach ($allAkreditasiInternasional as $akreditasi)
+                                            <div class="time-label">
+                                                <span class="bg-danger">
+                                                    {{ Carbon\Carbon::parse($akreditasi->tgl_sk)->format('d-F-Y')}}
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <i class="fas fa-certificate bg-danger"></i>
 
-                                            <div class="timeline-item">
-                                                <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
+                                                <div class="timeline-item">
+                                                    <span class="time"><i class="far fa-clock"></i> {{ Carbon\Carbon::parse($akreditasi->tgl_sk)->diffForHumans()}} </span>
 
-                                                <h3 class="timeline-header">Sertifikat Akreditasi Periode <b>18 Juli 2023 s/d 18 Juli 2028</b></h3>
+                                                    <h3 class="timeline-header">Sertifikat Akreditasi Periode <b>{{ Carbon\Carbon::parse($akreditasi->tgl_awal_sk)->format('d F Y')}} s/d {{ Carbon\Carbon::parse($akreditasi->tgl_akhir_sk)->format('d F Y')}}</b></h3>
 
-                                                <div class="timeline-body">
-                                                    <div class="card">
-                                                        <div class="card-header text-muted border-bottom-0">
-                                                            Sertifikat Akreditasi
-                                                        </div>
-                                                        <div class="card-body pt-0">
-                                                            <div class="row">
-                                                                <div class="col-7">
-                                                                    <ul class="ml-4 my-2 fa-ul text-muted">
-                                                                        <li><span class="fa-li"><i class="fas fa-lg fa-certificate"></i></span>
-                                                                          No Sertifikat<br><b>No. 451/SK/BAN-PT/Ak.Ppj/PT/VII/2023</b>
-                                                                        </li>
-                                                                        <li><span class="fa-li"><i class="fas fa-lg fa-award"></i></span>
-                                                                          Nilai<br><b>UNGGUL</b>
-                                                                        </li>
-                                                                        <li><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span>
-                                                                          Periode<br><b>18 Juli 2023 s/d 18 Juli 2028</b>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div class="col-5 text-center">
-                                                                  <a href="{{ asset('img/sertifikat.jpg') }}" class="image-popup">
-                                                                    <img class="img-fluid" src="{{ asset('img/sertifikat.jpg') }}" alt="Sertifikat Akreditasi UNS">
-                                                                  </a>
+                                                    <div class="timeline-body">
+                                                        <div class="card">
+                                                            <div class="card-header text-muted border-bottom-0">
+                                                                Sertifikat Akreditasi Internasional
+                                                            </div>
+                                                            <div class="card-body pt-0">
+                                                                <div class="row">
+                                                                    <div class="col-7">
+                                                                        <ul class="ml-4 my-2 fa-ul text-muted">
+                                                                            @if($akreditasi->no_sk)
+                                                                            <li><span class="fa-li"><i class="fas fa-lg fa-certificate"></i></span>
+                                                                            No Sertifikat<br><b>No. {{ $akreditasi->no_sk }}</b>
+                                                                            </li>
+                                                                            @endif
+                                                                            <li><span class="fa-li"><i class="fas fa-lg fa-building"></i></span>
+                                                                            Lembaga Akreditasi<br><b>{{ $akreditasi->lembaga->name }}</b>
+                                                                            </li>
+                                                                            @if ($akreditasi->peringkat)
+                                                                            <li><span class="fa-li"><i class="fas fa-lg fa-award"></i></span>
+                                                                            Nilai<br><b>{{ $akreditasi->peringkat }} {{ $akreditasi->nilai ? '('.$akreditasi->nilai .')' : '' }}</b>
+                                                                            </li>
+                                                                            @endif
+                                                                            <li><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span>
+                                                                            Periode<br><b>{{ Carbon\Carbon::parse($akreditasi->tgl_awal_sk)->format('d F Y') }} s/d {{ Carbon\Carbon::parse($akreditasi->tgl_akhir_sk)->format('d F Y')}}</b>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    <div class="col-5 text-center">
+                                                                        <a href="{{ $akreditasi->sertifikat ? $akreditasi->sertifikat->getUrl() : asset('img/default.jpg') }}" class="image-popup">
+                                                                            <img class="img-fluid" src="{{ $akreditasi->sertifikat ? $akreditasi->sertifikat->getUrl() : asset('img/default.jpg') }}" alt="Sertifikat Akreditasi {{ $prodi->nama_prodi }}">
+                                                                        </a>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="card-footer text-center">
-                                                            <a href="{{ asset('img/sertifikat.jpg') }}" download="Sertifikat_Akreditasi_UNS.jpg" class="btn btn-success">
-                                                                <i class="fas fa-download"></i> Download SK Sertifikat
-                                                            </a>
-                                                            <a href="{{ asset('img/sertifikat.jpg') }}" download="Sertifikat_Akreditasi_UNS.jpg" class="btn btn-danger">
-                                                                <i class="fas fa-download"></i> Download Sertifikat
-                                                            </a>
+                                                            <div class="card-footer text-center">
+                                                                @if($akreditasi)
+                                                                    @if($akreditasi->sertifikat)
+                                                                        <a href="{{ $akreditasi->sertifikat->url }}" download="{{ $akreditasi->sertifikat->filename }}" class="btn btn-success">
+                                                                            <i class="fas fa-download"></i> Download Sertifikat
+                                                                        </a>
+                                                                    @endif
+                                                                    @if($akreditasi->file_penunjang)
+                                                                        <div class="btn-group">
+                                                                            <button type="button" class="btn btn-danger"><i class="fas fa-download"></i> Download SK</button>
+                                                                            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                                                                                <span class="sr-only">Toggle Dropdown</span>
+                                                                            </button>
+                                                                            <div class="dropdown-menu" role="menu"> 
+                                                                                <div class="dropdown-divider"></div>
+                                                                                @foreach ($akreditasi->file_penunjang as $item)
+                                                                                    <a class="dropdown-item" href="{{ $item->getUrl() }}" target="_blank">
+                                                                                        {{ $item->file_name }}
+                                                                                    </a>
+                                                                                <div class="dropdown-divider"></div>
+                                                                                @endforeach
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
+                                                                @endif
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- END timeline item -->
-                                        <!-- END timeline item -->
-                                        <!-- timeline time label -->
-                                        <div class="time-label">
-                                            <span class="bg-danger">
-                                                3 Jan. 2014
-                                            </span>
-                                        </div>
-                                        <!-- /.timeline-label -->
-                                        <!-- timeline item -->
-                                        <div>
-                                            <i class="fas fa-certificate bg-danger"></i>
+                                        @endforeach
 
-                                            <div class="timeline-item">
-                                                <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
-
-                                                <h3 class="timeline-header">Sertifikat Akreditasi Periode <b>18 Juli 2023 s/d 18 Juli 2028</b></h3>
-
-                                                <div class="timeline-body">
-                                                    <div class="card">
-                                                        <div class="card-header text-muted border-bottom-0">
-                                                            Sertifikat Akreditasi
-                                                        </div>
-                                                        <div class="card-body pt-0">
-                                                            <div class="row">
-                                                                <div class="col-7">
-                                                                    <ul class="ml-4 my-2 fa-ul text-muted">
-                                                                        <li><span class="fa-li"><i class="fas fa-lg fa-certificate"></i></span>
-                                                                          No Sertifikat<br><b>No. 451/SK/BAN-PT/Ak.Ppj/PT/VII/2023</b>
-                                                                        </li>
-                                                                        <li><span class="fa-li"><i class="fas fa-lg fa-award"></i></span>
-                                                                          Nilai<br><b>UNGGUL</b>
-                                                                        </li>
-                                                                        <li><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span>
-                                                                          Periode<br><b>18 Juli 2023 s/d 18 Juli 2028</b>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div class="col-5 text-center">
-                                                                  <a href="{{ asset('img/sertifikat.jpg') }}" class="image-popup">
-                                                                    <img class="img-fluid" src="{{ asset('img/sertifikat.jpg') }}" alt="Sertifikat Akreditasi UNS">
-                                                                  </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="card-footer text-center">
-                                                            <a href="{{ asset('img/sertifikat.jpg') }}" download="Sertifikat_Akreditasi_UNS.jpg" class="btn btn-success">
-                                                                <i class="fas fa-download"></i> Download SK Sertifikat
-                                                            </a>
-                                                            <a href="{{ asset('img/sertifikat.jpg') }}" download="Sertifikat_Akreditasi_UNS.jpg" class="btn btn-danger">
-                                                                <i class="fas fa-download"></i> Download Sertifikat
-                                                            </a>
-                                                        </div>
-                                                    </div>
+                                        @if($allAkreditasiInternasional->isEmpty())
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    Tidak Ada Sertifikat
                                                 </div>
                                             </div>
-                                        </div>
+                                        @else
                                         <!-- END timeline item -->
-                                        <div>
-                                            <i class="far fa-clock bg-gray"></i>
-                                        </div>
+                                            <div>
+                                                <i class="far fa-clock bg-gray"></i>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <!-- /.tab-pane -->

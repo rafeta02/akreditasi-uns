@@ -10,7 +10,7 @@ use App\Models\Jenjang;
 use App\Models\LembagaAkreditasi;
 use App\Models\Ajuan;
 use App\Models\Akreditasi;
-use App\Models\akreditasiInternasional;
+use App\Models\AkreditasiInternasional;
 use Yajra\DataTables\Facades\DataTables;
 use App\Charts\BarChart;
 use App\Charts\PieChart;
@@ -121,11 +121,16 @@ class HomeController extends Controller
             });
 
             $table->addColumn('akreditasi_nasional', function ($row) {
-                return $row->currentAkreditasi ? $row->currentAkreditasi->lembaga->name.'<br>('.$row->currentAkreditasi->no_sk.')' : 'Belum Terakreditasi';
+                return $row->currentAkreditasi ? '<b>'.$row->currentAkreditasi->lembaga->name.'</b><br>('.$row->currentAkreditasi->no_sk.')' : 'Belum Terakreditasi';
             });
 
             $table->addColumn('akreditasi_internasional', function ($row) {
-                return $row->currentAkreditasiInternasional ? $row->currentAkreditasiInternasional->lembaga->name.'<br>('.$row->currentAkreditasiInternasional->no_sk.')' : 'Belum Terakreditasi';
+                return $row->currentAkreditasiInternasional 
+                ? '<b>' . $row->currentAkreditasiInternasional->lembaga->name . '</b>' 
+                    . (!empty($row->currentAkreditasiInternasional->no_sk) 
+                        ? '<br>(' . $row->currentAkreditasiInternasional->no_sk . ')' 
+                        : '') 
+                : 'Belum Terakreditasi';
             });
 
             $table->addColumn('peringkat_nasional', function ($row) {
@@ -150,8 +155,10 @@ class HomeController extends Controller
         $prodi = Prodi::where('slug', $slug)->first();
         $currentAkreditasi = Akreditasi::where('prodi_id', $prodi->id)->current()->first();
         $allAkreditasi = Akreditasi::allAkreditasi($prodi->id)->get();
+        $currentAkreditasiInternasional = AkreditasiInternasional::where('prodi_id', $prodi->id)->current()->first();
+        $allAkreditasiInternasional = AkreditasiInternasional::allAkreditasi($prodi->id)->get();
 
-        return view('frontend.detail_prodi', compact('prodi', 'currentAkreditasi', 'allAkreditasi'));
+        return view('frontend.detail_prodi', compact('prodi', 'currentAkreditasi', 'allAkreditasi', 'currentAkreditasiInternasional', 'allAkreditasiInternasional'));
     }
 
     public function akreditasiNasional(Request $request)
