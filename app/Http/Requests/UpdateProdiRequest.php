@@ -19,11 +19,11 @@ class UpdateProdiRequest extends FormRequest
         return [
             'code' => [
                 'string',
-                'required',
+                'nullable',
             ],
             'fakultas_id' => [
                 'required',
-                'integer',
+                'nullable',
             ],
             'jenjang_id' => [
                 'required',
