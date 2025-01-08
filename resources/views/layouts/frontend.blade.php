@@ -59,6 +59,12 @@
                     <li class="nav-item">
                         <a href="{{ route('home') }}" class="nav-link">Home</a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('fakultas') }}" class="nav-link">Fakultas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('prodi') }}" class="nav-link">Prodi</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false" class="nav-link dropdown-toggle">Akreditasi</a>

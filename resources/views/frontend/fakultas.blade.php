@@ -47,9 +47,13 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $prodi_all = 0;
+                            @endphp
                             @foreach ($fakultas as $item)
                             @php
                                 $total_prodi = $item->prodi->count();
+                                $prodi_all += $total_prodi;
                             @endphp
                             <tr data-entry-id="{{ $item->id}}">
                                 <td class="text-center">{{ $loop->iteration }}</td>
@@ -57,16 +61,30 @@
                                 <td class="text-center">{{ $inter = $akreditasiInternasional->where('fakultas_id', $item->id)->count() }}</td>
                                 <td class="text-center">{{ $total_prodi - $inter }}</td>
                                 <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'A')->count() }}</td>
-                                <td class="text-center">5</td>
-                                <td class="text-center">29</td>
-                                <td class="text-center">9</td>
-                                <td class="text-center">11</td>
-                                <td class="text-center">4</td>
-                                <td class="text-center">4</td>
-                                <td class="text-center">4</td>
+                                <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'UNGGUL')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'B')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'BAIK SEKALI')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'C')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'BAIK')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'SEMENTARA')->count() }}</td>
+                                <td class="text-center">{{ $total_prodi - $akreditasi->where('fakultas_id', $item->id)->count() }}</td>
                                 <td class="text-center">{{ $total_prodi }}</td>
-                              </tr> 
+                            </tr> 
                             @endforeach
+                            <tr data-entry-id="last">
+                                <td class="text-center" colspan="2">TOTAL</td>
+                                <td class="text-center">{{ $inter = $akreditasiInternasional->count() }}</td>
+                                <td class="text-center">{{ $prodi_all - $inter }}</td>
+                                <td class="text-center">{{ $akreditasi->where('peringkat', 'A')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('peringkat', 'UNGGUL')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('peringkat', 'B')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('peringkat', 'BAIK SEKALI')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('peringkat', 'C')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('peringkat', 'BAIK')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('peringkat', 'SEMENTARA')->count() }}</td>
+                                <td class="text-center">{{ $prodi_all - $akreditasi->count() }}</td>
+                                <td class="text-center">{{ $prodi_all }}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

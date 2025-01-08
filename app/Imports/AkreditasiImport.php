@@ -25,6 +25,9 @@ class AkreditasiImport implements ToCollection, WithHeadingRow
             }
             
             $lembaga = LembagaAkreditasi::where('code', $row['lembaga'])->first();
+            if (!$lembaga) {
+                dd($row['lembaga']);
+            }
 
             Akreditasi::create([
                 'fakultas_id' => $prodi->fakultas_id,
