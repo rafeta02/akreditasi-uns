@@ -148,7 +148,7 @@
                                                         <i class="fas fa-download"></i> Download Sertifikat
                                                     </a>
                                                 @endif
-                                                @if($currentAkreditasi->file_penunjang)
+                                                @if($currentAkreditasi->file_penunjang->count() > 0)
                                                     <div class="btn-group">
                                                         <button type="button" class="btn btn-danger"><i class="fas fa-download"></i> Download SK</button>
                                                         <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
@@ -217,7 +217,7 @@
                                                         <i class="fas fa-download"></i> Download Sertifikat
                                                     </a>
                                                 @endif
-                                                @if($currentAkreditasiInternasional->file_penunjang)
+                                                @if($currentAkreditasiInternasional->file_penunjang->count() > 0)
                                                     <div class="btn-group">
                                                         <button type="button" class="btn btn-danger"><i class="fas fa-download"></i> Download SK</button>
                                                         <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
@@ -291,7 +291,7 @@
                                                                             <i class="fas fa-download"></i> Download Sertifikat
                                                                         </a>
                                                                     @endif
-                                                                    @if($akreditasi->file_penunjang)
+                                                                    @if($akreditasi->file_penunjang->count() > 0)
                                                                         <div class="btn-group">
                                                                             <button type="button" class="btn btn-danger"><i class="fas fa-download"></i> Download SK</button>
                                                                             <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
@@ -390,7 +390,7 @@
                                                                             <i class="fas fa-download"></i> Download Sertifikat
                                                                         </a>
                                                                     @endif
-                                                                    @if($akreditasi->file_penunjang)
+                                                                    @if($akreditasi->file_penunjang->count() > 0)
                                                                         <div class="btn-group">
                                                                             <button type="button" class="btn btn-danger"><i class="fas fa-download"></i> Download SK</button>
                                                                             <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
