@@ -22,11 +22,11 @@ class UpdateProdiRequest extends FormRequest
                 'nullable',
             ],
             'fakultas_id' => [
-                'required',
                 'nullable',
+                'integer',
             ],
             'jenjang_id' => [
-                'required',
+                'nullable',
                 'integer',
             ],
             'code_siakad' => [
