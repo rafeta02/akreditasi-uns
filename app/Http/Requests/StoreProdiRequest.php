@@ -69,6 +69,9 @@ class StoreProdiRequest extends FormRequest
                 'date_format:' . config('panel.date_format'),
                 'nullable',
             ],
+            'file_sk_pendirian' => [
+                'array',
+            ],
         ];
     }
 }

@@ -127,6 +127,26 @@
                             {{ $prodi->description }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.prodi.fields.status') }}
+                        </th>
+                        <td>
+                            <input type="checkbox" disabled="disabled" {{ $prodi->status ? 'checked' : '' }}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.prodi.fields.file_sk_pendirian') }}
+                        </th>
+                        <td>
+                            @foreach($prodi->file_sk_pendirian as $key => $media)
+                                <a href="{{ $media->getUrl() }}" target="_blank">
+                                    {{ trans('global.view_file') }}
+                                </a>
+                            @endforeach
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

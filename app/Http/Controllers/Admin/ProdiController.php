@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\CsvImportTrait;
+use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyProdiRequest;
 use App\Http\Requests\StoreProdiRequest;
 use App\Http\Requests\UpdateProdiRequest;
@@ -13,6 +14,7 @@ use App\Models\Prodi;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Yajra\DataTables\Facades\DataTables;
 use App\Imports\ProdiImport;
 use Alert;
@@ -20,7 +22,7 @@ use Excel;
 
 class ProdiController extends Controller
 {
-    use CsvImportTrait;
+    use MediaUploadingTrait, CsvImportTrait;
 
     public function index(Request $request)
     {
@@ -39,7 +41,7 @@ class ProdiController extends Controller
                 $deleteGate    = 'prodi_delete';
                 $crudRoutePart = 'prodis';
 
-                return view('partials.datatablesActions', compact(
+                return view('partials.akreditasiActions', compact(
                     'viewGate',
                     'editGate',
                     'deleteGate',
@@ -95,6 +97,10 @@ class ProdiController extends Controller
     {
         $prodi = Prodi::create($request->all());
 
+        foreach ($request->input('file_sk_pendirian', []) as $file) {
+            $prodi->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('file_sk_pendirian');
+        }
+
         return redirect()->route('admin.prodis.index');
     }
 
@@ -111,9 +117,32 @@ class ProdiController extends Controller
         return view('admin.prodis.edit', compact('fakultas', 'jenjangs', 'prodi'));
     }
 
+    public function uploadSertifikat(Prodi $prodi)
+    {
+        abort_if(Gate::denies('prodi_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $prodi->load('fakultas', 'jenjang');
+
+        return view('admin.prodis.upload_sertif', compact('prodi'));
+    }
+
     public function update(UpdateProdiRequest $request, Prodi $prodi)
     {
         $prodi->update($request->all());
+
+        if (count($prodi->file_sk_pendirian) > 0) {
+            foreach ($prodi->file_sk_pendirian as $media) {
+                if (! in_array($media->file_name, $request->input('file_sk_pendirian', []))) {
+                    $media->delete();
+                }
+            }
+        }
+        $media = $prodi->file_sk_pendirian->pluck('file_name')->toArray();
+        foreach ($request->input('file_sk_pendirian', []) as $file) {
+            if (count($media) === 0 || ! in_array($file, $media)) {
+                $prodi->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('file_sk_pendirian');
+            }
+        }
 
         return redirect()->route('admin.prodis.index');
     }
@@ -194,5 +223,17 @@ class ProdiController extends Controller
         }
 
         return response()->json($formattedResults);
+    }
+
+    public function storeCKEditorImages(Request $request)
+    {
+        abort_if(Gate::denies('prodi_create') && Gate::denies('prodi_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $model         = new Prodi();
+        $model->id     = $request->input('crud_id', 0);
+        $model->exists = true;
+        $media         = $model->addMediaFromRequest('upload')->toMediaCollection('ck-media');
+
+        return response()->json(['id' => $media->id, 'url' => $media->getUrl()], Response::HTTP_CREATED);
     }
 }

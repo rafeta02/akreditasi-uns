@@ -187,6 +187,8 @@ return [
             'fakultas_helper'        => ' ',
             'status'                 => 'Status',
             'status_helper'          => ' ',
+            'file_sk_pendirian'        => 'File SK Pendirian',
+            'file_sk_pendirian_helper' => ' ',
         ],
     ],
     'akreditasi' => [

@@ -237,6 +237,49 @@
                                             @endif
                                         </div>
                                     </div>
+
+                                    @if($prodi->file_sk_pendirian->count() > 0)
+                                        <div class="card mt-5">
+                                            <div class="card-header text-muted border-bottom-0">
+                                                SK Izin Pendirian Prodi
+                                            </div>
+                                            <div class="card-body pt-0">
+                                                <div class="row">
+                                                    <div class="col-3 text-center">
+                                                        <img class="profile-user-img img-fluid img-circle"
+                                                        src="{{ asset('img/uns.png') }}" alt="User profile picture">
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <ul class="ml-4 my-2 fa-ul text-muted">
+                                                            <li><span class="fa-li"><i class="fas fa-lg fa-certificate"></i></span>
+                                                            No SK<br><b>No. {{ $prodi->sk_izin }}</b>
+                                                            </li>
+                                                            <li><span class="fa-li"><i class="fas fa-lg fa-calendar"></i></span>
+                                                            Tanggal Berdiri<br><b>{{ Carbon\Carbon::parse($prodi->tanggal_berdiri)->format('d F Y')}}</b>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer text-center">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-primary"><i class="fas fa-download"></i> Download SK Izin Pendirian Prodi</button>
+                                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                    </button>
+                                                    <div class="dropdown-menu" role="menu"> 
+                                                        <div class="dropdown-divider"></div>
+                                                        @foreach ($prodi->file_sk_pendirian as $item)
+                                                            <a class="dropdown-item" href="{{ $item->getUrl() }}" target="_blank">
+                                                                {{ $item->file_name }}
+                                                            </a>
+                                                        <div class="dropdown-divider"></div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="nasional">

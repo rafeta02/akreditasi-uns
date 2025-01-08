@@ -57,17 +57,17 @@
 
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a href="{{ route('home') }}" class="nav-link">Home</a>
+                        <a href="{{ route('home') }}" class="nav-link {{ request()->routeIs("home") ? "active" : "" }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('fakultas') }}" class="nav-link">Fakultas</a>
+                        <a href="{{ route('fakultas') }}" class="nav-link {{ request()->routeIs("fakultas") ? "active" : "" }}">Fakultas</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('prodi') }}" class="nav-link">Prodi</a>
+                        <a href="{{ route('prodi') }}" class="nav-link {{ request()->routeIs("prodi") ? "active" : "" }} {{ request()->is("prodi*") ? "active" : "" }} ">Prodi</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false" class="nav-link dropdown-toggle">Akreditasi</a>
+                            aria-expanded="false" class="nav-link dropdown-toggle {{ request()->routeIs("akreditasiNasional") ? "active" : "" }} {{ request()->routeIs("akreditasiInternasional") ? "active" : "" }}">Akreditasi</a>
                         <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
                             <li><a href="{{ route('akreditasiNasional') }}" class="dropdown-item">Akreditasi Nasional</a></li>
                             <li><a href="{{ route('akreditasiInternasional') }}" class="dropdown-item">Akreditasi Internasional</a></li>
@@ -75,13 +75,13 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a id="pantuan" href="#" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false" class="nav-link dropdown-toggle">Pantauan</a>
+                            aria-expanded="false" class="nav-link dropdown-toggle {{ request()->routeIs("pantauanBanpt") ? "active" : "" }}">Pantauan</a>
                         <ul aria-labelledby="pantuan" class="dropdown-menu border-0 shadow">
                             <li><a href="{{ route('pantauanBanpt') }}" class="dropdown-item">Pantauan BAN-PT</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('infografis') }}" class="nav-link">Infografis Pengajaran</a>
+                        <a href="{{ route('infografis') }}" class="nav-link {{ request()->routeIs("infografis") ? "active" : "" }}">Infografis Pengajaran</a>
                     </li>
                 </ul>
             </div>

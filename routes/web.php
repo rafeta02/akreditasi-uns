@@ -48,9 +48,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Prodi
     Route::delete('prodis/destroy', 'ProdiController@massDestroy')->name('prodis.massDestroy');
+    Route::post('prodis/media', 'ProdiController@storeMedia')->name('prodis.storeMedia');
+    Route::post('prodis/ckmedia', 'ProdiController@storeCKEditorImages')->name('prodis.storeCKEditorImages');
     Route::post('prodis/parse-csv-import', 'ProdiController@parseCsvImport')->name('prodis.parseCsvImport');
     Route::post('prodis/process-csv-import', 'ProdiController@processCsvImport')->name('prodis.processCsvImport');
     Route::post('prodis/import', 'ProdiController@import')->name('prodis.import');
+    Route::get('prodis/{prodi}/upload-sertifikat', 'ProdiController@uploadSertifikat')->name('prodis.uploadSertifikat');
     Route::resource('prodis', 'ProdiController');
 
     // Akreditasi

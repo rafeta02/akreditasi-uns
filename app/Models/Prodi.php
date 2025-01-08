@@ -9,10 +9,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Prodi extends Model
+class Prodi extends Model implements HasMedia
 {
-    use SoftDeletes, Auditable, HasFactory, Sluggable;
+    use SoftDeletes, InteractsWithMedia, Auditable, HasFactory, Sluggable;
 
     public $table = 'prodis';
 
@@ -46,7 +49,10 @@ class Prodi extends Model
         'deleted_at',
     ];
 
-    protected $appends = ['nama_prodi'];
+    protected $appends = [
+        'nama_prodi',
+        'file_sk_pendirian'
+    ];
 
     public function getNamaProdiAttribute()
     {
@@ -118,6 +124,11 @@ class Prodi extends Model
         return $this->hasOne(AkreditasiInternasional::class)
             ->whereDate('tgl_awal_sk', '<=', Carbon::today())
             ->whereDate('tgl_akhir_sk', '>=', Carbon::today());
+    }
+
+    public function getFileSkPendirianAttribute()
+    {
+        return $this->getMedia('file_sk_pendirian');
     }
 
 }

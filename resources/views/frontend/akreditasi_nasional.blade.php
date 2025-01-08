@@ -200,12 +200,12 @@ $(function () {
             { data: null, name: 'row_num', class: 'text-center', orderable: false, searchable: false },
             { data: 'fakultas_name', name: 'fakultas.name', class: 'text-center' },
             { data: 'prodi_name_dikti', name: 'prodi.name_dikti', class: 'text-center' },
-            { data: 'lembaga_name', name: 'lembaga.name', class: 'text-center' },
+            { data: 'lembaga_name', name: 'lembaga.name', class: 'text-center', searchable: false },
             { data: 'no_sk', name: 'no_sk', class: 'text-center' },
-            { data: 'tgl_akhir_sk', name: 'tgl_akhir_sk', class: 'text-center' },
-            { data: 'peringkat', name: 'peringkat', class: 'text-center' },
-            { data: 'sertifikat', name: 'sertifikat', sortable: false, searchable: false, class: 'text-center' },
-            { data: 'actions', name: '{{ trans('global.actions') }}', class: 'text-center' }
+            { data: 'tgl_akhir_sk', name: 'tgl_akhir_sk', class: 'text-center', searchable: false },
+            { data: 'peringkat', name: 'peringkat', class: 'text-center', searchable: false },
+            { data: 'sertifikat', name: 'sertifikat', sortable: false, searchable: false, class: 'text-center', searchable: false },
+            { data: 'actions', name: '{{ trans('global.actions') }}', class: 'text-center', searchable: false }
         ],
         orderCellsTop: true,
         // order: [[ 5, 'desc' ]],
