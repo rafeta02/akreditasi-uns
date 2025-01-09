@@ -9,7 +9,7 @@
 
     <title>@yield('title', 'Akreditasi UNS | LPPMP UNS')</title>
 
-    {{-- <link rel="shortcut icon" href="{{ asset('jobcy/images/favicon.ico') }}"> --}}
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" rel="stylesheet" />
