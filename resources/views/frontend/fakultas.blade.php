@@ -92,10 +92,25 @@
         </div>
         </div>
     </div>
+    <div class="row">
+        @foreach ($grafik as $item)
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header text-muted border-bottom-0">Capaian Peringkat Akreditasi Nasional</div>
+                <div class="card-body mb-3">
+                    {!! $item->container() !!}
+                </div>
+                <div class="card-footer">
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
 </div>
 @endsection
 @section('scripts')
 @parent
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
 $(function () {
     let table = $('.datatable-List:not(.ajaxTable)').DataTable({
@@ -108,5 +123,9 @@ $(function () {
             .columns.adjust();
     });
 })
+
+@foreach ($grafik as $item)
+    {{ $item->script() }}
+@endforeach
 </script>
 @endsection

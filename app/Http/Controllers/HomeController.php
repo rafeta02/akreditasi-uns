@@ -70,12 +70,33 @@ class HomeController extends Controller
         return view('home', compact('grafik', 'data', 'label', 'internasional', 'cakupan'));
     }
 
-    public function fakultas()
+    public function fakultas(PieChart $pie)
     {
         $fakultas = Faculty::all();
         $akreditasi = Akreditasi::current()->get();
         $akreditasiInternasional = AkreditasiInternasional::current()->get();
-        return view('frontend.fakultas', compact('fakultas', 'akreditasi', 'akreditasiInternasional'));
+
+        foreach ($fakultas as $item) {
+            $title = 'CAPAIAN PERINGKAT AKREDITASI NASIONAL FAKULTAS ' . $item->name;
+            $subtitle = '';
+            
+            $data = [
+                $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'UNGGUL')->count(),
+                $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'A')->count(),
+                $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'BAIK SEKALI')->count(),
+                $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'B')->count(),
+                $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'BAIK')->count(),
+                $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'C')->count(),
+                $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'SEMENTARA')->count(),
+                $item->prodi->count() - $akreditasi->where('fakultas_id', $item->id)->count()
+            ];
+
+            $label = ["Terakreditasi Unggul", 'Terakreditasi "A"', 'Terakreditasi Baik Sekali', 'Terakreditasi "B"', 'Terakreditasi Baik', 'Terakreditasi "C"', 'Terakreditasi Sementara', 'Belum Terakreditasi'];
+
+            $grafik[] = $pie->build($title, $subtitle, $data, $label);
+        }
+
+        return view('frontend.fakultas', compact('fakultas', 'akreditasi', 'akreditasiInternasional', 'grafik'));
     }
 
     public function prodi(Request $request)
