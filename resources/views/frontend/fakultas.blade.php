@@ -72,7 +72,7 @@
                             </tr> 
                             @endforeach
                             <tr data-entry-id="last">
-                                <td class="text-center" colspan="2">TOTAL</td>
+                                <td class="text-center" colspan="2"><strong>TOTAL</strong></td>
                                 <td class="text-center">{{ $inter = $akreditasiInternasional->count() }}</td>
                                 <td class="text-center">{{ $prodi_all - $inter }}</td>
                                 <td class="text-center">{{ $akreditasi->where('peringkat', 'A')->count() }}</td>
@@ -94,16 +94,16 @@
     </div>
     <div class="row">
         @foreach ($grafik as $item)
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header text-muted border-bottom-0">Capaian Peringkat Akreditasi Nasional</div>
-                <div class="card-body mb-3">
-                    {!! $item->container() !!}
-                </div>
-                <div class="card-footer">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header text-muted border-bottom-0">Capaian Peringkat Akreditasi Nasional</div>
+                    <div class="card-body mb-3">
+                        {!! $item->container() !!}
+                    </div>
+                    <div class="card-footer">
+                    </div>
                 </div>
             </div>
-        </div>
         @endforeach
     </div>
 </div>
@@ -111,6 +111,9 @@
 @section('scripts')
 @parent
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+@foreach ($grafik as $item)
+    {{ $item->script() }}
+@endforeach
 <script>
 $(function () {
     let table = $('.datatable-List:not(.ajaxTable)').DataTable({
@@ -123,9 +126,5 @@ $(function () {
             .columns.adjust();
     });
 })
-
-@foreach ($grafik as $item)
-    {{ $item->script() }}
-@endforeach
 </script>
 @endsection
