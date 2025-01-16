@@ -125,6 +125,24 @@ if (! function_exists('sumProdiBaikSekali')) {
     }
 }
 
+if (! function_exists('sumProdiB')) {
+    function sumProdiB()
+    {
+        return Prodi::whereHas('currentAkreditasi', function ($query) {
+            $query->where('peringkat', 'B'); 
+        })->count();
+    }
+}
+
+if (! function_exists('sumProdiBaik')) {
+    function sumProdiBaik ()
+    {
+        return Prodi::whereHas('currentAkreditasi', function ($query) {
+            $query->where('peringkat', 'BAIK'); 
+        })->count();
+    }
+}
+
 if (! function_exists('sumProdiSementara')) {
 
     function sumProdiSementara()
@@ -173,6 +191,22 @@ if (! function_exists('sumProdiAqas')) {
         return Prodi::whereHas('currentAkreditasiInternasional', function ($query) {
             $query->where('lembaga_id', 10); 
         })->count();
+    }
+}
+
+if (! function_exists('sumProdiFibaa')) {
+    function sumProdiFibaa()
+    {
+        return Prodi::whereHas('currentAkreditasiInternasional', function ($query) {
+            $query->where('lembaga_id', 9); 
+        })->count();
+    }
+}
+
+if (! function_exists('sumProdiBelumTerakreditasiInternasional')) {
+    function sumProdiBelumTerakreditasiInternasional()
+    {
+        return Prodi::whereDoesntHave('currentAkreditasiInternasional')->count();
     }
 }
 ?>

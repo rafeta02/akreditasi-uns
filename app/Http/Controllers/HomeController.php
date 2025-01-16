@@ -37,16 +37,18 @@ class HomeController extends Controller
     public function index(PieChart $pie)
     {
         //grafik pie akred nasional
-        $title = 'Capaian Peringkat Akreditasi Tahun 2024';
-        $subtitle = 'Capaian Peringkat Akreditasi Tahun 2024 Seluruh Universitas Sebelas Maret';
-        $data = [47, 84, 22, 16, 22, 3, 8];
+        $title = 'Capaian Peringkat Akreditasi Tahun 2025';
+        $subtitle = 'Capaian Peringkat Akreditasi Tahun 2025 Seluruh Universitas Sebelas Maret';
+
+
+        $data = [sumProdiUnggul(), sumProdiA(), sumProdiBaikSekali(), sumProdiB(), sumProdiBaik(), sumProdiSementara(), sumProdiBelumTerakreditasi()];
         $label = ['Terakreditasi Unggul', 'Terakreditasi A', ' Terakreditasi Baik Sekali', 'Terakreditasi B', 'Terakreditasi Baik', 'Terakreditasi Sementara', 'Belum Terakreditasi'];
         $grafik = $pie->build($title, $subtitle, $data, $label);
 
         //grafik pie akred internasional
         $internasional = [
             'labels' => ['ASIIN', 'FIBAA', 'AQAS', 'IABEE', 'Belum Terakreditasi'],
-            'values' => [14, 5, 11, 5, 167]
+            'values' => [sumProdiAsiin(), sumProdiFibaa(), sumProdiAqas(), sumProdiIabee(), sumProdiBelumTerakreditasiInternasional()]
         ];
 
         return view('home', compact('grafik', 'data', 'label', 'internasional'));

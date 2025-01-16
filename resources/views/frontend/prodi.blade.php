@@ -142,8 +142,8 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Prodi</th>
                                             <th>Fakultas</th>
+                                            <th>Prodi</th>
                                             <th width="1%">Akreditasi Nasional</th>
                                             <th width="1%">Akreditasi Internasional</th>
                                             <th>Peringkat</th>
