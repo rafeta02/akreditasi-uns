@@ -51,7 +51,23 @@ class HomeController extends Controller
             'values' => [sumProdiAsiin(), sumProdiFibaa(), sumProdiAqas(), sumProdiIabee(), sumProdiBelumTerakreditasiInternasional()]
         ];
 
-        return view('home', compact('grafik', 'data', 'label', 'internasional'));
+        $lembaga_nasional = LembagaAkreditasi::where('type', 'nasional')->get();
+        $akreditasi = Akreditasi::current()->get();
+
+        $labels_cakupan = [];
+        $values_cakupan = [];
+
+        foreach($lembaga_nasional as $lembaga) {
+            $labels_cakupan[] = $lembaga->name;
+            $values_cakupan[] = $akreditasi->where('lembaga_id', $lembaga->id)->count();
+        };
+
+        $cakupan = [
+            'labels' => $labels_cakupan,
+            'values' => $values_cakupan,
+        ];
+
+        return view('home', compact('grafik', 'data', 'label', 'internasional', 'cakupan'));
     }
 
     public function fakultas()

@@ -302,6 +302,51 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header text-muted text-center"><h3>Cakupan Lembaga Akreditasi, Akreditasi Nasional Universitas Sebelas Maret</h3></div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3">
+                                    <div style="height: 600px; display: flex; align-items: center; justify-content: center;">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Lembaga Akreditasi</th>
+                                                    <th>Jumlah</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($cakupan['labels'] as $key => $value)
+                                                <tr>
+                                                    <td class="text-center">{{ $value }}</td>
+                                                    <td class="text-center">{{ $cakupan['values'][$key] }}</td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td class="text-center"><b>Total</b></td>
+                                                    <td class="text-center"><b>{{ array_sum($cakupan['values']) }}</b></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-9">
+                                    <div style="height: 600px; display: flex; align-items: center; justify-content: center;">
+                                        <canvas id="cakupanChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -365,6 +410,49 @@
           datasets: [{
               label: 'Program Studi',
               data: @json($internasional['values']),
+              backgroundColor: colors, // Using 7 colors for the pie chart sections
+              hoverOffset: 4,
+          }]
+      },
+      options: {
+          responsive: true,
+          plugins: {
+              tooltip: {
+                    enabled: true,
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.raw;
+                            // const total = context.dataset.data
+                            //     .filter((val, index) => !context.chart.getDatasetMeta(0).data[index].hidden) // Only sum visible data points
+                            //     .reduce((sum, val) => sum + val, 0);
+    
+                            // const percentage = ((value / total) * 100).toFixed(1);
+
+                            return ` ${value} Program Studi`;
+                        }
+                    }
+              },
+              legend: {
+                position: 'right',  // Set legend to appear on the left side
+                labels: {
+                    font: {
+                        size: 14,  // Customize font size of the legend
+                    },
+                    padding: 10,
+                },
+              },
+          }
+      }
+  });
+
+  var ctxCakupan = document.getElementById('cakupanChart').getContext('2d');
+  var cakupanChart = new Chart(ctxCakupan, {
+      type: 'pie',
+      data: {
+          labels: @json($cakupan['labels']),
+          datasets: [{
+              label: 'Program Studi',
+              data: @json($cakupan['values']),
               backgroundColor: colors, // Using 7 colors for the pie chart sections
               hoverOffset: 4,
           }]
