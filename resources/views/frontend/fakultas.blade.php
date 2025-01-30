@@ -35,12 +35,12 @@
                               <th>Fakultas</th>
                               <th width="1%">Akreditasi Internasional</th>
                               <th width="1%">Belum Terakreditasi Internasional</th>
-                              <th width="1%">"A"</th>
                               <th width="1%">Unggul</th>
-                              <th width="1%">"B"</th>
+                              <th width="1%">"A"</th>
                               <th width="1%">Baik Sekali</th>
-                              <th width="1%">"C"</th>
+                              <th width="1%">"B"</th>
                               <th width="1%">Baik</th>
+                              <th width="1%">"C"</th>
                               <th width="1%">Terakreditasi Sementara</th>
                               <th width="1%">Belum Terakreditasi</th>
                               <th>Total</th>
@@ -60,12 +60,12 @@
                                 <td class="text-center">{{ $item->name }}</td>
                                 <td class="text-center">{{ $inter = $akreditasiInternasional->where('fakultas_id', $item->id)->count() }}</td>
                                 <td class="text-center">{{ $total_prodi - $inter }}</td>
-                                <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'A')->count() }}</td>
                                 <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'UNGGUL')->count() }}</td>
-                                <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'B')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'A')->count() }}</td>
                                 <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'BAIK SEKALI')->count() }}</td>
-                                <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'C')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'B')->count() }}</td>
                                 <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'BAIK')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'C')->count() }}</td>
                                 <td class="text-center">{{ $akreditasi->where('fakultas_id', $item->id)->where('peringkat', 'SEMENTARA')->count() }}</td>
                                 <td class="text-center">{{ $total_prodi - $akreditasi->where('fakultas_id', $item->id)->count() }}</td>
                                 <td class="text-center">{{ $total_prodi }}</td>
@@ -75,12 +75,12 @@
                                 <td class="text-center" colspan="2"><strong>TOTAL</strong></td>
                                 <td class="text-center">{{ $inter = $akreditasiInternasional->count() }}</td>
                                 <td class="text-center">{{ $prodi_all - $inter }}</td>
-                                <td class="text-center">{{ $akreditasi->where('peringkat', 'A')->count() }}</td>
                                 <td class="text-center">{{ $akreditasi->where('peringkat', 'UNGGUL')->count() }}</td>
-                                <td class="text-center">{{ $akreditasi->where('peringkat', 'B')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('peringkat', 'A')->count() }}</td>
                                 <td class="text-center">{{ $akreditasi->where('peringkat', 'BAIK SEKALI')->count() }}</td>
-                                <td class="text-center">{{ $akreditasi->where('peringkat', 'C')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('peringkat', 'B')->count() }}</td>
                                 <td class="text-center">{{ $akreditasi->where('peringkat', 'BAIK')->count() }}</td>
+                                <td class="text-center">{{ $akreditasi->where('peringkat', 'C')->count() }}</td>
                                 <td class="text-center">{{ $akreditasi->where('peringkat', 'SEMENTARA')->count() }}</td>
                                 <td class="text-center">{{ $prodi_all - $akreditasi->count() }}</td>
                                 <td class="text-center">{{ $prodi_all }}</td>
