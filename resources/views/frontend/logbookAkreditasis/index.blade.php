@@ -6,11 +6,11 @@
             @can('logbook_akreditasi_create')
                 <div style="margin-bottom: 10px;" class="row">
                     <div class="col-lg-12">
-                        <a class="btn btn-success" href="{{ route('frontend.logbook-akreditasis.create') }}">
-                            {{ trans('global.add') }} {{ trans('cruds.logbookAkreditasi.title_singular') }}
+                        <a class="btn btn-success" href="{{ route('frontend.logbook-akreditasi.create') }}">
+                            Tambah Logbook
                         </a>
                         <button class="btn btn-warning" data-toggle="modal" data-target="#csvImportModal">
-                            {{ trans('global.app_csvImport') }}
+                            Import Excel
                         </button>
                         @include('csvImport.modal', ['model' => 'LogbookAkreditasi', 'route' => 'admin.logbook-akreditasis.parseCsvImport'])
                     </div>
@@ -27,9 +27,6 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        {{ trans('cruds.logbookAkreditasi.fields.user') }}
-                                    </th>
-                                    <th>
                                         {{ trans('cruds.logbookAkreditasi.fields.uraian') }}
                                     </th>
                                     <th>
@@ -42,13 +39,7 @@
                                         {{ trans('cruds.logbookAkreditasi.fields.jumlah') }}
                                     </th>
                                     <th>
-                                        {{ trans('cruds.logbookAkreditasi.fields.satuan') }}
-                                    </th>
-                                    <th>
                                         {{ trans('cruds.logbookAkreditasi.fields.hasil_pekerjaan') }}
-                                    </th>
-                                    <th>
-                                        {{ trans('cruds.logbookAkreditasi.fields.keterangan') }}
                                     </th>
                                     <th>
                                         &nbsp;
@@ -58,55 +49,46 @@
                             <tbody>
                                 @foreach($logbookAkreditasis as $key => $logbookAkreditasi)
                                     <tr data-entry-id="{{ $logbookAkreditasi->id }}">
-                                        <td>
-                                            {{ $logbookAkreditasi->user->name ?? '' }}
+                                        <td class="text-center">
+                                            <span class="badge badge-danger">{{ App\Models\LogbookAkreditasi::URAIAN_SELECT[$logbookAkreditasi->uraian] ?? '' }}</span>
                                         </td>
-                                        <td>
-                                            {{ App\Models\LogbookAkreditasi::URAIAN_SELECT[$logbookAkreditasi->uraian] ?? '' }}
-                                        </td>
-                                        <td>
+                                        <td class="text-center">
                                             {{ $logbookAkreditasi->detail ?? '' }}
                                         </td>
-                                        <td>
-                                            {{ $logbookAkreditasi->tanggal ?? '' }}
+                                        <td class="text-center">
+                                            {{ $logbookAkreditasi->tanggal ? Carbon\Carbon::parse($logbookAkreditasi->tanggal)->format('d F Y') :  '' }}
                                         </td>
-                                        <td>
-                                            {{ $logbookAkreditasi->jumlah ?? '' }}
+                                        <td class="text-center">
+                                            <span class="badge badge-success">{{ $logbookAkreditasi->jumlah ?? '' }} {{ $logbookAkreditasi->satuan ?? '' }}</span>
                                         </td>
-                                        <td>
-                                            {{ $logbookAkreditasi->satuan ?? '' }}
-                                        </td>
-                                        <td>
+                                        <td class="text-center">
                                             @foreach($logbookAkreditasi->hasil_pekerjaan as $key => $media)
                                                 <a href="{{ $media->getUrl() }}" target="_blank">
                                                     {{ trans('global.view_file') }}
                                                 </a>
+                                                <br>
                                             @endforeach
                                         </td>
-                                        <td>
-                                            {{ $logbookAkreditasi->keterangan ?? '' }}
-                                        </td>
-                                        <td>
+                                        <td class="text-center">
                                             @can('logbook_akreditasi_show')
-                                                <a class="btn btn-xs btn-primary" href="{{ route('frontend.logbook-akreditasis.show', $logbookAkreditasi->id) }}">
+                                                <a class="btn btn-xs btn-primary" href="{{ route('frontend.logbook-akreditasi.show', $logbookAkreditasi->id) }}">
                                                     {{ trans('global.view') }}
                                                 </a>
                                             @endcan
 
                                             @can('logbook_akreditasi_edit')
-                                                <a class="btn btn-xs btn-info" href="{{ route('frontend.logbook-akreditasis.edit', $logbookAkreditasi->id) }}">
+                                                <a class="btn btn-xs btn-info" href="{{ route('frontend.logbook-akreditasi.edit', $logbookAkreditasi->id) }}">
                                                     {{ trans('global.edit') }}
                                                 </a>
                                             @endcan
 
                                             @can('logbook_akreditasi_delete')
-                                                <form action="{{ route('frontend.logbook-akreditasis.destroy', $logbookAkreditasi->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                                <form action="{{ route('frontend.logbook-akreditasi.destroy', $logbookAkreditasi->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                                     <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                                 </form>
                                             @endcan
-
                                         </td>
 
                                     </tr>
@@ -130,7 +112,7 @@
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
-    url: "{{ route('frontend.logbook-akreditasis.massDestroy') }}",
+    url: "{{ route('frontend.logbook-akreditasi.massDestroy') }}",
     className: 'btn-danger',
     action: function (e, dt, node, config) {
       var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {

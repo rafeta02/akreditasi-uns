@@ -27,7 +27,7 @@ class AjuanController extends Controller
     {
         abort_if(Gate::denies('ajuan_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $ajuans = Ajuan::with(['fakultas', 'prodi', 'jenjang', 'lembaga', 'asesors', 'diajukan_by', 'media'])->get();
+        $ajuans = Ajuan::with([ 'asesors', 'diajukan_by', 'media'])->get();
 
         return view('frontend.ajuans.index', compact('ajuans'));
     }
@@ -36,23 +36,14 @@ class AjuanController extends Controller
     {
         abort_if(Gate::denies('ajuan_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $fakultas = Faculty::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $prodis = Prodi::pluck('name_dikti', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $jenjangs = Jenjang::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         $lembagas = LembagaAkreditasi::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $asesors = User::pluck('name', 'id');
-
-        $diajukan_bies = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        return view('frontend.ajuans.create', compact('asesors', 'diajukan_bies', 'fakultas', 'jenjangs', 'lembagas', 'prodis'));
+        return view('frontend.ajuans.create', compact('lembagas'));
     }
 
     public function store(StoreAjuanRequest $request)
-    {
+    {   
+        dd($request->all());
         $ajuan = Ajuan::create($request->all());
         $ajuan->asesors()->sync($request->input('asesors', []));
         foreach ($request->input('surat_tugas', []) as $file) {
@@ -69,6 +60,25 @@ class AjuanController extends Controller
 
         if ($media = $request->input('ck-media', false)) {
             Media::whereIn('id', $media)->update(['model_id' => $ajuan->id]);
+        }
+
+        foreach($request->nama_dokumen as $index => $nama) {
+            $dokumen = DokumenAkreditasi::create([
+                'nama' => $nama,
+                'tipe' => $request->tipe_dokumen[$index],
+                'user_id' => auth()->id()
+            ]);
+
+            if(isset($request->dokumen[$index])) {
+                foreach($request->dokumen[$index] as $file) {
+                    $fileName = $request->tipe_dokumen[$index] . '_' . $nama . '_' . uniqid() . '.' . pathinfo($file, PATHINFO_EXTENSION);
+                    
+                    $dokumen->addMedia(storage_path('tmp/uploads/' . $file))
+                        ->usingName($fileName)
+                        ->usingFileName($fileName)
+                        ->toMediaCollection('dokumen');
+                }
+            }
         }
 
         return redirect()->route('frontend.ajuans.index');

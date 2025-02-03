@@ -23,7 +23,7 @@ class LogbookAkreditasiController extends Controller
     {
         abort_if(Gate::denies('logbook_akreditasi_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $logbookAkreditasis = LogbookAkreditasi::with(['user', 'media'])->get();
+        $logbookAkreditasis = LogbookAkreditasi::with(['user', 'media'])->where('user_id', auth()->id())->orderBy('tanggal', 'DESC')->get();
 
         return view('frontend.logbookAkreditasis.index', compact('logbookAkreditasis'));
     }
@@ -39,17 +39,24 @@ class LogbookAkreditasiController extends Controller
 
     public function store(StoreLogbookAkreditasiRequest $request)
     {
-        $logbookAkreditasi = LogbookAkreditasi::create($request->all());
+        $logbookAkreditasi = LogbookAkreditasi::create(array_merge($request->all(), ['user_id' => auth()->id()]));
 
         foreach ($request->input('hasil_pekerjaan', []) as $file) {
-            $logbookAkreditasi->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('hasil_pekerjaan');
+            $originalFilename = basename($file);
+            $fileExtension = pathinfo($originalFilename, PATHINFO_EXTENSION);
+            $newFilename = 'Logbook_'. auth()->user()->name . '_' . $request->input('tanggal') . '_' . uniqid(). '.' . $fileExtension;
+            
+            $logbookAkreditasi->addMedia(storage_path('tmp/uploads/' . $originalFilename))
+                ->usingName($newFilename)
+                ->usingFileName($newFilename)
+                ->toMediaCollection('hasil_pekerjaan');
         }
 
         if ($media = $request->input('ck-media', false)) {
             Media::whereIn('id', $media)->update(['model_id' => $logbookAkreditasi->id]);
         }
 
-        return redirect()->route('frontend.logbook-akreditasis.index');
+        return redirect()->route('frontend.logbook-akreditasi.index');
     }
 
     public function edit(LogbookAkreditasi $logbookAkreditasi)
@@ -69,24 +76,34 @@ class LogbookAkreditasiController extends Controller
 
         if (count($logbookAkreditasi->hasil_pekerjaan) > 0) {
             foreach ($logbookAkreditasi->hasil_pekerjaan as $media) {
-                if (! in_array($media->file_name, $request->input('hasil_pekerjaan', []))) {
+                if (!in_array($media->file_name, $request->input('hasil_pekerjaan', []))) {
                     $media->delete();
                 }
             }
         }
+        
         $media = $logbookAkreditasi->hasil_pekerjaan->pluck('file_name')->toArray();
         foreach ($request->input('hasil_pekerjaan', []) as $file) {
-            if (count($media) === 0 || ! in_array($file, $media)) {
-                $logbookAkreditasi->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('hasil_pekerjaan');
+            if (count($media) === 0 || !in_array($file, $media)) {
+                $originalFilename = basename($file);
+                $fileExtension = pathinfo($originalFilename, PATHINFO_EXTENSION);
+                $newFilename = 'Logbook_' . auth()->user()->name . '_' . $request->input('tanggal') . '_' . uniqid() . '.' . $fileExtension;
+                
+                $logbookAkreditasi->addMedia(storage_path('tmp/uploads/' . $originalFilename))
+                    ->usingName($newFilename)
+                    ->usingFileName($newFilename)
+                    ->toMediaCollection('hasil_pekerjaan');
             }
         }
 
-        return redirect()->route('frontend.logbook-akreditasis.index');
+        return redirect()->route('frontend.logbook-akreditasi.index');
     }
 
     public function show(LogbookAkreditasi $logbookAkreditasi)
     {
         abort_if(Gate::denies('logbook_akreditasi_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        abort_if($logbookAkreditasi->user_id !== auth()->id(), Response::HTTP_NOT_FOUND);
 
         $logbookAkreditasi->load('user');
 

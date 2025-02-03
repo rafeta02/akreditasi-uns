@@ -48,27 +48,34 @@
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand-md navbar-dark" style="background-color: #22004C">
             <div class="container">
-                <a href="{{ route('home') }}" class="navbar-brand mr-5">
-                    <img src="{{ asset('jobcy/images/logo-cdc-white.png') }}" alt="CDC Fakultas Psikologi UNS" style="height: 40px;">
+                <a href="{{ route('home') }}" class="navbar-brand">
+                    <span class="brand-text font-weight-light">Akreditasi Universitas</span>
+                    <small class="text-light" style="font-size: 12px; display: block; line-height: 1;">Lembaga Penjaminan & Pengembangan Mutu Pendidikan UNS</small> <!-- Jargon -->
                 </a>
 
-                <div class="collapse navbar-collapse order-3" id="navbarCollapse">
+                <div class="collapse navbar-collapse order-3 ml-5" id="navbarCollapse">
                     <!-- Left navbar links -->
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a href="{{ route('frontend.home') }}" class="nav-link">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('alumni-caring') }}" class="nav-link">Alumni Caring</a>
+                            <a href="{{ route('frontend.ajuan-akreditasi.index') }}" class="nav-link">Ajuan</a>
                         </li>
-                        <li class="nav-item dropdown">
+                        <li class="nav-item">
+                            <a href="{{ route('frontend.logbook-akreditasi.index') }}" class="nav-link">Logbook</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('frontend.ajuan-akreditasi.index') }}" class="nav-link">Khusus Asesor</a>
+                        </li>
+                        {{-- <li class="nav-item dropdown">
                             <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false" class="nav-link dropdown-toggle">Prestasi</a>
                             <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
                                 <li><a href="{{ route('frontend.prestasi-mahasiswas.index') }}" class="dropdown-item">Prestasi Mahasiswa</a></li>
                                 <li><a href="{{ route('frontend.prestasi-mabas.index') }}" class="dropdown-item">Prestasi Mahasiswa Baru</a></li>
                             </ul>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
 
