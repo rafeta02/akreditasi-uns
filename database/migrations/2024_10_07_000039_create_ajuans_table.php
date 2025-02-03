@@ -10,10 +10,12 @@ class CreateAjuansTable extends Migration
     {
         Schema::create('ajuans', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('type_ajuan')->nullable();
+            $table->longText('note')->nullable();
             $table->date('tgl_ajuan')->nullable();
             $table->date('tgl_diterima')->nullable();
             $table->string('status_ajuan')->nullable();
-            $table->longText('note')->nullable();
+            $table->string('clear')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

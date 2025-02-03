@@ -44,6 +44,10 @@ class UpdateUserRequest extends FormRequest
                 'string',
                 'nullable',
             ],
+            'nip' => [
+                'string',
+                'nullable',
+            ],
         ];
     }
 }

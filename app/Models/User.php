@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Auditable;
 use Carbon\Carbon;
 use DateTimeInterface;
 use Hash;
@@ -14,7 +15,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use SoftDeletes, Notifiable, HasFactory;
+    use SoftDeletes, Notifiable, Auditable, HasFactory;
 
     public $table = 'users';
 
@@ -35,6 +36,16 @@ class User extends Authenticatable
         'deleted_at',
     ];
 
+    public const GOLONGAN_SELECT = [
+        '3b' => 'III/b',
+        '3c' => 'III/c',
+        '3d' => 'III/d',
+        '4a' => 'IV/a',
+        '4b' => 'IV/b',
+        '4c' => 'IV/c',
+        '4d' => 'IV/d',
+    ];
+
     protected $fillable = [
         'name',
         'email',
@@ -46,6 +57,12 @@ class User extends Authenticatable
         'level',
         'identity_number',
         'alamat',
+        'id_simpeg',
+        'nip',
+        'fakultas_id',
+        'prodi_id',
+        'jenjang_id',
+        'golongan',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -86,5 +103,20 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(Role::class);
+    }
+
+    public function fakultas()
+    {
+        return $this->belongsTo(Faculty::class, 'fakultas_id');
+    }
+
+    public function prodi()
+    {
+        return $this->belongsTo(Prodi::class, 'prodi_id');
+    }
+
+    public function jenjang()
+    {
+        return $this->belongsTo(Jenjang::class, 'jenjang_id');
     }
 }

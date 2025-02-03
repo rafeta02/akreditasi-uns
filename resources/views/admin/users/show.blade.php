@@ -17,14 +17,6 @@
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.user.fields.id') }}
-                        </th>
-                        <td>
-                            {{ $user->id }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
                             {{ trans('cruds.user.fields.name') }}
                         </th>
                         <td>
@@ -95,6 +87,46 @@
                         </th>
                         <td>
                             {{ $user->alamat }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.nip') }}
+                        </th>
+                        <td>
+                            {{ $user->nip }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.fakultas') }}
+                        </th>
+                        <td>
+                            {{ $user->fakultas->name ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.prodi') }}
+                        </th>
+                        <td>
+                            {{ $user->prodi->name_dikti ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.jenjang') }}
+                        </th>
+                        <td>
+                            {{ $user->jenjang->name ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.golongan') }}
+                        </th>
+                        <td>
+                            {{ App\Models\User::GOLONGAN_SELECT[$user->golongan] ?? '' }}
                         </td>
                     </tr>
                 </tbody>

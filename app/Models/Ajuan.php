@@ -18,8 +18,20 @@ class Ajuan extends Model implements HasMedia
 
     public $table = 'ajuans';
 
+    public const CLEAR_SELECT = [
+        'done' => 'Done',
+        'otw'  => 'On Progress',
+    ];
+
     protected $appends = [
+        'surat_tugas',
+        'surat_pernyataan',
         'bukti_upload',
+    ];
+
+    public const TYPE_AJUAN_SELECT = [
+        'isk'          => 'ISK',
+        'reakreditasi' => 'Reakreditasi',
     ];
 
     protected $dates = [
@@ -31,10 +43,11 @@ class Ajuan extends Model implements HasMedia
     ];
 
     public const STATUS_AJUAN_SELECT = [
-        'submit' => 'Submit Dokumen',
-        'proses' => 'Menunggu Proses Akreditasi',
-        'revisi' => 'Revisi Dokumen',
-        'terbit' => 'Penerbitan SK dan Sertifikat',
+        'submit'    => 'Submit Dokumen',
+        'proses'    => 'Menunggu Proses Akreditasi',
+        'revisi'    => 'Revisi Dokumen',
+        'terbit'    => 'Penerbitan SK dan Sertifikat',
+        'pengajuan' => 'Pengajuan Akreditasi',
     ];
 
     protected $fillable = [
@@ -42,10 +55,13 @@ class Ajuan extends Model implements HasMedia
         'prodi_id',
         'jenjang_id',
         'lembaga_id',
+        'type_ajuan',
+        'note',
         'tgl_ajuan',
         'tgl_diterima',
         'status_ajuan',
-        'note',
+        'diajukan_by_id',
+        'clear',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -102,6 +118,21 @@ class Ajuan extends Model implements HasMedia
         $this->attributes['tgl_diterima'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
     }
 
+    public function asesors()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+    public function getSuratTugasAttribute()
+    {
+        return $this->getMedia('surat_tugas');
+    }
+
+    public function getSuratPernyataanAttribute()
+    {
+        return $this->getMedia('surat_pernyataan');
+    }
+
     public function getBuktiUploadAttribute()
     {
         $files = $this->getMedia('bukti_upload');
@@ -112,5 +143,10 @@ class Ajuan extends Model implements HasMedia
         });
 
         return $files;
+    }
+
+    public function diajukan_by()
+    {
+        return $this->belongsTo(User::class, 'diajukan_by_id');
     }
 }

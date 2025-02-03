@@ -20,6 +20,9 @@ class CreateUsersTable extends Migration
             $table->string('level')->nullable();
             $table->string('identity_number')->nullable();
             $table->longText('alamat')->nullable();
+            $table->string('id_simpeg')->nullable();
+            $table->string('nip')->nullable();
+            $table->string('golongan')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

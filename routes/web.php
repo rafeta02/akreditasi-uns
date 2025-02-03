@@ -102,3 +102,30 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 
         Route::post('profile/destroy', 'ChangePasswordController@destroy')->name('password.destroyProfile');
     }
 });
+
+Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['auth']], function () {
+    Route::get('/home', 'HomeController@index')->name('home');
+
+    // Ajuan
+    Route::delete('ajuans/destroy', 'AjuanController@massDestroy')->name('ajuans.massDestroy');
+    Route::post('ajuans/media', 'AjuanController@storeMedia')->name('ajuans.storeMedia');
+    Route::post('ajuans/ckmedia', 'AjuanController@storeCKEditorImages')->name('ajuans.storeCKEditorImages');
+    Route::resource('ajuans', 'AjuanController');
+
+    // Dokumen Akreditasi
+    Route::delete('dokumen-akreditasis/destroy', 'DokumenAkreditasiController@massDestroy')->name('dokumen-akreditasis.massDestroy');
+    Route::post('dokumen-akreditasis/media', 'DokumenAkreditasiController@storeMedia')->name('dokumen-akreditasis.storeMedia');
+    Route::post('dokumen-akreditasis/ckmedia', 'DokumenAkreditasiController@storeCKEditorImages')->name('dokumen-akreditasis.storeCKEditorImages');
+    Route::resource('dokumen-akreditasis', 'DokumenAkreditasiController');
+
+    // Logbook Akreditasi
+    Route::delete('logbook-akreditasis/destroy', 'LogbookAkreditasiController@massDestroy')->name('logbook-akreditasis.massDestroy');
+    Route::post('logbook-akreditasis/media', 'LogbookAkreditasiController@storeMedia')->name('logbook-akreditasis.storeMedia');
+    Route::post('logbook-akreditasis/ckmedia', 'LogbookAkreditasiController@storeCKEditorImages')->name('logbook-akreditasis.storeCKEditorImages');
+    Route::resource('logbook-akreditasis', 'LogbookAkreditasiController');
+
+    Route::get('frontend/profile', 'ProfileController@index')->name('profile.index');
+    Route::post('frontend/profile', 'ProfileController@update')->name('profile.update');
+    Route::post('frontend/profile/destroy', 'ProfileController@destroy')->name('profile.destroy');
+    Route::post('frontend/profile/password', 'ProfileController@password')->name('profile.password');
+});

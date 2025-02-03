@@ -96,6 +96,63 @@
                 <span class="help-block">{{ trans('cruds.user.fields.alamat_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="nip">{{ trans('cruds.user.fields.nip') }}</label>
+                <input class="form-control {{ $errors->has('nip') ? 'is-invalid' : '' }}" type="text" name="nip" id="nip" value="{{ old('nip', $user->nip) }}">
+                @if($errors->has('nip'))
+                    <span class="text-danger">{{ $errors->first('nip') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.user.fields.nip_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="fakultas_id">{{ trans('cruds.user.fields.fakultas') }}</label>
+                <select class="form-control select2 {{ $errors->has('fakultas') ? 'is-invalid' : '' }}" name="fakultas_id" id="fakultas_id">
+                    @foreach($fakultas as $id => $entry)
+                        <option value="{{ $id }}" {{ (old('fakultas_id') ? old('fakultas_id') : $user->fakultas->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('fakultas'))
+                    <span class="text-danger">{{ $errors->first('fakultas') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.user.fields.fakultas_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="prodi_id">{{ trans('cruds.user.fields.prodi') }}</label>
+                <select class="form-control select2 {{ $errors->has('prodi') ? 'is-invalid' : '' }}" name="prodi_id" id="prodi_id">
+                    @foreach($prodis as $id => $entry)
+                        <option value="{{ $id }}" {{ (old('prodi_id') ? old('prodi_id') : $user->prodi->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('prodi'))
+                    <span class="text-danger">{{ $errors->first('prodi') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.user.fields.prodi_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="jenjang_id">{{ trans('cruds.user.fields.jenjang') }}</label>
+                <select class="form-control select2 {{ $errors->has('jenjang') ? 'is-invalid' : '' }}" name="jenjang_id" id="jenjang_id">
+                    @foreach($jenjangs as $id => $entry)
+                        <option value="{{ $id }}" {{ (old('jenjang_id') ? old('jenjang_id') : $user->jenjang->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('jenjang'))
+                    <span class="text-danger">{{ $errors->first('jenjang') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.user.fields.jenjang_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label>{{ trans('cruds.user.fields.golongan') }}</label>
+                <select class="form-control {{ $errors->has('golongan') ? 'is-invalid' : '' }}" name="golongan" id="golongan">
+                    <option value disabled {{ old('golongan', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                    @foreach(App\Models\User::GOLONGAN_SELECT as $key => $label)
+                        <option value="{{ $key }}" {{ old('golongan', $user->golongan) === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('golongan'))
+                    <span class="text-danger">{{ $errors->first('golongan') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.user.fields.golongan_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>

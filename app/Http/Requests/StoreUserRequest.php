@@ -47,6 +47,10 @@ class StoreUserRequest extends FormRequest
                 'string',
                 'nullable',
             ],
+            'nip' => [
+                'string',
+                'nullable',
+            ],
         ];
     }
 }

@@ -25,6 +25,18 @@ class UpdateAjuanRequest extends FormRequest
                 'date_format:' . config('panel.date_format'),
                 'nullable',
             ],
+            'asesors.*' => [
+                'integer',
+            ],
+            'asesors' => [
+                'array',
+            ],
+            'surat_tugas' => [
+                'array',
+            ],
+            'surat_pernyataan' => [
+                'array',
+            ],
             'bukti_upload' => [
                 'array',
             ],

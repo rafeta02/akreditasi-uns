@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Akreditasi UNS | LPPMP UNS')</title>
+    <title>@yield('title', 'Layanan LPPMP | LPPMP UNS')</title>
 
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
 

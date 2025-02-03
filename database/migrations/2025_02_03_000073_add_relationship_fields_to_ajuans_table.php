@@ -17,6 +17,8 @@ class AddRelationshipFieldsToAjuansTable extends Migration
             $table->foreign('jenjang_id', 'jenjang_fk_10169809')->references('id')->on('jenjangs');
             $table->unsignedBigInteger('lembaga_id')->nullable();
             $table->foreign('lembaga_id', 'lembaga_fk_10169810')->references('id')->on('lembaga_akreditasis');
+            $table->unsignedBigInteger('diajukan_by_id')->nullable();
+            $table->foreign('diajukan_by_id', 'diajukan_by_fk_10417010')->references('id')->on('users');
         });
     }
 }

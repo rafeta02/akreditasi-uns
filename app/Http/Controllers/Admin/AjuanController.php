@@ -13,15 +13,12 @@ use App\Models\Faculty;
 use App\Models\Jenjang;
 use App\Models\LembagaAkreditasi;
 use App\Models\Prodi;
+use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
-use Carbon\Carbon;
-use Illuminate\Support\Str;
-use Alert;
-use DB;
 
 class AjuanController extends Controller
 {
@@ -32,7 +29,7 @@ class AjuanController extends Controller
         abort_if(Gate::denies('ajuan_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Ajuan::with(['fakultas', 'prodi', 'jenjang', 'lembaga'])->select(sprintf('%s.*', (new Ajuan)->table));
+            $query = Ajuan::with(['fakultas', 'prodi', 'jenjang', 'lembaga', 'asesors', 'diajukan_by'])->select(sprintf('%s.*', (new Ajuan)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -58,29 +55,51 @@ class AjuanController extends Controller
             });
 
             $table->addColumn('prodi_name_dikti', function ($row) {
-                return $row->prodi ? $row->jenjang->name. ' - '.  $row->prodi->name_dikti : '';
+                return $row->prodi ? $row->prodi->name_dikti : '';
             });
 
             $table->addColumn('lembaga_name', function ($row) {
                 return $row->lembaga ? $row->lembaga->name : '';
             });
 
+            $table->editColumn('type_ajuan', function ($row) {
+                return $row->type_ajuan ? Ajuan::TYPE_AJUAN_SELECT[$row->type_ajuan] : '';
+            });
+            $table->editColumn('asesor', function ($row) {
+                $labels = [];
+                foreach ($row->asesors as $asesor) {
+                    $labels[] = sprintf('<span class="label label-info label-many">%s</span>', $asesor->name);
+                }
+
+                return implode(' ', $labels);
+            });
             $table->editColumn('status_ajuan', function ($row) {
                 return $row->status_ajuan ? Ajuan::STATUS_AJUAN_SELECT[$row->status_ajuan] : '';
             });
-            $table->editColumn('bukti_upload', function ($row) {
-                if (! $row->bukti_upload) {
+            $table->editColumn('surat_tugas', function ($row) {
+                if (! $row->surat_tugas) {
                     return '';
                 }
                 $links = [];
-                foreach ($row->bukti_upload as $media) {
-                    $links[] = '<a href="' . $media->getUrl() . '" target="_blank"><img src="' . $media->getUrl('thumb') . '" width="50px" height="50px"></a>';
+                foreach ($row->surat_tugas as $media) {
+                    $links[] = '<a href="' . $media->getUrl() . '" target="_blank">' . trans('global.downloadFile') . '</a>';
                 }
 
-                return implode(' ', $links);
+                return implode(', ', $links);
+            });
+            $table->editColumn('surat_pernyataan', function ($row) {
+                if (! $row->surat_pernyataan) {
+                    return '';
+                }
+                $links = [];
+                foreach ($row->surat_pernyataan as $media) {
+                    $links[] = '<a href="' . $media->getUrl() . '" target="_blank">' . trans('global.downloadFile') . '</a>';
+                }
+
+                return implode(', ', $links);
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'fakultas', 'prodi', 'lembaga', 'bukti_upload']);
+            $table->rawColumns(['actions', 'placeholder', 'fakultas', 'prodi', 'lembaga', 'asesor', 'surat_tugas', 'surat_pernyataan']);
 
             return $table->make(true);
         }
@@ -92,46 +111,39 @@ class AjuanController extends Controller
     {
         abort_if(Gate::denies('ajuan_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $fakultas = Faculty::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $prodis = Prodi::pluck('name_dikti', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $jenjangs = Jenjang::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
         $lembagas = LembagaAkreditasi::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.ajuans.create', compact('lembagas'));
+        $asesors = User::pluck('name', 'id');
+
+        $diajukan_bies = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.ajuans.create', compact('asesors', 'diajukan_bies', 'fakultas', 'jenjangs', 'lembagas', 'prodis'));
     }
 
     public function store(StoreAjuanRequest $request)
     {
-        $prodi = Prodi::find($request->input('prodi_id'));
-        $request->request->add(['fakultas_id' => $prodi->fakultas_id]);
-        $request->request->add(['jenjang_id' => $prodi->jenjang_id]);
+        $ajuan = Ajuan::create($request->all());
+        $ajuan->asesors()->sync($request->input('asesors', []));
+        foreach ($request->input('surat_tugas', []) as $file) {
+            $ajuan->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('surat_tugas');
+        }
 
-        try {
-            DB::transaction(function () use ($request, $prodi) {
-                $ajuan = Ajuan::create($request->all());
+        foreach ($request->input('surat_pernyataan', []) as $file) {
+            $ajuan->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('surat_pernyataan');
+        }
 
-                $prodi_name = Str::slug($prodi->jenjang->name . '-' . $prodi->name_dikti);
-                foreach ($request->input('bukti_upload', []) as $file) {
-                    $filePath = storage_path('tmp/uploads/' . basename($file));
-                    $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+        foreach ($request->input('bukti_upload', []) as $file) {
+            $ajuan->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('bukti_upload');
+        }
 
-                    $fileBukti = 'ajuan_bukti_' . $prodi_name . '_' . uniqid() . '.' . $extension;
-
-                    $newFilePath = storage_path('tmp/uploads/' . $fileBukti);
-                    rename($filePath, $newFilePath);
-
-                    if (file_exists($newFilePath)) {
-                        $ajuan->addMedia($newFilePath)->toMediaCollection('bukti_upload');
-                    } else {
-                        throw new \Exception('File does not exist at path: ' . $newFilePath);
-                    }
-                }
-
-                if ($media = $request->input('ck-media', false)) {
-                    Media::whereIn('id', $media)->update(['model_id' => $ajuan->id]);
-                }
-            });
-
-            Alert::success('Success', 'Ajuan Berhasil Disimpan');
-        } catch (\Exception $e) {
-            Alert::error('Error', "Failed: " . $e->getMessage());
+        if ($media = $request->input('ck-media', false)) {
+            Media::whereIn('id', $media)->update(['model_id' => $ajuan->id]);
         }
 
         return redirect()->route('admin.ajuans.index');
@@ -149,14 +161,46 @@ class AjuanController extends Controller
 
         $lembagas = LembagaAkreditasi::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $ajuan->load('fakultas', 'prodi', 'jenjang', 'lembaga');
+        $asesors = User::pluck('name', 'id');
 
-        return view('admin.ajuans.edit', compact('ajuan', 'fakultas', 'jenjangs', 'lembagas', 'prodis'));
+        $diajukan_bies = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $ajuan->load('fakultas', 'prodi', 'jenjang', 'lembaga', 'asesors', 'diajukan_by');
+
+        return view('admin.ajuans.edit', compact('ajuan', 'asesors', 'diajukan_bies', 'fakultas', 'jenjangs', 'lembagas', 'prodis'));
     }
 
     public function update(UpdateAjuanRequest $request, Ajuan $ajuan)
     {
         $ajuan->update($request->all());
+        $ajuan->asesors()->sync($request->input('asesors', []));
+        if (count($ajuan->surat_tugas) > 0) {
+            foreach ($ajuan->surat_tugas as $media) {
+                if (! in_array($media->file_name, $request->input('surat_tugas', []))) {
+                    $media->delete();
+                }
+            }
+        }
+        $media = $ajuan->surat_tugas->pluck('file_name')->toArray();
+        foreach ($request->input('surat_tugas', []) as $file) {
+            if (count($media) === 0 || ! in_array($file, $media)) {
+                $ajuan->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('surat_tugas');
+            }
+        }
+
+        if (count($ajuan->surat_pernyataan) > 0) {
+            foreach ($ajuan->surat_pernyataan as $media) {
+                if (! in_array($media->file_name, $request->input('surat_pernyataan', []))) {
+                    $media->delete();
+                }
+            }
+        }
+        $media = $ajuan->surat_pernyataan->pluck('file_name')->toArray();
+        foreach ($request->input('surat_pernyataan', []) as $file) {
+            if (count($media) === 0 || ! in_array($file, $media)) {
+                $ajuan->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('surat_pernyataan');
+            }
+        }
 
         if (count($ajuan->bukti_upload) > 0) {
             foreach ($ajuan->bukti_upload as $media) {
@@ -179,7 +223,7 @@ class AjuanController extends Controller
     {
         abort_if(Gate::denies('ajuan_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $ajuan->load('fakultas', 'prodi', 'jenjang', 'lembaga');
+        $ajuan->load('fakultas', 'prodi', 'jenjang', 'lembaga', 'asesors', 'diajukan_by');
 
         return view('admin.ajuans.show', compact('ajuan'));
     }

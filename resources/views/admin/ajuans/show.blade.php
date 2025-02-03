@@ -49,6 +49,22 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.ajuan.fields.type_ajuan') }}
+                        </th>
+                        <td>
+                            {{ App\Models\Ajuan::TYPE_AJUAN_SELECT[$ajuan->type_ajuan] ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.ajuan.fields.note') }}
+                        </th>
+                        <td>
+                            {{ $ajuan->note }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.ajuan.fields.tgl_ajuan') }}
                         </th>
                         <td>
@@ -65,10 +81,44 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.ajuan.fields.asesor') }}
+                        </th>
+                        <td>
+                            @foreach($ajuan->asesors as $key => $asesor)
+                                <span class="label label-info">{{ $asesor->name }}</span>
+                            @endforeach
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.ajuan.fields.status_ajuan') }}
                         </th>
                         <td>
                             {{ App\Models\Ajuan::STATUS_AJUAN_SELECT[$ajuan->status_ajuan] ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.ajuan.fields.surat_tugas') }}
+                        </th>
+                        <td>
+                            @foreach($ajuan->surat_tugas as $key => $media)
+                                <a href="{{ $media->getUrl() }}" target="_blank">
+                                    {{ trans('global.view_file') }}
+                                </a>
+                            @endforeach
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.ajuan.fields.surat_pernyataan') }}
+                        </th>
+                        <td>
+                            @foreach($ajuan->surat_pernyataan as $key => $media)
+                                <a href="{{ $media->getUrl() }}" target="_blank">
+                                    {{ trans('global.view_file') }}
+                                </a>
+                            @endforeach
                         </td>
                     </tr>
                     <tr>
@@ -85,10 +135,10 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.ajuan.fields.note') }}
+                            {{ trans('cruds.ajuan.fields.diajukan_by') }}
                         </th>
                         <td>
-                            {{ $ajuan->note }}
+                            {{ $ajuan->diajukan_by->name ?? '' }}
                         </td>
                     </tr>
                 </tbody>

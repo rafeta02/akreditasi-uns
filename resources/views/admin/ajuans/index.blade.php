@@ -35,13 +35,19 @@
                         {{ trans('cruds.ajuan.fields.lembaga') }}
                     </th>
                     <th>
-                        {{ trans('cruds.ajuan.fields.tgl_ajuan') }}
+                        {{ trans('cruds.ajuan.fields.type_ajuan') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.ajuan.fields.asesor') }}
                     </th>
                     <th>
                         {{ trans('cruds.ajuan.fields.status_ajuan') }}
                     </th>
                     <th>
-                        {{ trans('cruds.ajuan.fields.bukti_upload') }}
+                        {{ trans('cruds.ajuan.fields.surat_tugas') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.ajuan.fields.surat_pernyataan') }}
                     </th>
                     <th>
                         &nbsp;
@@ -58,8 +64,37 @@
 @section('scripts')
 @parent
 <script>
-$(function () {
+    $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+@can('ajuan_delete')
+  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
+  let deleteButton = {
+    text: deleteButtonTrans,
+    url: "{{ route('admin.ajuans.massDestroy') }}",
+    className: 'btn-danger',
+    action: function (e, dt, node, config) {
+      var ids = $.map(dt.rows({ selected: true }).data(), function (entry) {
+          return entry.id
+      });
+
+      if (ids.length === 0) {
+        alert('{{ trans('global.datatables.zero_selected') }}')
+
+        return
+      }
+
+      if (confirm('{{ trans('global.areYouSure') }}')) {
+        $.ajax({
+          headers: {'x-csrf-token': _token},
+          method: 'POST',
+          url: config.url,
+          data: { ids: ids, _method: 'DELETE' }})
+          .done(function () { location.reload() })
+      }
+    }
+  }
+  dtButtons.push(deleteButton)
+@endcan
 
   let dtOverrideGlobals = {
     buttons: dtButtons,
@@ -69,14 +104,16 @@ $(function () {
     aaSorting: [],
     ajax: "{{ route('admin.ajuans.index') }}",
     columns: [
-        { data: 'placeholder', name: 'placeholder' },
-        { data: 'fakultas_name', name: 'fakultas.name', class: 'text-center' },
-        { data: 'prodi_name_dikti', name: 'prodi.name_dikti', class: 'text-center' },
-        { data: 'lembaga_name', name: 'lembaga.name', class: 'text-center' },
-        { data: 'tgl_ajuan', name: 'tgl_ajuan', class: 'text-center' },
-        { data: 'status_ajuan', name: 'status_ajuan', class: 'text-center' },
-        { data: 'bukti_upload', name: 'bukti_upload', sortable: false, searchable: false, class: 'text-center' },
-        { data: 'actions', name: '{{ trans('global.actions') }}', class: 'text-center' }
+      { data: 'placeholder', name: 'placeholder' },
+{ data: 'fakultas_name', name: 'fakultas.name' },
+{ data: 'prodi_name_dikti', name: 'prodi.name_dikti' },
+{ data: 'lembaga_name', name: 'lembaga.name' },
+{ data: 'type_ajuan', name: 'type_ajuan' },
+{ data: 'asesor', name: 'asesors.name' },
+{ data: 'status_ajuan', name: 'status_ajuan' },
+{ data: 'surat_tugas', name: 'surat_tugas', sortable: false, searchable: false },
+{ data: 'surat_pernyataan', name: 'surat_pernyataan', sortable: false, searchable: false },
+{ data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,
     order: [[ 2, 'desc' ]],
@@ -87,7 +124,7 @@ $(function () {
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
-
+  
 });
 
 </script>
