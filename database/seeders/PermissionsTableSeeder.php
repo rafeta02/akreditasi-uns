@@ -98,6 +98,21 @@ class PermissionsTableSeeder extends Seeder
                 'title' => 'lembaga_akreditasi_access',
             ],
             [
+                'title' => 'faculty_create',
+            ],
+            [
+                'title' => 'faculty_edit',
+            ],
+            [
+                'title' => 'faculty_show',
+            ],
+            [
+                'title' => 'faculty_delete',
+            ],
+            [
+                'title' => 'faculty_access',
+            ],
+            [
                 'title' => 'prodi_create',
             ],
             [
@@ -158,19 +173,52 @@ class PermissionsTableSeeder extends Seeder
                 'title' => 'ajuan_access',
             ],
             [
-                'title' => 'faculty_create',
+                'title' => 'dokumen_akreditasi_create',
             ],
             [
-                'title' => 'faculty_edit',
+                'title' => 'dokumen_akreditasi_edit',
             ],
             [
-                'title' => 'faculty_show',
+                'title' => 'dokumen_akreditasi_show',
             ],
             [
-                'title' => 'faculty_delete',
+                'title' => 'dokumen_akreditasi_delete',
             ],
             [
-                'title' => 'faculty_access',
+                'title' => 'dokumen_akreditasi_access',
+            ],
+            [
+                'title' => 'document_create',
+            ],
+            [
+                'title' => 'document_edit',
+            ],
+            [
+                'title' => 'document_show',
+            ],
+            [
+                'title' => 'document_delete',
+            ],
+            [
+                'title' => 'document_access',
+            ],
+            [
+                'title' => 'unit_akreditasi_access',
+            ],
+            [
+                'title' => 'logbook_akreditasi_create',
+            ],
+            [
+                'title' => 'logbook_akreditasi_edit',
+            ],
+            [
+                'title' => 'logbook_akreditasi_show',
+            ],
+            [
+                'title' => 'logbook_akreditasi_delete',
+            ],
+            [
+                'title' => 'logbook_akreditasi_access',
             ],
             [
                 'title' => 'profile_password_edit',

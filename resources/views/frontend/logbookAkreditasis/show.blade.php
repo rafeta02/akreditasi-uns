@@ -12,20 +12,12 @@
                 <div class="card-body">
                     <div class="form-group">
                         <div class="form-group">
-                            <a class="btn btn-default" href="{{ route('frontend.logbook-akreditasis.index') }}">
+                            <a class="btn btn-default" href="{{ route('frontend.logbook-akreditasi.index') }}">
                                 {{ trans('global.back_to_list') }}
                             </a>
                         </div>
                         <table class="table table-bordered table-striped">
                             <tbody>
-                                <tr>
-                                    <th>
-                                        {{ trans('cruds.logbookAkreditasi.fields.user') }}
-                                    </th>
-                                    <td>
-                                        {{ $logbookAkreditasi->user->name ?? '' }}
-                                    </td>
-                                </tr>
                                 <tr>
                                     <th>
                                         {{ trans('cruds.logbookAkreditasi.fields.uraian') }}
@@ -89,7 +81,7 @@
                             </tbody>
                         </table>
                         <div class="form-group">
-                            <a class="btn btn-default" href="{{ route('frontend.logbook-akreditasis.index') }}">
+                            <a class="btn btn-default" href="{{ route('frontend.logbook-akreditasi.index') }}">
                                 {{ trans('global.back_to_list') }}
                             </a>
                         </div>

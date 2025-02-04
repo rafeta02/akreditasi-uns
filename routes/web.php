@@ -35,17 +35,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Audit Logs
     Route::resource('audit-logs', 'AuditLogsController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
 
+    // Faculty
+    Route::delete('faculties/destroy', 'FacultyController@massDestroy')->name('faculties.massDestroy');
+    Route::post('faculties/parse-csv-import', 'FacultyController@parseCsvImport')->name('faculties.parseCsvImport');
+    Route::post('faculties/process-csv-import', 'FacultyController@processCsvImport')->name('faculties.processCsvImport');
+    Route::resource('faculties', 'FacultyController'); 
+
     // Jenjang
     Route::delete('jenjangs/destroy', 'JenjangController@massDestroy')->name('jenjangs.massDestroy');
     Route::post('jenjangs/parse-csv-import', 'JenjangController@parseCsvImport')->name('jenjangs.parseCsvImport');
     Route::post('jenjangs/process-csv-import', 'JenjangController@processCsvImport')->name('jenjangs.processCsvImport');
     Route::resource('jenjangs', 'JenjangController');
-
-    // Lembaga Akreditasi
-    Route::delete('lembaga-akreditasis/destroy', 'LembagaAkreditasiController@massDestroy')->name('lembaga-akreditasis.massDestroy');
-    Route::post('lembaga-akreditasis/parse-csv-import', 'LembagaAkreditasiController@parseCsvImport')->name('lembaga-akreditasis.parseCsvImport');
-    Route::post('lembaga-akreditasis/process-csv-import', 'LembagaAkreditasiController@processCsvImport')->name('lembaga-akreditasis.processCsvImport');
-    Route::resource('lembaga-akreditasis', 'LembagaAkreditasiController');
 
     // Prodi
     Route::delete('prodis/destroy', 'ProdiController@massDestroy')->name('prodis.massDestroy');
@@ -56,6 +56,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('prodis/import', 'ProdiController@import')->name('prodis.import');
     Route::get('prodis/{prodi}/upload-sertifikat', 'ProdiController@uploadSertifikat')->name('prodis.uploadSertifikat');
     Route::resource('prodis', 'ProdiController');
+
+    // Lembaga Akreditasi
+    Route::delete('lembaga-akreditasis/destroy', 'LembagaAkreditasiController@massDestroy')->name('lembaga-akreditasis.massDestroy');
+    Route::post('lembaga-akreditasis/parse-csv-import', 'LembagaAkreditasiController@parseCsvImport')->name('lembaga-akreditasis.parseCsvImport');
+    Route::post('lembaga-akreditasis/process-csv-import', 'LembagaAkreditasiController@processCsvImport')->name('lembaga-akreditasis.processCsvImport');
+    Route::resource('lembaga-akreditasis', 'LembagaAkreditasiController');
 
     // Akreditasi
     Route::delete('akreditasis/destroy', 'AkreditasiController@massDestroy')->name('akreditasis.massDestroy');
@@ -85,14 +91,29 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('ajuans/process-csv-import', 'AjuanController@processCsvImport')->name('ajuans.processCsvImport');
     Route::resource('ajuans', 'AjuanController');
 
-    // Faculty
-    Route::delete('faculties/destroy', 'FacultyController@massDestroy')->name('faculties.massDestroy');
-    Route::post('faculties/parse-csv-import', 'FacultyController@parseCsvImport')->name('faculties.parseCsvImport');
-    Route::post('faculties/process-csv-import', 'FacultyController@processCsvImport')->name('faculties.processCsvImport');
-    Route::resource('faculties', 'FacultyController');
+    // Dokumen Akreditasi
+    Route::delete('dokumen-akreditasis/destroy', 'DokumenAkreditasiController@massDestroy')->name('dokumen-akreditasis.massDestroy');
+    Route::post('dokumen-akreditasis/media', 'DokumenAkreditasiController@storeMedia')->name('dokumen-akreditasis.storeMedia');
+    Route::post('dokumen-akreditasis/ckmedia', 'DokumenAkreditasiController@storeCKEditorImages')->name('dokumen-akreditasis.storeCKEditorImages');
+    Route::resource('dokumen-akreditasis', 'DokumenAkreditasiController');
+
+    // Document
+    Route::delete('documents/destroy', 'DocumentController@massDestroy')->name('documents.massDestroy');
+    Route::post('documents/media', 'DocumentController@storeMedia')->name('documents.storeMedia');
+    Route::post('documents/ckmedia', 'DocumentController@storeCKEditorImages')->name('documents.storeCKEditorImages');
+    Route::resource('documents', 'DocumentController');
+
+    // Logbook Akreditasi
+    Route::delete('logbook-akreditasis/destroy', 'LogbookAkreditasiController@massDestroy')->name('logbook-akreditasis.massDestroy');
+    Route::post('logbook-akreditasis/media', 'LogbookAkreditasiController@storeMedia')->name('logbook-akreditasis.storeMedia');
+    Route::post('logbook-akreditasis/ckmedia', 'LogbookAkreditasiController@storeCKEditorImages')->name('logbook-akreditasis.storeCKEditorImages');
+    Route::post('logbook-akreditasis/parse-csv-import', 'LogbookAkreditasiController@parseCsvImport')->name('logbook-akreditasis.parseCsvImport');
+    Route::post('logbook-akreditasis/process-csv-import', 'LogbookAkreditasiController@processCsvImport')->name('logbook-akreditasis.processCsvImport');
+    Route::resource('logbook-akreditasis', 'LogbookAkreditasiController');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
 });
+
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password
     if (file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php'))) {
@@ -107,10 +128,12 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 
     // Ajuan
-    Route::delete('ajuans/destroy', 'AjuanController@massDestroy')->name('ajuans.massDestroy');
-    Route::post('ajuans/media', 'AjuanController@storeMedia')->name('ajuans.storeMedia');
-    Route::post('ajuans/ckmedia', 'AjuanController@storeCKEditorImages')->name('ajuans.storeCKEditorImages');
-    Route::resource('ajuans', 'AjuanController');
+    Route::delete('ajuan-akreditasi/destroy', 'AjuanController@massDestroy')->name('ajuan-akreditasi.massDestroy');
+    Route::post('ajuan-akreditasi/media', 'AjuanController@storeMedia')->name('ajuan-akreditasi.storeMedia');
+    Route::post('ajuan-akreditasi/ckmedia', 'AjuanController@storeCKEditorImages')->name('ajuan-akreditasi.storeCKEditorImages');
+    Route::post('ajuan-akreditasi/parse-csv-import', 'AjuanController@parseCsvImport')->name('ajuan-akreditasi.parseCsvImport');
+    Route::post('ajuan-akreditasi/process-csv-import', 'AjuanController@processCsvImport')->name('ajuan-akreditasi.processCsvImport');
+    Route::resource('ajuan-akreditasi', 'AjuanController');
 
     // Dokumen Akreditasi
     Route::delete('dokumen-akreditasis/destroy', 'DokumenAkreditasiController@massDestroy')->name('dokumen-akreditasis.massDestroy');
@@ -119,10 +142,10 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     Route::resource('dokumen-akreditasis', 'DokumenAkreditasiController');
 
     // Logbook Akreditasi
-    Route::delete('logbook-akreditasis/destroy', 'LogbookAkreditasiController@massDestroy')->name('logbook-akreditasis.massDestroy');
-    Route::post('logbook-akreditasis/media', 'LogbookAkreditasiController@storeMedia')->name('logbook-akreditasis.storeMedia');
-    Route::post('logbook-akreditasis/ckmedia', 'LogbookAkreditasiController@storeCKEditorImages')->name('logbook-akreditasis.storeCKEditorImages');
-    Route::resource('logbook-akreditasis', 'LogbookAkreditasiController');
+    Route::delete('logbook-akreditasi/destroy', 'LogbookAkreditasiController@massDestroy')->name('logbook-akreditasi.massDestroy');
+    Route::post('logbook-akreditasi/media', 'LogbookAkreditasiController@storeMedia')->name('logbook-akreditasi.storeMedia');
+    Route::post('logbook-akreditasi/ckmedia', 'LogbookAkreditasiController@storeCKEditorImages')->name('logbook-akreditasi.storeCKEditorImages');
+    Route::resource('logbook-akreditasi', 'LogbookAkreditasiController');
 
     Route::get('frontend/profile', 'ProfileController@index')->name('profile.index');
     Route::post('frontend/profile', 'ProfileController@update')->name('profile.update');

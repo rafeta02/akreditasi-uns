@@ -26,7 +26,7 @@
 
                     </th>
                     <th>
-                        {{ trans('cruds.logbookAkreditasi.fields.user') }}
+                        Supertim
                     </th>
                     <th>
                         {{ trans('cruds.logbookAkreditasi.fields.uraian') }}
@@ -39,9 +39,6 @@
                     </th>
                     <th>
                         {{ trans('cruds.logbookAkreditasi.fields.jumlah') }}
-                    </th>
-                    <th>
-                        {{ trans('cruds.logbookAkreditasi.fields.satuan') }}
                     </th>
                     <th>
                         {{ trans('cruds.logbookAkreditasi.fields.hasil_pekerjaan') }}
@@ -64,7 +61,7 @@
 @section('scripts')
 @parent
 <script>
-    $(function () {
+$(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 @can('logbook_akreditasi_delete')
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
@@ -104,16 +101,15 @@
     aaSorting: [],
     ajax: "{{ route('admin.logbook-akreditasis.index') }}",
     columns: [
-      { data: 'placeholder', name: 'placeholder' },
-{ data: 'user_name', name: 'user.name' },
-{ data: 'uraian', name: 'uraian' },
-{ data: 'detail', name: 'detail' },
-{ data: 'tanggal', name: 'tanggal' },
-{ data: 'jumlah', name: 'jumlah' },
-{ data: 'satuan', name: 'satuan' },
-{ data: 'hasil_pekerjaan', name: 'hasil_pekerjaan', sortable: false, searchable: false },
-{ data: 'keterangan', name: 'keterangan' },
-{ data: 'actions', name: '{{ trans('global.actions') }}' }
+        { data: 'placeholder', name: 'placeholder' },
+        { data: 'user_name', name: 'user.name', class: 'text-center' },
+        { data: 'uraian', name: 'uraian', class: 'text-center' },
+        { data: 'detail', name: 'detail', class: 'text-center' },
+        { data: 'tanggal', name: 'tanggal', class: 'text-center' },
+        { data: 'jumlah', name: 'jumlah', class: 'text-center' },
+        { data: 'hasil_pekerjaan', name: 'hasil_pekerjaan', sortable: false, searchable: false, class: 'text-center' },
+        { data: 'keterangan', name: 'keterangan', class: 'text-center' },
+        { data: 'actions', name: '{{ trans('global.actions') }}', class: 'text-center' }
     ],
     orderCellsTop: true,
     order: [[ 1, 'desc' ]],

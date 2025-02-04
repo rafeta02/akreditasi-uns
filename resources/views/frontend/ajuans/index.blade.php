@@ -6,11 +6,11 @@
             @can('ajuan_create')
                 <div style="margin-bottom: 10px;" class="row">
                     <div class="col-lg-12">
-                        <a class="btn btn-success" href="{{ route('frontend.ajuans.create') }}">
-                            {{ trans('global.add') }} {{ trans('cruds.ajuan.title_singular') }}
+                        <a class="btn btn-success" href="{{ route('frontend.ajuan-akreditasi.create') }}">
+                            Tambah Ajuan Akreditasi
                         </a>
                         <button class="btn btn-warning" data-toggle="modal" data-target="#csvImportModal">
-                            {{ trans('global.app_csvImport') }}
+                            Import Excel
                         </button>
                         @include('csvImport.modal', ['model' => 'Ajuan', 'route' => 'admin.ajuans.parseCsvImport'])
                     </div>
@@ -45,12 +45,6 @@
                                         {{ trans('cruds.ajuan.fields.status_ajuan') }}
                                     </th>
                                     <th>
-                                        {{ trans('cruds.ajuan.fields.surat_tugas') }}
-                                    </th>
-                                    <th>
-                                        {{ trans('cruds.ajuan.fields.surat_pernyataan') }}
-                                    </th>
-                                    <th>
                                         &nbsp;
                                     </th>
                                 </tr>
@@ -58,7 +52,7 @@
                             <tbody>
                                 @foreach($ajuans as $key => $ajuan)
                                     <tr data-entry-id="{{ $ajuan->id }}">
-                                        <td>
+                                        <td class="text-center">
                                             {{ $ajuan->fakultas->name ?? '' }}
                                         </td>
                                         <td>
@@ -71,9 +65,13 @@
                                             {{ App\Models\Ajuan::TYPE_AJUAN_SELECT[$ajuan->type_ajuan] ?? '' }}
                                         </td>
                                         <td>
-                                            @foreach($ajuan->asesors as $key => $item)
-                                                <span>{{ $item->name }}</span>
-                                            @endforeach
+                                            @if($ajuan->asesors->count() <= 0)
+                                            <span class="badge badge-danger">Belum Diassign</span>
+                                            @else
+                                                @foreach($ajuan->asesors as $key => $item)
+                                                    <span>{{ $item->name }}</span>
+                                                @endforeach
+                                            @endif
                                         </td>
                                         <td>
                                             {{ App\Models\Ajuan::STATUS_AJUAN_SELECT[$ajuan->status_ajuan] ?? '' }}
@@ -94,19 +92,19 @@
                                         </td>
                                         <td>
                                             @can('ajuan_show')
-                                                <a class="btn btn-xs btn-primary" href="{{ route('frontend.ajuans.show', $ajuan->id) }}">
+                                                <a class="btn btn-xs btn-primary" href="{{ route('frontend.ajuan-akreditasi.show', $ajuan->id) }}">
                                                     {{ trans('global.view') }}
                                                 </a>
                                             @endcan
 
                                             @can('ajuan_edit')
-                                                <a class="btn btn-xs btn-info" href="{{ route('frontend.ajuans.edit', $ajuan->id) }}">
+                                                <a class="btn btn-xs btn-info" href="{{ route('frontend.ajuan-akreditasi.edit', $ajuan->id) }}">
                                                     {{ trans('global.edit') }}
                                                 </a>
                                             @endcan
 
                                             @can('ajuan_delete')
-                                                <form action="{{ route('frontend.ajuans.destroy', $ajuan->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                                <form action="{{ route('frontend.ajuan-akreditasi.destroy', $ajuan->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                                     <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
@@ -136,7 +134,7 @@
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
-    url: "{{ route('frontend.ajuans.massDestroy') }}",
+    url: "{{ route('frontend.ajuan-akreditasi.massDestroy') }}",
     className: 'btn-danger',
     action: function (e, dt, node, config) {
       var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {

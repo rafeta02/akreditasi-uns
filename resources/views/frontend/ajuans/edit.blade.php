@@ -10,7 +10,7 @@
                 </div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route("frontend.ajuans.update", [$ajuan->id]) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route("frontend.ajuan-akreditasi.update", [$ajuan->id]) }}" enctype="multipart/form-data">
                         @method('PUT')
                         @csrf
                         <div class="form-group">
@@ -212,7 +212,7 @@
 <script>
     var uploadedSuratTugasMap = {}
 Dropzone.options.suratTugasDropzone = {
-    url: '{{ route('frontend.ajuans.storeMedia') }}',
+    url: '{{ route('frontend.ajuan-akreditasi.storeMedia') }}',
     maxFilesize: 5, // MB
     addRemoveLinks: true,
     headers: {
@@ -268,7 +268,7 @@ Dropzone.options.suratTugasDropzone = {
 <script>
     var uploadedSuratPernyataanMap = {}
 Dropzone.options.suratPernyataanDropzone = {
-    url: '{{ route('frontend.ajuans.storeMedia') }}',
+    url: '{{ route('frontend.ajuan-akreditasi.storeMedia') }}',
     maxFilesize: 5, // MB
     addRemoveLinks: true,
     headers: {
@@ -324,7 +324,7 @@ Dropzone.options.suratPernyataanDropzone = {
 <script>
     var uploadedBuktiUploadMap = {}
 Dropzone.options.buktiUploadDropzone = {
-    url: '{{ route('frontend.ajuans.storeMedia') }}',
+    url: '{{ route('frontend.ajuan-akreditasi.storeMedia') }}',
     maxFilesize: 5, // MB
     acceptedFiles: '.jpeg,.jpg,.png,.gif',
     addRemoveLinks: true,

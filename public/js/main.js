@@ -75,6 +75,15 @@ $(document).ready(function () {
       }
   });
 
+  $('.form-prevent-multiple-submits').on('submit', function () {
+      $('.form-prevent-multiple-submits').attr('disabled', 'true');
+  })
+
+  $('.form-prevent-multiple-submits').on('keypress', function (event) {
+      if (event.key === 'Enter') {
+          event.preventDefault();
+      }
+  });
 })
 
 function convertToRupiah(angka)

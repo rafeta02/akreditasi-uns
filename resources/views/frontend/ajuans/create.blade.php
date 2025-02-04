@@ -10,91 +10,89 @@
                 </div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route("frontend.ajuans.store") }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route("frontend.ajuan-akreditasi.store") }}" enctype="multipart/form-data">
                         @method('POST')
                         @csrf
-                        <div class="form-group">
-                            <label for="fakultas_id">{{ trans('cruds.ajuan.fields.fakultas') }}</label>
-                            <select class="form-control select2" name="fakultas_id" id="fakultas_id">
-                                @foreach($fakultas as $id => $entry)
-                                    <option value="{{ $id }}" {{ old('fakultas_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('fakultas'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('fakultas') }}
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="lembaga_id">{{ trans('cruds.ajuan.fields.lembaga') }}</label>
+                                    <select class="form-control select2" name="lembaga_id" id="lembaga_id">
+                                        @foreach($lembagas as $id => $entry)
+                                            <option value="{{ $id }}" {{ old('lembaga_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if($errors->has('lembaga'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('lembaga') }}
+                                        </div>
+                                    @endif
+                                    <span class="help-block">{{ trans('cruds.ajuan.fields.lembaga_helper') }}</span>
                                 </div>
-                            @endif
-                            <span class="help-block">{{ trans('cruds.ajuan.fields.fakultas_helper') }}</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="prodi_id">{{ trans('cruds.ajuan.fields.prodi') }}</label>
-                            <select class="form-control select2" name="prodi_id" id="prodi_id">
-                                @foreach($prodis as $id => $entry)
-                                    <option value="{{ $id }}" {{ old('prodi_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('prodi'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('prodi') }}
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>{{ trans('cruds.ajuan.fields.type_ajuan') }}</label>
+                                    <select class="form-control" name="type_ajuan" id="type_ajuan">
+                                        <option value disabled {{ old('type_ajuan', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                                        @foreach(App\Models\Ajuan::TYPE_AJUAN_SELECT as $key => $label)
+                                            <option value="{{ $key }}" {{ old('type_ajuan', '') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if($errors->has('type_ajuan'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('type_ajuan') }}
+                                        </div>
+                                    @endif
+                                    <span class="help-block">{{ trans('cruds.ajuan.fields.type_ajuan_helper') }}</span>
                                 </div>
-                            @endif
-                            <span class="help-block">{{ trans('cruds.ajuan.fields.prodi_helper') }}</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="jenjang_id">{{ trans('cruds.ajuan.fields.jenjang') }}</label>
-                            <select class="form-control select2" name="jenjang_id" id="jenjang_id">
-                                @foreach($jenjangs as $id => $entry)
-                                    <option value="{{ $id }}" {{ old('jenjang_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('jenjang'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('jenjang') }}
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="note">{{ trans('cruds.ajuan.fields.note') }}</label>
+                                    <textarea class="form-control" name="note" id="note">{{ old('note') }}</textarea>
+                                    @if($errors->has('note'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('note') }}
+                                        </div>
+                                    @endif
+                                    <span class="help-block">{{ trans('cruds.ajuan.fields.note_helper') }}</span>
                                 </div>
-                            @endif
-                            <span class="help-block">{{ trans('cruds.ajuan.fields.jenjang_helper') }}</span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="lembaga_id">{{ trans('cruds.ajuan.fields.lembaga') }}</label>
-                            <select class="form-control select2" name="lembaga_id" id="lembaga_id">
-                                @foreach($lembagas as $id => $entry)
-                                    <option value="{{ $id }}" {{ old('lembaga_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('lembaga'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('lembaga') }}
+
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-primary" onclick="addFileUpload()">Add Document</button>
+                            </div>
+                        </div>
+                        
+                        <div id="dokumen-container">
+                            <div class="dokumen-row mb-3">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" name="nama_dokumen[]" placeholder="Document Name">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select class="form-control" name="tipe_dokumen[]">
+                                            <option value="">Select Type</option>
+                                            <option value="type1">Type 1</option>
+                                            <option value="type2">Type 2</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="needsclick dropzone" id="dokumen-dropzone-0"></div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button type="button" class="btn btn-danger" onclick="removeFileUpload(this)">X</button>
+                                    </div>
                                 </div>
-                            @endif
-                            <span class="help-block">{{ trans('cruds.ajuan.fields.lembaga_helper') }}</span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>{{ trans('cruds.ajuan.fields.type_ajuan') }}</label>
-                            <select class="form-control" name="type_ajuan" id="type_ajuan">
-                                <option value disabled {{ old('type_ajuan', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
-                                @foreach(App\Models\Ajuan::TYPE_AJUAN_SELECT as $key => $label)
-                                    <option value="{{ $key }}" {{ old('type_ajuan', '') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
-                                @endforeach
-                            </select>
-                            @if($errors->has('type_ajuan'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('type_ajuan') }}
-                                </div>
-                            @endif
-                            <span class="help-block">{{ trans('cruds.ajuan.fields.type_ajuan_helper') }}</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="note">{{ trans('cruds.ajuan.fields.note') }}</label>
-                            <textarea class="form-control" name="note" id="note">{{ old('note') }}</textarea>
-                            @if($errors->has('note'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('note') }}
-                                </div>
-                            @endif
-                            <span class="help-block">{{ trans('cruds.ajuan.fields.note_helper') }}</span>
-                        </div>
-                        <div class="form-group">
+                        
+                        
+                        
+                        {{-- <div class="form-group">
                             <label for="tgl_ajuan">{{ trans('cruds.ajuan.fields.tgl_ajuan') }}</label>
                             <input class="form-control date" type="text" name="tgl_ajuan" id="tgl_ajuan" value="{{ old('tgl_ajuan') }}">
                             @if($errors->has('tgl_ajuan'))
@@ -193,7 +191,7 @@
                                 </div>
                             @endif
                             <span class="help-block">{{ trans('cruds.ajuan.fields.diajukan_by_helper') }}</span>
-                        </div>
+                        </div> --}}
                         <div class="form-group">
                             <button class="btn btn-danger" type="submit">
                                 {{ trans('global.save') }}
@@ -212,7 +210,7 @@
 <script>
     var uploadedSuratTugasMap = {}
 Dropzone.options.suratTugasDropzone = {
-    url: '{{ route('frontend.ajuans.storeMedia') }}',
+    url: '{{ route('frontend.ajuan-akreditasi.storeMedia') }}',
     maxFilesize: 5, // MB
     addRemoveLinks: true,
     headers: {
@@ -268,7 +266,7 @@ Dropzone.options.suratTugasDropzone = {
 <script>
     var uploadedSuratPernyataanMap = {}
 Dropzone.options.suratPernyataanDropzone = {
-    url: '{{ route('frontend.ajuans.storeMedia') }}',
+    url: '{{ route('frontend.ajuan-akreditasi.storeMedia') }}',
     maxFilesize: 5, // MB
     addRemoveLinks: true,
     headers: {
@@ -324,7 +322,7 @@ Dropzone.options.suratPernyataanDropzone = {
 <script>
     var uploadedBuktiUploadMap = {}
 Dropzone.options.buktiUploadDropzone = {
-    url: '{{ route('frontend.ajuans.storeMedia') }}',
+    url: '{{ route('frontend.ajuan-akreditasi.storeMedia') }}',
     maxFilesize: 5, // MB
     acceptedFiles: '.jpeg,.jpg,.png,.gif',
     addRemoveLinks: true,
@@ -381,5 +379,64 @@ Dropzone.options.buktiUploadDropzone = {
      }
 }
 
+</script>
+<script>
+    let dropzoneCount = 0;
+    let uploadedDokumenMap = {};
+
+function initializeDropzone(id) {
+    new Dropzone(`#dokumen-dropzone-${id}`, {
+        url: '{{ route('frontend.dokumen-akreditasis.storeMedia') }}',
+        maxFilesize: 5,
+        addRemoveLinks: true,
+        headers: {
+            'X-CSRF-TOKEN': "{{ csrf_token() }}"
+        },
+        success: function (file, response) {
+            $('form').append(`<input type="hidden" name="dokumen[${id}][]" value="${response.name}">`)
+            uploadedDokumenMap[file.name] = response.name
+        },
+        removedfile: function (file) {
+            file.previewElement.remove()
+            let name = file.file_name || uploadedDokumenMap[file.name]
+            $('form').find(`input[name="dokumen[${id}][]"][value="${name}"]`).remove()
+        }
+    });
+}
+
+function addFileUpload() {
+    dropzoneCount++;
+    let template = `
+        <div class="dokumen-row mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="nama_dokumen[]" placeholder="Document Name">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control" name="tipe_dokumen[]">
+                        <option value="">Select Type</option>
+                        <option value="type1">Type 1</option>
+                        <option value="type2">Type 2</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <div class="needsclick dropzone" id="dokumen-dropzone-${dropzoneCount}"></div>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-danger" onclick="removeFileUpload(this)">X</button>
+                </div>
+            </div>
+        </div>`;
+
+    $('#dokumen-container').append(template);
+    initializeDropzone(dropzoneCount);
+}
+
+function removeFileUpload(button) {
+    $(button).closest('.dokumen-row').remove();
+}
+
+// Initialize first dropzone
+initializeDropzone(0);
 </script>
 @endsection

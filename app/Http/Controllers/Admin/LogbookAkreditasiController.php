@@ -51,14 +51,13 @@ class LogbookAkreditasiController extends Controller
             });
 
             $table->editColumn('uraian', function ($row) {
-                return $row->uraian ? LogbookAkreditasi::URAIAN_SELECT[$row->uraian] : '';
+                return $row->uraian ? '<span class="badge badge-danger">'. LogbookAkreditasi::URAIAN_SELECT[$row->uraian] .'</span>' : '';
             });
             $table->editColumn('detail', function ($row) {
                 return $row->detail ? $row->detail : '';
             });
-
             $table->editColumn('jumlah', function ($row) {
-                return $row->jumlah ? $row->jumlah : '';
+                return $row->jumlah ? '<span class="badge badge-success">' . $row->jumlah . ' '. $row->satuan. '</span>' : '';
             });
             $table->editColumn('satuan', function ($row) {
                 return $row->satuan ? $row->satuan : '';
@@ -78,7 +77,7 @@ class LogbookAkreditasiController extends Controller
                 return $row->keterangan ? $row->keterangan : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'user', 'hasil_pekerjaan']);
+            $table->rawColumns(['actions', 'placeholder', 'user', 'uraian', 'jumlah', 'hasil_pekerjaan']);
 
             return $table->make(true);
         }
