@@ -84,7 +84,13 @@
                         <a href="{{ route('infografis') }}" class="nav-link {{ request()->routeIs("infografis") ? "active" : "" }}">Infografis Pengajaran</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('frontend.home') }}" class="nav-link">Login</a>
+                        <a href="{{ route('frontend.home') }}" class="nav-link">
+                            @guest
+                                Login
+                            @else
+                                Dashboard
+                            @endguest
+                        </a>
                     </li>
                 </ul>
             </div>
