@@ -125,7 +125,7 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 
 });
 
 Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['auth']], function () {
-    Route::get('/dashboard', 'HomeController@index')->name('dashboard');
+    Route::get('/dashboard', 'HomeController@index')->name('home');
 
     // Ajuan
     Route::delete('ajuan-akreditasi/destroy', 'AjuanController@massDestroy')->name('ajuan-akreditasi.massDestroy');
