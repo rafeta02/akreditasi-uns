@@ -48,7 +48,7 @@
     @include('sweetalert::alert')
     <div class="wrapper">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand-md navbar-dark navbar-purple">
+        <nav class="main-header navbar navbar-expand-md navbar-dark" style="background-color: #2e3192">
             <div class="container">
                 <a href="{{ route('home') }}" class="navbar-brand">
                     <span class="brand-text font-weight-light">Akreditasi Universitas</span>
@@ -138,7 +138,7 @@
         <!-- /.content-wrapper -->
 
         <!-- Main Footer -->
-        <footer class="main-footer bg-purple">
+        <footer class="main-footer" style="background-color: #2e3192">
             <div class="container">
                 <!-- To the right -->
                 <div class="float-right d-none d-sm-inline">

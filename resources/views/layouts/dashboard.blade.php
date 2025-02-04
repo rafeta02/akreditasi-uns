@@ -30,7 +30,7 @@
 </head>
 
 <div class="loading" style="display: none" id="loadingSpinner">
-    <div style="color: blue" class="loading-content la-ball-spin-fade la-3x">
+    <div style="color: #2e3192" class="loading-content la-ball-spin-fade la-3x">
         <div></div>
         <div></div>
         <div></div>
@@ -46,7 +46,7 @@
     @include('sweetalert::alert')
     <div class="wrapper">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand-md navbar-dark" style="background-color: #22004C">
+        <nav class="main-header navbar navbar-expand-md navbar-dark" style="background-color: #2e3192">
             <div class="container">
                 <a href="{{ route('home') }}" class="navbar-brand">
                     <span class="brand-text font-weight-light">Akreditasi Universitas</span>
@@ -162,7 +162,7 @@
         <!-- /.content-wrapper -->
 
         <!-- Main Footer -->
-        <footer class="main-footer" style="background-color: #22004C">
+        <footer class="main-footer" style="background-color: #2e3192">
             <!-- To the right -->
             <div class="float-right d-none d-sm-inline">
                 Version  二千二十四
