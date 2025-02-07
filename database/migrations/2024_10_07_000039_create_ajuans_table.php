@@ -10,6 +10,7 @@ class CreateAjuansTable extends Migration
     {
         Schema::create('ajuans', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('ulid')->nullable();
             $table->string('type_ajuan')->nullable();
             $table->longText('note')->nullable();
             $table->date('tgl_ajuan')->nullable();

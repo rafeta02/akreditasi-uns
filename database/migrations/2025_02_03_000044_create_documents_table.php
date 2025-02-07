@@ -10,8 +10,8 @@ class CreateDocumentsTable extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code')->nullable();
             $table->string('file_name')->nullable();
+            $table->string('slug')->nullable();
             $table->string('event_name')->nullable();
             $table->string('unit')->nullable();
             $table->string('category')->nullable();

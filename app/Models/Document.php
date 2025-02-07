@@ -28,8 +28,8 @@ class Document extends Model implements HasMedia
     ];
 
     protected $fillable = [
-        'code',
         'file_name',
+        'slug',
         'event_name',
         'unit',
         'category',
@@ -60,5 +60,16 @@ class Document extends Model implements HasMedia
     public function getFileAttribute()
     {
         return $this->getMedia('file');
+    }
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => ['file_name'],
+                'separator' => '-', // Custom separator
+                'maxLength' => 50, // Maximum length of the slug
+            ]
+        ];
     }
 }

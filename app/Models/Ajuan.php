@@ -11,12 +11,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Ulid\Ulid;
 
 class Ajuan extends Model implements HasMedia
 {
     use SoftDeletes, InteractsWithMedia, Auditable, HasFactory;
 
     public $table = 'ajuans';
+
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($model) {
+            $model->ulid = (string) Ulid::generate();
+        });
+    }
 
     public const CLEAR_SELECT = [
         'done' => 'Done',

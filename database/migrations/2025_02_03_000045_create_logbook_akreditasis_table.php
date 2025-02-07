@@ -10,6 +10,7 @@ class CreateLogbookAkreditasisTable extends Migration
     {
         Schema::create('logbook_akreditasis', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('ulid')->nullable();
             $table->string('uraian')->nullable();
             $table->string('detail')->nullable();
             $table->date('tanggal')->nullable();
