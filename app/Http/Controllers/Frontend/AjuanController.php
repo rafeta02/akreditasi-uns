@@ -45,18 +45,18 @@ class AjuanController extends Controller
     {   
         dd($request->all());
         $ajuan = Ajuan::create($request->all());
-        $ajuan->asesors()->sync($request->input('asesors', []));
-        foreach ($request->input('surat_tugas', []) as $file) {
-            $ajuan->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('surat_tugas');
-        }
+        // $ajuan->asesors()->sync($request->input('asesors', []));
+        // foreach ($request->input('surat_tugas', []) as $file) {
+        //     $ajuan->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('surat_tugas');
+        // }
 
-        foreach ($request->input('surat_pernyataan', []) as $file) {
-            $ajuan->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('surat_pernyataan');
-        }
+        // foreach ($request->input('surat_pernyataan', []) as $file) {
+        //     $ajuan->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('surat_pernyataan');
+        // }
 
-        foreach ($request->input('bukti_upload', []) as $file) {
-            $ajuan->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('bukti_upload');
-        }
+        // foreach ($request->input('bukti_upload', []) as $file) {
+        //     $ajuan->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('bukti_upload');
+        // }
 
         if ($media = $request->input('ck-media', false)) {
             Media::whereIn('id', $media)->update(['model_id' => $ajuan->id]);
@@ -66,7 +66,7 @@ class AjuanController extends Controller
             $dokumen = DokumenAkreditasi::create([
                 'nama' => $nama,
                 'tipe' => $request->tipe_dokumen[$index],
-                'user_id' => auth()->id()
+                'owned_by' => auth()->id()
             ]);
 
             if(isset($request->dokumen[$index])) {
