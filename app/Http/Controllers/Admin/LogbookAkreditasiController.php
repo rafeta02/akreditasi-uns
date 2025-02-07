@@ -9,6 +9,7 @@ use App\Http\Requests\MassDestroyLogbookAkreditasiRequest;
 use App\Http\Requests\StoreLogbookAkreditasiRequest;
 use App\Http\Requests\UpdateLogbookAkreditasiRequest;
 use App\Models\LogbookAkreditasi;
+use App\Models\UraianLogbook;
 use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class LogbookAkreditasiController extends Controller
         abort_if(Gate::denies('logbook_akreditasi_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = LogbookAkreditasi::with(['user'])->select(sprintf('%s.*', (new LogbookAkreditasi)->table));
+            $query = LogbookAkreditasi::with(['user', 'uraian', 'validated_by'])->select(sprintf('%s.*', (new LogbookAkreditasi)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -50,14 +51,19 @@ class LogbookAkreditasiController extends Controller
                 return $row->user ? $row->user->name : '';
             });
 
-            $table->editColumn('uraian', function ($row) {
-                return $row->uraian ? '<span class="badge badge-danger">'. LogbookAkreditasi::URAIAN_SELECT[$row->uraian] .'</span>' : '';
+            $table->editColumn('tugas', function ($row) {
+                return $row->tugas ? LogbookAkreditasi::TUGAS_SELECT[$row->tugas] : '';
             });
+            $table->addColumn('uraian_name', function ($row) {
+                return $row->uraian ? $row->uraian->name : '';
+            });
+
             $table->editColumn('detail', function ($row) {
                 return $row->detail ? $row->detail : '';
             });
+
             $table->editColumn('jumlah', function ($row) {
-                return $row->jumlah ? '<span class="badge badge-success">' . $row->jumlah . ' '. $row->satuan. '</span>' : '';
+                return $row->jumlah ? $row->jumlah : '';
             });
             $table->editColumn('satuan', function ($row) {
                 return $row->satuan ? $row->satuan : '';
@@ -76,8 +82,11 @@ class LogbookAkreditasiController extends Controller
             $table->editColumn('keterangan', function ($row) {
                 return $row->keterangan ? $row->keterangan : '';
             });
+            $table->editColumn('valid', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->valid ? 'checked' : null) . '>';
+            });
 
-            $table->rawColumns(['actions', 'placeholder', 'user', 'uraian', 'jumlah', 'hasil_pekerjaan']);
+            $table->rawColumns(['actions', 'placeholder', 'user', 'uraian', 'hasil_pekerjaan', 'valid']);
 
             return $table->make(true);
         }
@@ -91,7 +100,11 @@ class LogbookAkreditasiController extends Controller
 
         $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.logbookAkreditasis.create', compact('users'));
+        $uraians = UraianLogbook::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $validated_bies = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.logbookAkreditasis.create', compact('uraians', 'users', 'validated_bies'));
     }
 
     public function store(StoreLogbookAkreditasiRequest $request)
@@ -115,9 +128,13 @@ class LogbookAkreditasiController extends Controller
 
         $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $logbookAkreditasi->load('user');
+        $uraians = UraianLogbook::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.logbookAkreditasis.edit', compact('logbookAkreditasi', 'users'));
+        $validated_bies = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $logbookAkreditasi->load('user', 'uraian', 'validated_by');
+
+        return view('admin.logbookAkreditasis.edit', compact('logbookAkreditasi', 'uraians', 'users', 'validated_bies'));
     }
 
     public function update(UpdateLogbookAkreditasiRequest $request, LogbookAkreditasi $logbookAkreditasi)
@@ -145,7 +162,7 @@ class LogbookAkreditasiController extends Controller
     {
         abort_if(Gate::denies('logbook_akreditasi_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $logbookAkreditasi->load('user');
+        $logbookAkreditasi->load('user', 'uraian', 'validated_by');
 
         return view('admin.logbookAkreditasis.show', compact('logbookAkreditasi'));
     }

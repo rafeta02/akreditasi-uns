@@ -23,7 +23,7 @@ class UsersController extends Controller
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = User::with(['roles', 'fakultas', 'prodi', 'jenjang'])->select(sprintf('%s.*', (new User)->table));
+            $query = User::with(['roles', 'fakultas', 'prodi', 'jenjang', 'atasan'])->select(sprintf('%s.*', (new User)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -83,7 +83,9 @@ class UsersController extends Controller
 
         $jenjangs = Jenjang::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.users.create', compact('fakultas', 'jenjangs', 'prodis', 'roles'));
+        $atasans = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.users.create', compact('atasans', 'fakultas', 'jenjangs', 'prodis', 'roles'));
     }
 
     public function store(StoreUserRequest $request)
@@ -106,9 +108,11 @@ class UsersController extends Controller
 
         $jenjangs = Jenjang::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $user->load('roles', 'fakultas', 'prodi', 'jenjang');
+        $atasans = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.users.edit', compact('fakultas', 'jenjangs', 'prodis', 'roles', 'user'));
+        $user->load('roles', 'fakultas', 'prodi', 'jenjang', 'atasan');
+
+        return view('admin.users.edit', compact('atasans', 'fakultas', 'jenjangs', 'prodis', 'roles', 'user'));
     }
 
     public function update(UpdateUserRequest $request, User $user)
@@ -123,7 +127,7 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $user->load('roles', 'fakultas', 'prodi', 'jenjang');
+        $user->load('roles', 'fakultas', 'prodi', 'jenjang', 'atasan');
 
         return view('admin.users.show', compact('user'));
     }

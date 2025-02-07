@@ -39,7 +39,7 @@ class LogbookAkreditasi extends Model implements HasMedia
         'deleted_at',
     ];
 
-    public const URAIAN_SELECT = [
+    public const TUGAS_SELECT = [
         'spmi' => 'SPMI',
         'spme' => 'SPME',
         'gkm'  => 'GKM',
@@ -47,12 +47,16 @@ class LogbookAkreditasi extends Model implements HasMedia
 
     protected $fillable = [
         'user_id',
-        'uraian',
+        'tugas',
+        'uraian_id',
         'detail',
         'tanggal',
         'jumlah',
         'satuan',
         'keterangan',
+        'valid',
+        'validated_by_id',
+        'paid',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -74,6 +78,11 @@ class LogbookAkreditasi extends Model implements HasMedia
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function uraian()
+    {
+        return $this->belongsTo(UraianLogbook::class, 'uraian_id');
+    }
+
     public function getTanggalAttribute($value)
     {
         return $value ? Carbon::parse($value)->format(config('panel.date_format')) : null;
@@ -87,5 +96,10 @@ class LogbookAkreditasi extends Model implements HasMedia
     public function getHasilPekerjaanAttribute()
     {
         return $this->getMedia('hasil_pekerjaan');
+    }
+
+    public function validated_by()
+    {
+        return $this->belongsTo(User::class, 'validated_by_id');
     }
 }

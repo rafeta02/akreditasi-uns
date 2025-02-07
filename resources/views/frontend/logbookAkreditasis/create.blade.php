@@ -16,19 +16,17 @@
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label class="required">{{ trans('cruds.logbookAkreditasi.fields.uraian') }}</label>
-                                    <select class="form-control" name="uraian" id="uraian">
-                                        <option value disabled {{ old('uraian', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
-                                        @foreach(App\Models\LogbookAkreditasi::URAIAN_SELECT as $key => $label)
-                                            <option value="{{ $key }}" {{ old('uraian', '') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
+                                    <label  class="required">{{ trans('cruds.logbookAkreditasi.fields.tugas') }}</label>
+                                    <select class="form-control {{ $errors->has('tugas') ? 'is-invalid' : '' }}" name="tugas" id="tugas">
+                                        <option value disabled {{ old('tugas', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                                        @foreach(App\Models\LogbookAkreditasi::TUGAS_SELECT as $key => $label)
+                                            <option value="{{ $key }}" {{ old('tugas', '') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
                                         @endforeach
                                     </select>
-                                    @if($errors->has('uraian'))
-                                        <div class="invalid-feedback">
-                                            {{ $errors->first('uraian') }}
-                                        </div>
+                                    @if($errors->has('tugas'))
+                                        <span class="text-danger">{{ $errors->first('tugas') }}</span>
                                     @endif
-                                    <span class="help-block">{{ trans('cruds.logbookAkreditasi.fields.uraian_helper') }}</span>
+                                    <span class="help-block">{{ trans('cruds.logbookAkreditasi.fields.tugas_helper') }}</span>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -41,6 +39,20 @@
                                         </div>
                                     @endif
                                     <span class="help-block">{{ trans('cruds.logbookAkreditasi.fields.tanggal_helper') }}</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="required" for="uraian_id">{{ trans('cruds.logbookAkreditasi.fields.uraian') }}</label>
+                                    <select class="form-control select2 {{ $errors->has('uraian') ? 'is-invalid' : '' }}" name="uraian_id" id="uraian_id">
+                                        @foreach($uraians as $id => $entry)
+                                            <option value="{{ $id }}" {{ old('uraian_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if($errors->has('uraian'))
+                                        <span class="text-danger">{{ $errors->first('uraian') }}</span>
+                                    @endif
+                                    <span class="help-block">{{ trans('cruds.logbookAkreditasi.fields.uraian_helper') }}</span>
                                 </div>
                             </div>
                             <div class="col-12">

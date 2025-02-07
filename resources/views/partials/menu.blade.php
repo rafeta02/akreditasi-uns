@@ -195,8 +195,8 @@
                     </li>
                 @endcan
                 @can('unit_akreditasi_access')
-                    <li class="nav-item has-treeview {{ request()->is("admin/ajuans*") ? "menu-open" : "" }} {{ request()->is("admin/dokumen-akreditasis*") ? "menu-open" : "" }} {{ request()->is("admin/logbook-akreditasis*") ? "menu-open" : "" }}">
-                        <a class="nav-link nav-dropdown-toggle {{ request()->is("admin/ajuans*") ? "active" : "" }} {{ request()->is("admin/dokumen-akreditasis*") ? "active" : "" }} {{ request()->is("admin/logbook-akreditasis*") ? "active" : "" }}" href="#">
+                    <li class="nav-item has-treeview {{ request()->is("admin/ajuans*") ? "menu-open" : "" }} {{ request()->is("admin/dokumen-akreditasis*") ? "menu-open" : "" }} {{ request()->is("admin/uraian-logbooks*") ? "menu-open" : "" }} {{ request()->is("admin/logbook-akreditasis*") ? "menu-open" : "" }}">
+                        <a class="nav-link nav-dropdown-toggle {{ request()->is("admin/ajuans*") ? "active" : "" }} {{ request()->is("admin/dokumen-akreditasis*") ? "active" : "" }} {{ request()->is("admin/uraian-logbooks*") ? "active" : "" }} {{ request()->is("admin/logbook-akreditasis*") ? "active" : "" }}" href="#">
                             <i class="fa-fw nav-icon fas fa-star">
 
                             </i>
@@ -226,6 +226,18 @@
                                         </i>
                                         <p>
                                             {{ trans('cruds.dokumenAkreditasi.title') }}
+                                        </p>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('uraian_logbook_access')
+                                <li class="nav-item">
+                                    <a href="{{ route("admin.uraian-logbooks.index") }}" class="nav-link {{ request()->is("admin/uraian-logbooks") || request()->is("admin/uraian-logbooks/*") ? "active" : "" }}">
+                                        <i class="fa-fw nav-icon fas fa-list">
+
+                                        </i>
+                                        <p>
+                                            {{ trans('cruds.uraianLogbook.title') }}
                                         </p>
                                     </a>
                                 </li>

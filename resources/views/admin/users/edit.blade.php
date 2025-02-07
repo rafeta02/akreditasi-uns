@@ -153,6 +153,18 @@
                 <span class="help-block">{{ trans('cruds.user.fields.golongan_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="atasan_id">{{ trans('cruds.user.fields.atasan') }}</label>
+                <select class="form-control select2 {{ $errors->has('atasan') ? 'is-invalid' : '' }}" name="atasan_id" id="atasan_id">
+                    @foreach($atasans as $id => $entry)
+                        <option value="{{ $id }}" {{ (old('atasan_id') ? old('atasan_id') : $user->atasan->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('atasan'))
+                    <span class="text-danger">{{ $errors->first('atasan') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.user.fields.atasan_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>

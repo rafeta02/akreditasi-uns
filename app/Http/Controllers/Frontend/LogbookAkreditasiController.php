@@ -9,6 +9,7 @@ use App\Http\Requests\MassDestroyLogbookAkreditasiRequest;
 use App\Http\Requests\StoreLogbookAkreditasiRequest;
 use App\Http\Requests\UpdateLogbookAkreditasiRequest;
 use App\Models\LogbookAkreditasi;
+use App\Models\UraianLogbook;
 use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
@@ -32,9 +33,9 @@ class LogbookAkreditasiController extends Controller
     {
         abort_if(Gate::denies('logbook_akreditasi_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $uraians = UraianLogbook::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('frontend.logbookAkreditasis.create', compact('users'));
+        return view('frontend.logbookAkreditasis.create', compact('uraians'));
     }
 
     public function store(StoreLogbookAkreditasiRequest $request)

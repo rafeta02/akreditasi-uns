@@ -19,20 +19,20 @@ class StoreLogbookAkreditasiRequest extends FormRequest
         return [
             'detail' => [
                 'string',
-                'required',
+                'nullable',
             ],
             'tanggal' => [
                 'date_format:' . config('panel.date_format'),
-                'required',
+                'nullable',
             ],
             'jumlah' => [
-                'required',
+                'nullable',
                 'integer',
                 'min:-2147483648',
                 'max:2147483647',
             ],
             'satuan' => [
-                'required',
+                'string',
                 'nullable',
             ],
             'hasil_pekerjaan' => [

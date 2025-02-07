@@ -26,7 +26,10 @@
 
                     </th>
                     <th>
-                        Supertim
+                        {{ trans('cruds.logbookAkreditasi.fields.user') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.logbookAkreditasi.fields.tugas') }}
                     </th>
                     <th>
                         {{ trans('cruds.logbookAkreditasi.fields.uraian') }}
@@ -41,10 +44,16 @@
                         {{ trans('cruds.logbookAkreditasi.fields.jumlah') }}
                     </th>
                     <th>
+                        {{ trans('cruds.logbookAkreditasi.fields.satuan') }}
+                    </th>
+                    <th>
                         {{ trans('cruds.logbookAkreditasi.fields.hasil_pekerjaan') }}
                     </th>
                     <th>
                         {{ trans('cruds.logbookAkreditasi.fields.keterangan') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.logbookAkreditasi.fields.valid') }}
                     </th>
                     <th>
                         &nbsp;
@@ -61,7 +70,7 @@
 @section('scripts')
 @parent
 <script>
-$(function () {
+    $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 @can('logbook_akreditasi_delete')
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
@@ -101,15 +110,18 @@ $(function () {
     aaSorting: [],
     ajax: "{{ route('admin.logbook-akreditasis.index') }}",
     columns: [
-        { data: 'placeholder', name: 'placeholder' },
-        { data: 'user_name', name: 'user.name', class: 'text-center' },
-        { data: 'uraian', name: 'uraian', class: 'text-center' },
-        { data: 'detail', name: 'detail', class: 'text-center' },
-        { data: 'tanggal', name: 'tanggal', class: 'text-center' },
-        { data: 'jumlah', name: 'jumlah', class: 'text-center' },
-        { data: 'hasil_pekerjaan', name: 'hasil_pekerjaan', sortable: false, searchable: false, class: 'text-center' },
-        { data: 'keterangan', name: 'keterangan', class: 'text-center' },
-        { data: 'actions', name: '{{ trans('global.actions') }}', class: 'text-center' }
+      { data: 'placeholder', name: 'placeholder' },
+{ data: 'user_name', name: 'user.name' },
+{ data: 'tugas', name: 'tugas' },
+{ data: 'uraian_name', name: 'uraian.name' },
+{ data: 'detail', name: 'detail' },
+{ data: 'tanggal', name: 'tanggal' },
+{ data: 'jumlah', name: 'jumlah' },
+{ data: 'satuan', name: 'satuan' },
+{ data: 'hasil_pekerjaan', name: 'hasil_pekerjaan', sortable: false, searchable: false },
+{ data: 'keterangan', name: 'keterangan' },
+{ data: 'valid', name: 'valid' },
+{ data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,
     order: [[ 1, 'desc' ]],
