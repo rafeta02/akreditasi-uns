@@ -64,6 +64,12 @@ class AjuanController extends Controller
 
         foreach($request->nama_dokumen as $index => $nama) {
             $dokumen = DokumenAkreditasi::create([
+                'ajuan_id' => $ajuan->id,
+                'name' => $nama,
+                'type' => $request->tipe_dokumen[$index] ,
+                'counter',
+                'owned_by_id',
+
                 'nama' => $nama,
                 'tipe' => $request->tipe_dokumen[$index],
                 'owned_by' => auth()->id()
