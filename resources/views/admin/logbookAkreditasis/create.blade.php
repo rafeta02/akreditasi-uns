@@ -22,11 +22,23 @@
                 <span class="help-block">{{ trans('cruds.logbookAkreditasi.fields.user_helper') }}</span>
             </div>
             <div class="form-group">
-                <label>{{ trans('cruds.logbookAkreditasi.fields.uraian') }}</label>
-                <select class="form-control {{ $errors->has('uraian') ? 'is-invalid' : '' }}" name="uraian" id="uraian">
-                    <option value disabled {{ old('uraian', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
-                    @foreach(App\Models\LogbookAkreditasi::URAIAN_SELECT as $key => $label)
-                        <option value="{{ $key }}" {{ old('uraian', '') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
+                <label>{{ trans('cruds.logbookAkreditasi.fields.tugas') }}</label>
+                <select class="form-control {{ $errors->has('tugas') ? 'is-invalid' : '' }}" name="tugas" id="tugas">
+                    <option value disabled {{ old('tugas', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                    @foreach(App\Models\LogbookAkreditasi::TUGAS_SELECT as $key => $label)
+                        <option value="{{ $key }}" {{ old('tugas', '') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('tugas'))
+                    <span class="text-danger">{{ $errors->first('tugas') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.logbookAkreditasi.fields.tugas_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="uraian_id">{{ trans('cruds.logbookAkreditasi.fields.uraian') }}</label>
+                <select class="form-control select2 {{ $errors->has('uraian') ? 'is-invalid' : '' }}" name="uraian_id" id="uraian_id">
+                    @foreach($uraians as $id => $entry)
+                        <option value="{{ $id }}" {{ old('uraian_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                     @endforeach
                 </select>
                 @if($errors->has('uraian'))
@@ -82,6 +94,29 @@
                     <span class="text-danger">{{ $errors->first('keterangan') }}</span>
                 @endif
                 <span class="help-block">{{ trans('cruds.logbookAkreditasi.fields.keterangan_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <div class="form-check {{ $errors->has('valid') ? 'is-invalid' : '' }}">
+                    <input type="hidden" name="valid" value="0">
+                    <input class="form-check-input" type="checkbox" name="valid" id="valid" value="1" {{ old('valid', 0) == 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="valid">{{ trans('cruds.logbookAkreditasi.fields.valid') }}</label>
+                </div>
+                @if($errors->has('valid'))
+                    <span class="text-danger">{{ $errors->first('valid') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.logbookAkreditasi.fields.valid_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="validated_by_id">{{ trans('cruds.logbookAkreditasi.fields.validated_by') }}</label>
+                <select class="form-control select2 {{ $errors->has('validated_by') ? 'is-invalid' : '' }}" name="validated_by_id" id="validated_by_id">
+                    @foreach($validated_bies as $id => $entry)
+                        <option value="{{ $id }}" {{ old('validated_by_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('validated_by'))
+                    <span class="text-danger">{{ $errors->first('validated_by') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.logbookAkreditasi.fields.validated_by_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">

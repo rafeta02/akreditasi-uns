@@ -63,6 +63,7 @@ class User extends Authenticatable
         'prodi_id',
         'jenjang_id',
         'golongan',
+        'atasan_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -118,5 +119,10 @@ class User extends Authenticatable
     public function jenjang()
     {
         return $this->belongsTo(Jenjang::class, 'jenjang_id');
+    }
+
+    public function atasan()
+    {
+        return $this->belongsTo(self::class, 'atasan_id');
     }
 }

@@ -129,6 +129,14 @@
                             {{ App\Models\User::GOLONGAN_SELECT[$user->golongan] ?? '' }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.atasan') }}
+                        </th>
+                        <td>
+                            {{ $user->atasan->name ?? '' }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

@@ -221,8 +221,23 @@ class PermissionsTableSeeder extends Seeder
                 'title' => 'logbook_akreditasi_access',
             ],
             [
-                'title' => 'profile_password_edit',
+                'title' => 'uraian_logbook_create',
             ],
+            [
+                'title' => 'uraian_logbook_edit',
+            ],
+            [
+                'title' => 'uraian_logbook_show',
+            ],
+            [
+                'title' => 'uraian_logbook_delete',
+            ],
+            [
+                'title' => 'uraian_logbook_access',
+            ],
+            [
+                'title' => 'profile_password_edit',
+            ]
         ];
 
         Permission::insert($permissions);
