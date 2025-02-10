@@ -17,6 +17,13 @@ class StoreLogbookAkreditasiRequest extends FormRequest
     public function rules()
     {
         return [
+            'tugas' => [
+                'string',
+                'nullable',
+            ],
+            'uraian_id' => [
+                'nullable',
+            ],
             'detail' => [
                 'string',
                 'nullable',

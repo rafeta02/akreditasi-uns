@@ -115,4 +115,20 @@ class UraianLogbookController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
+
+    public function getUraian(Request $request)
+    {
+        $search = $request->search;
+        $type = $request->tugas;
+        
+        $query = UraianLogbook::query()->where('type', $type);
+        
+        if ($search) {
+            $query->where('name', 'LIKE', "%{$search}%");
+        }
+        
+        $uraians = $query->select('id', 'name as text')->get();
+        
+        return response()->json($uraians);
+    }
 }

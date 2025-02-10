@@ -15,8 +15,10 @@ Route::get('/infografis', 'HomeController@infografis')->name("infografis");
 Route::get('/pantauan-banpt', 'HomeController@pantauanBanpt')->name("pantauanBanpt");
 
 Route::get('select/prodi-with-fakultas', 'Admin\ProdiController@getProdisWithFakultas')->name('select.getProdiWithFakultas');
+Route::get('select/get-uraian', 'Admin\UraianLogbookController@getUraian')->name('select.getUraian');
 
 Auth::routes(['register' => false]);
+
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
     Route::get('/', 'HomeController@index')->name('home');
@@ -151,7 +153,12 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     Route::delete('logbook-akreditasi/destroy', 'LogbookAkreditasiController@massDestroy')->name('logbook-akreditasi.massDestroy');
     Route::post('logbook-akreditasi/media', 'LogbookAkreditasiController@storeMedia')->name('logbook-akreditasi.storeMedia');
     Route::post('logbook-akreditasi/ckmedia', 'LogbookAkreditasiController@storeCKEditorImages')->name('logbook-akreditasi.storeCKEditorImages');
-    Route::resource('logbook-akreditasi', 'LogbookAkreditasiController');
+    Route::post('logbook-akreditasi/import', 'LogbookAkreditasiController@import')->name('logbook-akreditasi.import');
+    Route::get('logbook-akreditasi/validasi', 'LogbookAkreditasiController@validasi')->name('logbook-akreditasi.validasi');
+    Route::post('logbook-akreditasi/mass-validate', 'LogbookAkreditasiController@massValidate')->name('logbook-akreditasi.mass-validate');
+    Route::resource('logbook-akreditasi', 'LogbookAkreditasiController')->parameters([
+        'logbook-akreditasi' => 'ulid'
+    ]);
 
     Route::get('frontend/profile', 'ProfileController@index')->name('profile.index');
     Route::post('frontend/profile', 'ProfileController@update')->name('profile.update');

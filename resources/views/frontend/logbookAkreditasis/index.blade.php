@@ -9,10 +9,29 @@
                         <a class="btn btn-success" href="{{ route('frontend.logbook-akreditasi.create') }}">
                             Tambah Logbook
                         </a>
-                        <button class="btn btn-warning" data-toggle="modal" data-target="#csvImportModal">
+                        <button class="btn btn-warning" data-toggle="modal" data-target="#importModal">
                             Import Excel
                         </button>
-                        @include('csvImport.modal', ['model' => 'LogbookAkreditasi', 'route' => 'admin.logbook-akreditasis.parseCsvImport'])
+                        @include('csvImport.import_modal', ['model' => 'LogbookAkreditasi', 'route' => 'frontend.logbook-akreditasi.import'])
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary">Template Import</button>
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu" role="menu">
+                                <a class="dropdown-item" href="#">
+                                    Template SPMI
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">
+                                    Template SPME
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">
+                                    Template GKM
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             @endcan
@@ -48,9 +67,9 @@
                             </thead>
                             <tbody>
                                 @foreach($logbookAkreditasis as $key => $logbookAkreditasi)
-                                    <tr data-entry-id="{{ $logbookAkreditasi->id }}">
+                                    <tr data-entry-id="{{ $logbookAkreditasi->ulid }}">
                                         <td class="text-center">
-                                            <span class="badge badge-danger">{{ App\Models\LogbookAkreditasi::URAIAN_SELECT[$logbookAkreditasi->uraian] ?? '' }}</span>
+                                            <span class="badge badge-danger">{{ $logbookAkreditasi->uraian->name ?? '' }}</span>
                                         </td>
                                         <td class="text-center">
                                             {{ $logbookAkreditasi->detail ?? '' }}
@@ -71,19 +90,19 @@
                                         </td>
                                         <td class="text-center">
                                             @can('logbook_akreditasi_show')
-                                                <a class="btn btn-xs btn-primary" href="{{ route('frontend.logbook-akreditasi.show', $logbookAkreditasi->id) }}">
+                                                <a class="btn btn-xs btn-primary" href="{{ route('frontend.logbook-akreditasi.show', $logbookAkreditasi->ulid) }}">
                                                     {{ trans('global.view') }}
                                                 </a>
                                             @endcan
 
                                             @can('logbook_akreditasi_edit')
-                                                <a class="btn btn-xs btn-info" href="{{ route('frontend.logbook-akreditasi.edit', $logbookAkreditasi->id) }}">
+                                                <a class="btn btn-xs btn-info" href="{{ route('frontend.logbook-akreditasi.edit', $logbookAkreditasi->ulid) }}">
                                                     {{ trans('global.edit') }}
                                                 </a>
                                             @endcan
 
                                             @can('logbook_akreditasi_delete')
-                                                <form action="{{ route('frontend.logbook-akreditasi.destroy', $logbookAkreditasi->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                                <form action="{{ route('frontend.logbook-akreditasi.destroy', $logbookAkreditasi->ulid) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                                     <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">

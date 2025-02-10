@@ -20,10 +20,18 @@
                             <tbody>
                                 <tr>
                                     <th>
+                                        {{ trans('cruds.logbookAkreditasi.fields.tugas') }}
+                                    </th>
+                                    <td>
+                                        {{ App\Models\LogbookAkreditasi::TUGAS_SELECT[$logbookAkreditasi->tugas] ?? '' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
                                         {{ trans('cruds.logbookAkreditasi.fields.uraian') }}
                                     </th>
                                     <td>
-                                        {{ App\Models\LogbookAkreditasi::URAIAN_SELECT[$logbookAkreditasi->uraian] ?? '' }}
+                                        {{ $logbookAkreditasi->uraian->name ?? '' }}
                                     </td>
                                 </tr>
                                 <tr>

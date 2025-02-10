@@ -134,7 +134,7 @@
 
 @section('scripts')
 <script>
-    var uploadedHasilPekerjaanMap = {}
+var uploadedHasilPekerjaanMap = {}
 Dropzone.options.hasilPekerjaanDropzone = {
     url: '{{ route('frontend.logbook-akreditasi.storeMedia') }}',
     maxFilesize: 5, // MB
@@ -188,5 +188,44 @@ Dropzone.options.hasilPekerjaanDropzone = {
          return _results
      }
 }
+</script>
+
+<script>
+$(document).ready(function() {
+    // Initialize Select2 on both dropdowns
+    $('#tugas').select2({
+        placeholder: "Please select",
+        allowClear: true
+    });
+
+    // Initialize Select2 on uraian dropdown with Ajax
+    $('#uraian_id').select2({
+        placeholder: "Please select uraian",
+        allowClear: true,
+        ajax: {
+            url: '{{route('select.getUraian')}}',
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+                return {
+                    tugas: $('#tugas').val(),
+                    search: params.term
+                };
+            },
+            processResults: function(data) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 0
+    });
+
+    // When tugas changes, clear and reset uraian
+    $('#tugas').on('change', function() {
+        $('#uraian_id').val(null).trigger('change');
+    });
+});
 </script>
 @endsection

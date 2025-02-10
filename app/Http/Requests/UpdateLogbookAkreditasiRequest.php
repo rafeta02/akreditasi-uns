@@ -17,6 +17,13 @@ class UpdateLogbookAkreditasiRequest extends FormRequest
     public function rules()
     {
         return [
+            'tugas' => [
+                'string',
+                'nullable',
+            ],
+            'uraian' => [
+                'nullable',
+            ],
             'detail' => [
                 'string',
                 'nullable',
