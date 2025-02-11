@@ -204,10 +204,11 @@ class LogbookAkreditasiController extends Controller
             });
 
             $table->editColumn('tugas', function ($row) {
-                return $row->tugas ? LogbookAkreditasi::TUGAS_SELECT[$row->tugas] : '';
+                return $row->tugas ? '<span class="badge badge-primary">'.LogbookAkreditasi::TUGAS_SELECT[$row->tugas].'</span><br>'. $row->uraian->name : '';
             });
+
             $table->addColumn('uraian_name', function ($row) {
-                return $row->uraian ? $row->uraian->name : '';
+                return $row->uraian ? '<span class="badge badge-primary">'.LogbookAkreditasi::TUGAS_SELECT[$row->tugas].'</span><br>'. $row->uraian->name : '';
             });
 
             $table->editColumn('detail', function ($row) {
@@ -238,7 +239,7 @@ class LogbookAkreditasiController extends Controller
                 return '<input type="checkbox" disabled ' . ($row->valid ? 'checked' : null) . '>';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'user', 'uraian', 'hasil_pekerjaan', 'valid']);
+            $table->rawColumns(['actions', 'placeholder', 'user', 'tugas', 'uraian', 'hasil_pekerjaan', 'valid']);
 
             return $table->make(true);
         }

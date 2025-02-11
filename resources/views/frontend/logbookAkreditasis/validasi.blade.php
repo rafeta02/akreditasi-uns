@@ -17,10 +17,7 @@
 
                                     </th>
                                     <th>
-                                        {{ trans('cruds.logbookAkreditasi.fields.user') }}
-                                    </th>
-                                    <th>
-                                        {{ trans('cruds.logbookAkreditasi.fields.uraian') }}
+                                        Personal
                                     </th>
                                     <th>
                                         {{ trans('cruds.logbookAkreditasi.fields.uraian') }}
@@ -61,8 +58,42 @@
 @parent
 <script>
 $(function () {
-    // Add checkbox column configuration
+    let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+    
+    let validateButton = {
+        text: 'Validate Selected',
+        className: 'btn-success',
+        action: function (e, dt, node, config) {
+            var selectedIds = [];
+            $('.dt-checkboxes:checked').each(function() {
+                selectedIds.push($(this).val());
+            });
+
+            if (selectedIds.length === 0) {
+                alert('Please select at least one item to validate');
+                return;
+            }
+
+            if (confirm('Are you sure you want to validate ' + selectedIds.length + ' selected items?')) {
+                $.ajax({
+                    headers: {'x-csrf-token': _token},
+                    url: '{{ route("frontend.logbook-akreditasi.mass-validate") }}',
+                    type: 'POST',
+                    data: { ids: selectedIds }
+                })
+                .done(function() {
+                    location.reload();
+                })
+                .fail(function(xhr, status, error) {
+                    alert('Error validating items: ' + error);
+                });
+            }
+        }
+    }
+    dtButtons.push(validateButton)
+
     let dtOverrideGlobals = {
+        buttons: dtButtons,
         processing: true,
         serverSide: true,
         retrieve: true,
@@ -74,40 +105,28 @@ $(function () {
                 name: 'placeholder',
                 orderable: false,
                 searchable: false,
+                width: '30px',
+                class: 'text-center',
                 render: function (data, type, row) {
                     return '<input type="checkbox" class="dt-checkboxes" value="' + row.id + '">';
                 }
             },
-            { data: 'user_name', name: 'user.name' },
-            { data: 'tugas', name: 'tugas' },
-            { data: 'uraian_name', name: 'uraian.name' },
-            { data: 'detail', name: 'detail' },
-            { data: 'tanggal', name: 'tanggal' },
-            { data: 'jumlah', name: 'jumlah' },
-            { data: 'hasil_pekerjaan', name: 'hasil_pekerjaan', sortable: false, searchable: false },
-            { data: 'keterangan', name: 'keterangan' },
-            { data: 'valid', name: 'valid' },
-            { data: 'actions', name: '{{ trans('global.actions') }}' }
+            { data: 'user_name', name: 'user.name', class: 'text-center'  },
+            { data: 'tugas', name: 'tugas', class: 'text-center'  },
+            { data: 'detail', name: 'detail', class: 'text-center'  },
+            { data: 'tanggal', name: 'tanggal', class: 'text-center'  },
+            { data: 'jumlah', name: 'jumlah', sortable: false, class: 'text-center' },
+            { data: 'hasil_pekerjaan', name: 'hasil_pekerjaan', sortable: false, searchable: false, class: 'text-center'  },
+            { data: 'keterangan', name: 'keterangan', sortable: false, class: 'text-center'  },
+            { data: 'valid', name: 'valid', sortable: false, searchable: false, class: 'text-center'  },
+            { data: 'actions', name: '{{ trans('global.actions') }}', class: 'text-center'  }
         ],
         orderCellsTop: true,
         pageLength: 50,
-        dom: 'Bfrtip', // Add buttons to the DOM
-        buttons: [
-            {
-                text: 'Validate Selected',
-                className: 'btn btn-success',
-                action: function (e, dt, node, config) {
-                    validateSelected();
-                }
-            }
-        ],
-        select: {
-            style: 'multi',
-            selector: 'td:first-child input[type="checkbox"]'
-        }
+        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]], // Page length options
+        dom: '<"top"Bl>rt<"bottom"p>' // Only show length menu, buttons, and pagination
     };
 
-    // Initialize DataTable
     let table = $('.datatable-LogbookAkreditasi').DataTable(dtOverrideGlobals);
 
     // Add "Select All" checkbox in header
@@ -132,50 +151,10 @@ $(function () {
         }
     });
 
-    // Function to handle validation of selected items
-    function validateSelected() {
-        var selectedIds = [];
-        $('.dt-checkboxes:checked').each(function() {
-            selectedIds.push($(this).val());
-        });
-
-        if (selectedIds.length === 0) {
-            alert('Please select at least one item to validate');
-            return;
-        }
-
-        // Show confirmation dialog
-        if (confirm('Are you sure you want to validate ' + selectedIds.length + ' selected items?')) {
-            // Send AJAX request to validate selected items
-            $.ajax({
-                url: '{{ route("frontend.logbook-akreditasi.mass-validate") }}',
-                type: 'POST',
-                data: {
-                    ids: selectedIds,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    // Show success message
-                    alert('Successfully validated ' + selectedIds.length + ' items');
-                    // Reload the table to reflect changes
-                    table.ajax.reload();
-                    // Uncheck "Select All" checkbox
-                    $('#select-all').prop('checked', false);
-                },
-                error: function(xhr, status, error) {
-                    alert('Error validating items: ' + error);
-                }
-            });
-        }
-    }
-
-    // Handle tab changes
-    $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e) {
+    $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
         $($.fn.dataTable.tables(true)).DataTable()
             .columns.adjust();
     });
-  
 });
-
 </script>
 @endsection
